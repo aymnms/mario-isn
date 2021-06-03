@@ -9,3 +9,5 @@ ISN_Mario has been rewarded by the second price of Digicosme Labex : https://dig
 ISN_Mario est un projet de Terminal Scientifique en ISN (Informatique et sciences du numérique).
 L'objectif etant de recréer un mario bros en c.
 ISN_Mario a été récompencé par le second prix du Labex Digicosme : https://digicosme.lri.fr/tiki-read_article.php?articleId=267
+
+Collaborator: [Aymerick Michelet](https://github.com/aymerickmichelet) x [Anthony Quéré](https://github.com/Anthony-Jhoiro) x Léo LIRZIN

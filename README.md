@@ -45,12 +45,14 @@
 [EN 🇬🇧]
 mario-isn is a Scientific Terminal project in ISN (Computing and digital sciences).
 The objective being to recreate a mario bros in c.
-The project has been rewarded by the second price of Digicosme Labex : https://digicosme.lri.fr/tiki-read_article.php?articleId=267
+The project has been rewarded by the second price of Digicosme Labex : https://digicosme.lri.fr/tiki-read_article.php?articleId=267.
+It is currently out of service, but will be back in service shortly.
 
 [FR 🇫🇷]
 mario-isn est un projet de Terminal Scientifique en ISN (Informatique et sciences du numérique).
 L'objectif etant de recréer un mario bros en c.
-Le projet a été récompencé par le second prix du Labex Digicosme : https://digicosme.lri.fr/tiki-read_article.php?articleId=267
+Le projet a été récompencé par le second prix du Labex Digicosme : https://digicosme.lri.fr/tiki-read_article.php?articleId=267.
+Il n'est actuellement plus en état de fonctionner mais le sera de nouveau prochainement.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -71,88 +73,23 @@ Le projet a été récompencé par le second prix du Labex Digicosme : https://d
   cd mario-isn
 ```
 
-3. Compile the program
+## Prerequisites
+
+- GCC
+
+<!-- USAGE EXAMPLES -->
+## Usage
+
+1. Compile the program
 
 ```bash
   ./compiler.sh
 ```
 
-## Prerequisites
-
-### macOS
-
-#### Avec Homebrew
-
-1. Install Homebrew :
-   ```sh
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
-2. Install GCC :
-   ```sh
-   brew install gcc
-   ```
-
-#### Avec Xcode
-
-1. Install Xcode from l'App Store.
-2. Install command line tools :
-```sh
-xcode-select --install
-```
-
-### Windows
-
-#### Avec MinGW
-
-1. Download MinGW from [mingw.org](http://www.mingw.org/).
-2. Follow installation instruction.
-3. Add `C:\MinGW\bin` to the environment variable `PATH`.
-
-#### Avec MSYS2
-
-1. Download MSYS2 from [msys2.org](https://www.msys2.org/).
-2. Follow installation instruction.
-3. Open the console MSYS2 and install GCC :
-```sh
-pacman -Syu
-pacman -S mingw-w64-x86_64-gcc
-```
-1. Add `C:\msys64\mingw64\bin` to the environment variable `PATH`.
-
-### Linux
-
-#### Debian/Ubuntu
-
-1. Open Terminal and install development tools :
-```sh
-sudo apt update
-sudo apt install build-essential
-```
-
-#### Fedora
-
-1. Open Terminal and install development tools :
-```sh
-sudo dnf groupinstall "Development Tools"
-```
-
-#### Arch Linux
-
-1. Open Terminal and install development tools :
-```sh
-sudo pacman -S base-devel
-```
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-1. Compile the program (getting started)
-
 2. Run the program
 
 ```bash
-  ./mario-isn <text>
+  ./mario-isn
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

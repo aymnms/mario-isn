@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
+#include "display.h"
 #include "MARIO_menu.h"
 #include "MARIO_game.h"
 #include "MARIO_niveau.h"
@@ -39,13 +40,16 @@ int main(int argc, char *argv[]){
     printf("Hello World\n");
     // while(run){
     	init_menu(); //envoie sur "init_menu.c" par "init_menu.h"
-        // MENU(); //envoie sur "MENU.c" par "MENU.h"
+        MENU(); //envoie sur "MENU.c" par "MENU.h"
     	// if(run_game){
      //        init_game();
      //        GAME();
      //    }
     // }
 
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
     // SDL_FreeSurface(img); // On libère la surface
     // SDL_FreeSurface(perso); //On libère la surface
     // SDL_Quit(); // libère la SDL de la mémoire

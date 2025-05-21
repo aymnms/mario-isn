@@ -13,32 +13,31 @@ Mix_Music *musiqueFond; //Création d'un pointeur de type Mix_Music
    Mix_Music *musiqueMiss;
    Mix_Music *musiquevictory;
 
-SDL_Window *window;
 
 void init_mus()
 {
    Mix_AllocateChannels(32);
-   window = SDL_CreateWindow("Mario ISN 2.0",
-                              SDL_WINDOWPOS_CENTERED,
-                              SDL_WINDOWPOS_CENTERED,
-                              800, 600,
-                              SDL_WINDOW_SHOWN);
-
-   SDL_SetWindowTitle(window, "SDL_Mixer");
+   // window = SDL_CreateWindow("Mario ISN 2.0",
+   //                            SDL_WINDOWPOS_CENTERED,
+   //                            SDL_WINDOWPOS_CENTERED,
+   //                            800, 600,
+   //                            SDL_WINDOW_SHOWN);
+   //
+   // SDL_SetWindowTitle(window, "SDL_Mixer");
 
    if (Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
       printf("%s", Mix_GetError());
    }
 
-   musiqueFond = Mix_LoadMUS("./musique/gameTheme.mp3"); //Chargement de la musique
-   musiqueMenu = Mix_LoadMUS("./musique/mainTheme.mp3");
-   sonSaut = Mix_LoadWAV("./musique/jumpSound.wav");
-   sonBloc = Mix_LoadWAV("./musique/coinSound.wav");
-   sonEnemy = Mix_LoadWAV("./musique/EnnemySound.wav");
-   musiqueGameOver= Mix_LoadMUS("./musique/gameOver.wav");
-   musiqueMiss= Mix_LoadMUS("./musique/miss.wav");
-   musiquevictory= Mix_LoadMUS("./musique/victory.wav");
-   sonUp= Mix_LoadWAV("./musique/up.wav");
+   musiqueFond = Mix_LoadMUS("../musique/gameTheme.mp3"); //Chargement de la musique
+   musiqueMenu = Mix_LoadMUS("../musique/mainTheme.mp3");
+   sonSaut = Mix_LoadWAV("../musique/jumpSound.wav");
+   sonBloc = Mix_LoadWAV("../musique/coinSound.wav");
+   sonEnemy = Mix_LoadWAV("../musique/EnnemySound.wav");
+   musiqueGameOver= Mix_LoadMUS("../musique/gameOver.wav");
+   musiqueMiss= Mix_LoadMUS("../musique/miss.wav");
+   musiquevictory= Mix_LoadMUS("../musique/victory.wav");
+   sonUp= Mix_LoadWAV("../musique/up.wav");
 }
 
 void playSon(const int son){

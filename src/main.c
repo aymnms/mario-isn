@@ -3,9 +3,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
-// #include "Headers/MARIO_menu.h"
-// #include "Headers/MARIO_game.h"
-// #include "Headers/MARIO_niveau.h"
+#include "MARIO_menu.h"
+#include "MARIO_game.h"
+#include "MARIO_niveau.h"
 
 
 int run = 1, run_game = 1;
@@ -38,12 +38,12 @@ char lvl[10][140];
 int main(int argc, char *argv[]){
     printf("Hello World\n");
     // while(run){
-    // 	init_menu(); //envoie sur "init_menu.c" par "init_menu.h"
-    //     MENU(); //envoie sur "MENU.c" par "MENU.h"
-    // 	if(run_game){
-    //         init_game();
-    //         GAME();
-    //     }
+    	init_menu(); //envoie sur "init_menu.c" par "init_menu.h"
+        // MENU(); //envoie sur "MENU.c" par "MENU.h"
+    	// if(run_game){
+     //        init_game();
+     //        GAME();
+     //    }
     // }
 
     // SDL_FreeSurface(img); // On libère la surface

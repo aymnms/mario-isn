@@ -3,12 +3,19 @@ project(mario_isn C)
 
 set(CMAKE_C_STANDARD 99)
 
-# Ajoute les headers de SDL2 (macOS Homebrew)
-include_directories(/opt/homebrew/include)
+# headers
+include_directories(
+        /opt/homebrew/include
+        include
+)
 
-add_executable(mario_isn src/main.c)
+add_executable(mario_isn
+        src/main.c
+        src/menu/init_menu.c
+        src/game/joueur/music.c
+)
 
-# Lie les bibliothèques SDL2
+# libraries
 target_link_libraries(mario_isn
         /opt/homebrew/lib/libSDL2.dylib
         /opt/homebrew/lib/libSDL2_mixer.dylib

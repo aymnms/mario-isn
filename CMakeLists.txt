@@ -13,8 +13,11 @@ add_executable(mario_isn
         src/main.c
         src/display.c
         src/menu/init_menu.c
-        src/game/joueur/music.c
         src/menu/menu.c
+        src/game/init_game.c
+        src/game/joueur/music.c
+        src/game/joueur/niveau.c
+        src/game/mechant/bowser.c
 )
 
 # libraries

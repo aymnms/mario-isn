@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
-#include "display.h"
 #include "MARIO_quit.h"
 #include "MARIO_musique.h"
 

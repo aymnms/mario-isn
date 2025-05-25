@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "display.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "MARIO_niveau.h"
@@ -229,65 +231,110 @@ void niveauSelect(int nb)
     }else{printf("echec ouverture niveau.txt");} //dbg si échec du chargement
 }
 
-// void niveauAfficher(int strawling)
-// {
-// 	printf("afficher niveau \n");
-// 	niveauOrigine.x = -strawling;
-// 	niveauOrigine.y = 0;
-// 	SDL_BlitSurface(fond, NULL, background, &niveauOrigine);
-//
-// 	int l,c;
-//
-//
-// 	for (l=0; l<10; l++)
-// 	{
-//
-// 		for (c = 0; c<140; c++)
-// 		{
-// 			switch (lvl[l][c])
-// 			{
-// 				case '1':
-//
-// 					bobie.x = (c*largBlock) - strawling;
-// 					bobie.y = l*hautBlock;
-// 					SDL_BlitSurface(bloc, NULL, background, &bobie);
-// 					break;
-// 				case '2':
-//
-// 					bobie.x = (c*largBlock) - strawling;
-// 					bobie.y = l*hautBlock;
-// 					SDL_BlitSurface(cadeau, NULL, background, &bobie);
-// 					break;
-// 				case '5':
-//
-// 					bobie.x = (c*largBlock) - strawling;
-// 					bobie.y = l*hautBlock;
-// 					SDL_BlitSurface(eau, NULL, background, &bobie);
-// 					break;
-// 				case '9':
-//
-// 					bobie.x = (c*largBlock) - strawling;
-// 					bobie.y = l*hautBlock;
-// 					SDL_BlitSurface(pic, NULL, background, &bobie);
-// 					break;
-//                 case 'D':
-//                     bobie.x = (c*largBlock) - strawling;
-//                     bobie.y = 0;
-//                     SDL_BlitSurface(drapeau, NULL, background, &bobie);
-//                     bobie.x = (c*largBlock) - strawling;
-//                     bobie.y = l*hautBlock;
-//                     SDL_BlitSurface(bloc, NULL, background, &bobie);
-//                     break;
-//                 case 'H':
-//                     bobie.x = (c*largBlock) - strawling;
-//                     bobie.y = 350;
-//                     SDL_BlitSurface(hache, NULL, background, &bobie);
-//                     bobie.x = (c*largBlock) - strawling;
-//                     bobie.y = l*hautBlock;
-//                     SDL_BlitSurface(bloc, NULL, background, &bobie);
-//                     break;
-// 			}
-// 		}
-// 	}
-//
-// }
+void niveauAfficher(int strawling)
+{
+	printf("afficher niveau \n");
+	niveauOrigine.x = -strawling;
+	niveauOrigine.y = 0;
+
+	// ALORS
+	SDL_BlitSurface(fond, NULL, background, &niveauOrigine);
+	// SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, fond);
+	// SDL_FreeSurface(fond);
+	// display_texture(texture, NULL, &niveauOrigine);
+	// SDL_DestroyTexture (texture);
+
+
+	int l,c;
+
+
+	for (l=0; l<10; l++)
+	{
+
+		for (c = 0; c<140; c++)
+		{
+
+			switch (lvl[l][c])
+			{
+				case '1':
+
+					bobie.x = (c*largBlock) - strawling;
+					bobie.y = l*hautBlock;
+					// ALORS
+					SDL_BlitSurface(bloc, NULL, background, &bobie);
+					// SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, bloc);
+					// display_texture(texture2, NULL, &bobie);
+					// SDL_DestroyTexture (texture2);
+					break;
+				case '2':
+					bobie.x = (c*largBlock) - strawling;
+					bobie.y = l*hautBlock;
+					// ALORS
+					SDL_BlitSurface(cadeau, NULL, background, &bobie);
+					// SDL_Texture *texture3 = SDL_CreateTextureFromSurface(renderer, cadeau);
+					// display_texture(texture3, NULL, &bobie);
+					// SDL_DestroyTexture (texture3);
+					break;
+				case '5':
+
+					bobie.x = (c*largBlock) - strawling;
+					bobie.y = l*hautBlock;
+					// ALORS
+					SDL_BlitSurface(eau, NULL, background, &bobie);
+					// SDL_Texture *texture4 = SDL_CreateTextureFromSurface(renderer, eau);
+					// display_texture(texture4, NULL, &bobie);
+					// SDL_DestroyTexture (texture4);
+					break;
+				case '9':
+
+					bobie.x = (c*largBlock) - strawling;
+					bobie.y = l*hautBlock;
+					// ALORS
+					SDL_BlitSurface(pic, NULL, background, &bobie);
+					// SDL_Texture *texture5 = SDL_CreateTextureFromSurface(renderer, pic);
+					// display_texture(texture5, NULL, &bobie);
+					// SDL_DestroyTexture (texture5);
+					break;
+                case 'D':
+                    bobie.x = (c*largBlock) - strawling;
+                    bobie.y = 0;
+					// ALORS
+					SDL_BlitSurface(drapeau, NULL, background, &bobie);
+					// SDL_Texture *texture6 = SDL_CreateTextureFromSurface(renderer, drapeau);
+					// display_texture(texture6, NULL, &bobie);
+					// SDL_DestroyTexture (texture6);
+                    bobie.x = (c*largBlock) - strawling;
+                    bobie.y = l*hautBlock;
+					// ALORS
+					SDL_BlitSurface(bloc, NULL, background, &bobie);
+					// SDL_Texture *texture7 = SDL_CreateTextureFromSurface(renderer, bloc);
+					// display_texture(texture7, NULL, &bobie);
+					// SDL_DestroyTexture (texture7);
+                    break;
+                case 'H':
+                    bobie.x = (c*largBlock) - strawling;
+                    bobie.y = 350;
+					// ALORS
+					SDL_BlitSurface(hache, NULL, background, &bobie);
+					// SDL_Texture *texture8 = SDL_CreateTextureFromSurface(renderer, hache);
+					// display_texture(texture8, NULL, &bobie);
+					// SDL_DestroyTexture (texture8);
+                    bobie.x = (c*largBlock) - strawling;
+                    bobie.y = l*hautBlock;
+					// ALORS
+					SDL_BlitSurface(bloc, NULL, background, &bobie);
+					// SDL_Texture *texture9 = SDL_CreateTextureFromSurface(renderer, bloc);
+					// display_texture(texture9, NULL, &bobie);
+					// SDL_DestroyTexture (texture9);
+                    break;
+			}
+		}
+	}
+	// SDL_FreeSurface(bloc);
+	// SDL_FreeSurface(fond);
+	// SDL_FreeSurface(cadeau);
+	// SDL_FreeSurface(eau);
+	// SDL_FreeSurface(pic);
+	// SDL_FreeSurface(drapeau);
+	// SDL_FreeSurface(hache);
+}

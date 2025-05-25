@@ -15,9 +15,20 @@ add_executable(mario_isn
         src/menu/init_menu.c
         src/menu/menu.c
         src/game/init_game.c
+        src/game/GAME.c
+        src/game/conditions.c
+        src/game/mechant/addElem.c
+        src/game/mechant/bowser.c
+        src/game/mechant/contact_mechant.c
+        src/game/mechant/deplacement_mechant.c
+        src/game/mechant/refresh_mechant.c
+        src/game/joueur/animation.c
+        src/game/joueur/deplacement_joueur.c
         src/game/joueur/music.c
         src/game/joueur/niveau.c
-        src/game/mechant/bowser.c
+        src/game/joueur/saut_joueur.c
+
+        coin.exe/src/coin.c
 )
 
 # libraries

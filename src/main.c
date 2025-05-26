@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
     	init_menu(); //envoie sur "init_menu.c" par "init_menu.h"
         MENU(); //envoie sur "MENU.c" par "MENU.h"
     	if(run_game){
-            init_game();
+            // init_game();
             GAME();
         }
     // }

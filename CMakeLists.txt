@@ -27,8 +27,6 @@ add_executable(mario_isn
         src/game/joueur/music.c
         src/game/joueur/niveau.c
         src/game/joueur/saut_joueur.c
-
-        coin.exe/src/coin.c
 )
 
 # libraries

@@ -105,8 +105,8 @@ void coinAff(){
     }
 
 	// ALORS ALORS
-    display_texture(coinnb, NULL, &pos_cadre);
     display_texture(coinmeter, NULL, &pos_coinmeter);
+    display_texture(coinnb, NULL, &pos_coinnb);
 }
 
 void refresh(){
@@ -149,17 +149,16 @@ void refresh(){
     }
 }
 
-// void init_coin(){
-//     printf("init_coin\n");
-//     pos_coinmeter.x = 0;
-//     pos_coinmeter.y = 65;
-//     coinmeter = SDL_LoadBMP("./img/coinx.png");
-//     if (coinmeter == NULL) {printf("coinx not found\n");}
-//     else{SDL_SetColorKey(coinmeter, SDL_SRCCOLORKEY, SDL_MapRGB(coinmeter->format, 0, 0, 0));}
-//
-//     pos_coinnb.x = 70;
-//     pos_coinnb.y = 65;
-// }
+void init_coin(){
+    printf("init_coin\n");
+    pos_coinmeter.x = 0;
+    pos_coinmeter.y = 65;
+    coinmeter = create_texture("../img/coinx.png");
+    if (coinmeter == NULL) {printf("coinx not found\n");}
+
+    pos_coinnb.x = 70;
+    pos_coinnb.y = 65;
+}
 
 void mechant(){
     for(nb_mechant = 0; nb_mechant <= 19; nb_mechant++){

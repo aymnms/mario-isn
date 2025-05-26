@@ -40,7 +40,7 @@ void init_niveau() {
     perso = create_texture("../img/mario_idle.png");
     display_texture(perso, NULL, &pos_perso);
 
-    SDL_ShowCursor(SDL_FALSE); //enleve le cusrseur dans la fenetre
+    // SDL_ShowCursor(SDL_FALSE); //enleve le cusrseur dans la fenetre
 }
 
 

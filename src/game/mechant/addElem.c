@@ -5,11 +5,9 @@
 
 
 //--------------------------Variable-générale--------------------------//
-extern SDL_Surface *background;
 extern int decalage;
 extern char statue[19];
-extern SDL_Surface *imgMechant; //surface du mechant
-extern SDL_Rect tableau_mechant[19][4]; 
+extern SDL_Rect tableau_mechant[19][4];
 extern int nb_mechant;
 int up = 0;
 //---------------------------------------------------------------------//

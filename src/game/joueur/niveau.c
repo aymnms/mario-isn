@@ -10,14 +10,13 @@
 
 int hautBlock = 50;
 int largBlock = 50;
-extern SDL_Surface *background;
-SDL_Surface *bloc;
-SDL_Surface *fond;
-SDL_Surface *cadeau;
-SDL_Surface *eau;
-SDL_Surface *pic;
-SDL_Surface *drapeau;
-SDL_Surface *hache;
+SDL_Texture *bloc;
+SDL_Texture *fond;
+SDL_Texture *cadeau;
+SDL_Texture *eau;
+SDL_Texture *pic;
+SDL_Texture *drapeau;
+SDL_Texture *hache;
 
 SDL_Rect bobie;
 SDL_Rect niveauOrigine;
@@ -26,25 +25,19 @@ extern int coin, niveau, vie;
 extern char statue[20];
 extern SDL_Rect tableau_mechant[20][4]; 
 extern int direction_mechant[20];
-extern SDL_Surface *imgMechant; //surface du mechant
+extern SDL_Texture *imgMechant; //surface du mechant
 extern SDL_Rect pos_perso;
 extern int decalage;
 
 void init_skin() {
 	printf ("initialisation skin\n");
-	bloc = IMG_Load("../img/block.bmp");
-	if (bloc == NULL){printf("'bloc' not found");}
-	fond = IMG_Load("../img/fondNuage.bmp");
-	if (fond == NULL){printf("'fond' not found");}
-	cadeau = IMG_Load("../img/cadeau.bmp");
-	if (cadeau == NULL){printf("'cadeau' not found");}
-	eau = IMG_Load("../img/eau.bmp");
-	pic = IMG_Load("../img/pic.bmp");
-	SDL_SetColorKey(pic, SDL_TRUE, SDL_MapRGB(pic->format, 0,0,0));//transparence d'une couleur
-    drapeau = IMG_Load("../img/drapeau.bmp");
-    SDL_SetColorKey(drapeau, SDL_TRUE, SDL_MapRGB(drapeau->format, 255, 255, 255));//transparence d'une couleur
-    hache = IMG_Load("../img/axe.bmp");
-    SDL_SetColorKey(hache, SDL_TRUE, SDL_MapRGB(hache->format, 0,0,0));//transparence d'une couleur
+	bloc = create_texture("../img/block.bmp");
+	fond = create_texture("../img/fondNuage.bmp");
+	cadeau = create_texture("../img/cadeau.bmp");
+	eau = create_texture("../img/eau.bmp");
+	pic = create_texture("../img/pic.bmp");
+    drapeau = create_texture("../img/drapeau.bmp");
+    hache = create_texture("../img/axe.bmp");
 }
 
 void addMechant(int x, int y) {
@@ -64,8 +57,7 @@ void addMechant(int x, int y) {
 
 void init_mechant(int ngh){
     printf("init_mechant\n");
-    imgMechant = IMG_Load("../img/goomba.bmp"); //on définit l'image du mechant
-    SDL_SetColorKey(imgMechant, SDL_TRUE, SDL_MapRGB(imgMechant->format, 255, 255, 255)); //transparence d'une couleur
+    imgMechant = create_texture("../img/goomba.bmp"); //on définit l'image du mechant
 
     switch(ngh) {
         case 1:
@@ -238,12 +230,7 @@ void niveauAfficher(int strawling)
 	niveauOrigine.y = 0;
 
 	// ALORS
-	SDL_BlitSurface(fond, NULL, background, &niveauOrigine);
-	// SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, fond);
-	// SDL_FreeSurface(fond);
-	// display_texture(texture, NULL, &niveauOrigine);
-	// SDL_DestroyTexture (texture);
-
+	display_texture(fond, NULL, &niveauOrigine);
 
 	int l,c;
 
@@ -261,80 +248,49 @@ void niveauAfficher(int strawling)
 					bobie.x = (c*largBlock) - strawling;
 					bobie.y = l*hautBlock;
 					// ALORS
-					SDL_BlitSurface(bloc, NULL, background, &bobie);
-					// SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, bloc);
-					// display_texture(texture2, NULL, &bobie);
-					// SDL_DestroyTexture (texture2);
+					display_texture(bloc, NULL, &bobie);
 					break;
 				case '2':
 					bobie.x = (c*largBlock) - strawling;
 					bobie.y = l*hautBlock;
 					// ALORS
-					SDL_BlitSurface(cadeau, NULL, background, &bobie);
-					// SDL_Texture *texture3 = SDL_CreateTextureFromSurface(renderer, cadeau);
-					// display_texture(texture3, NULL, &bobie);
-					// SDL_DestroyTexture (texture3);
+					display_texture(cadeau, NULL, &bobie);
 					break;
 				case '5':
 
 					bobie.x = (c*largBlock) - strawling;
 					bobie.y = l*hautBlock;
 					// ALORS
-					SDL_BlitSurface(eau, NULL, background, &bobie);
-					// SDL_Texture *texture4 = SDL_CreateTextureFromSurface(renderer, eau);
-					// display_texture(texture4, NULL, &bobie);
-					// SDL_DestroyTexture (texture4);
+					display_texture(cadeau, NULL, &bobie);
 					break;
 				case '9':
 
 					bobie.x = (c*largBlock) - strawling;
 					bobie.y = l*hautBlock;
 					// ALORS
-					SDL_BlitSurface(pic, NULL, background, &bobie);
-					// SDL_Texture *texture5 = SDL_CreateTextureFromSurface(renderer, pic);
-					// display_texture(texture5, NULL, &bobie);
-					// SDL_DestroyTexture (texture5);
+					display_texture(pic, NULL, &bobie);
 					break;
                 case 'D':
                     bobie.x = (c*largBlock) - strawling;
                     bobie.y = 0;
 					// ALORS
-					SDL_BlitSurface(drapeau, NULL, background, &bobie);
-					// SDL_Texture *texture6 = SDL_CreateTextureFromSurface(renderer, drapeau);
-					// display_texture(texture6, NULL, &bobie);
-					// SDL_DestroyTexture (texture6);
+					display_texture(drapeau, NULL, &bobie);
                     bobie.x = (c*largBlock) - strawling;
                     bobie.y = l*hautBlock;
 					// ALORS
-					SDL_BlitSurface(bloc, NULL, background, &bobie);
-					// SDL_Texture *texture7 = SDL_CreateTextureFromSurface(renderer, bloc);
-					// display_texture(texture7, NULL, &bobie);
-					// SDL_DestroyTexture (texture7);
+					display_texture(bloc, NULL, &bobie);
                     break;
                 case 'H':
                     bobie.x = (c*largBlock) - strawling;
                     bobie.y = 350;
 					// ALORS
-					SDL_BlitSurface(hache, NULL, background, &bobie);
-					// SDL_Texture *texture8 = SDL_CreateTextureFromSurface(renderer, hache);
-					// display_texture(texture8, NULL, &bobie);
-					// SDL_DestroyTexture (texture8);
+					display_texture(hache, NULL, &bobie);
                     bobie.x = (c*largBlock) - strawling;
                     bobie.y = l*hautBlock;
 					// ALORS
-					SDL_BlitSurface(bloc, NULL, background, &bobie);
-					// SDL_Texture *texture9 = SDL_CreateTextureFromSurface(renderer, bloc);
-					// display_texture(texture9, NULL, &bobie);
-					// SDL_DestroyTexture (texture9);
+					display_texture(bloc, NULL, &bobie);
                     break;
 			}
 		}
 	}
-	// SDL_FreeSurface(bloc);
-	// SDL_FreeSurface(fond);
-	// SDL_FreeSurface(cadeau);
-	// SDL_FreeSurface(eau);
-	// SDL_FreeSurface(pic);
-	// SDL_FreeSurface(drapeau);
-	// SDL_FreeSurface(hache);
 }

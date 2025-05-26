@@ -16,13 +16,13 @@ int coin = 0;
 int vic = 0;
 
 SDL_Rect tableau_mechant[20][4]; //tous les points pour les mechants
-SDL_Surface *imgMechant;
+SDL_Texture *imgMechant;
 char statue[20] ={'0','0','0','0','0','0','0','0','0','0'}; //mechant mort ou vivant
 int direction_mechant[20]; //tout est dans le nom
 int nb_mechant; //numéro du méchant à dont c'est le tour (voire game_runer.c)
 
 SDL_Rect origine, pos_perso, pos_mechant; //point pour positionner les elements
-SDL_Surface *background = NULL, *perso = NULL, *img = NULL; //les surfaces pour les images sauf pour celle des mechants
+SDL_Texture *perso = NULL, *img = NULL; //les surfaces pour les images sauf pour celle des mechants
 SDL_Event event; //stock les événements
 
 int bool_droite = 0, bool_gauche = 0, bool_saut = 0, bool_saut_sur_mechant = 0;
@@ -50,9 +50,6 @@ int main(int argc, char *argv[]){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
-    // SDL_FreeSurface(img); // On libère la surface
-    // SDL_FreeSurface(perso); //On libère la surface
-    // SDL_Quit(); // libère la SDL de la mémoire
     return EXIT_SUCCESS;
 }
 

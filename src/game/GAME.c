@@ -13,13 +13,13 @@
 
 
 extern int run_game;
-extern SDL_Surface *background, *perso, *img, *champi;
+extern SDL_Texture *perso, *img, *champi;
 extern int nb_mechant;
 extern int decalage;
 extern SDL_Rect origine, pos_perso, pos_champi;
 extern int decalage;
 extern char statue[10];
-extern SDL_Surface *imgMechant; //surface du mechant
+extern SDL_Texture *imgMechant; //surface du mechant
 extern SDL_Rect tableau_mechant[10][4]; 
 extern int nb_mechant;
 extern int repeat, x, y;
@@ -28,14 +28,14 @@ extern int jean;
 
 
 SDL_Rect pos_barre, pos_noir, pos_cadre;
-SDL_Surface *barre, *noir, *cadre;
+SDL_Texture *barre, *noir, *cadre;
 int decoule, alfred = 0;
 
 SDL_Rect pos_carre;
-SDL_Surface *carre;
+SDL_Texture *carre;
 int fois = 0;
 
-SDL_Surface *coinmeter, *coinnb;
+SDL_Texture *coinmeter, *coinnb;
 SDL_Rect pos_coinmeter, pos_coinnb;
 
 void timer(){
@@ -51,23 +51,12 @@ void timer(){
 }
 
 void systeme_vie(){ // affiche les vies à l'écran
-    champi = IMG_Load("../img/champi.bmp");
-    if(champi == NULL){printf("not found\n");}
-    SDL_SetColorKey(champi, SDL_TRUE, SDL_MapRGB(champi->format, 255, 255, 255));
-
-
-
+    SDL_Texture *champi = create_texture("../img/champi.bmp");
     pos_champi.y= 0;
     for (int i = 0; i <= vie-1; i++){
-
         pos_champi.x = i*55;
-
         // ALORS
-        SDL_BlitSurface (champi, NULL, background, &pos_champi);
-        // SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, champi);
-        // SDL_FreeSurface(champi);
-        // display_texture(texture, NULL, &pos_champi);
-        // SDL_DestroyTexture (texture);
+        display_texture(champi, NULL, &pos_champi);
     }
 }
 
@@ -75,90 +64,67 @@ void coinAff(){
     switch (coin){
 
         case 0 :
-        coinnb = IMG_Load("../img/zero.bmp");
+        coinnb = create_texture("../img/zero.bmp");
         break;
 
         case 1 :
-        coinnb = IMG_Load("../img/un.bmp");
+        coinnb = create_texture("../img/un.bmp");
         break;
 
         case 2 :
-        coinnb = IMG_Load("../img/deux.bmp");
+        coinnb = create_texture("../img/deux.bmp");
         break;
 
         case 3 :
-        coinnb = IMG_Load("../img/trois.bmp");
+        coinnb = create_texture("../img/trois.bmp");
         break;
 
         case 4 :
-        coinnb = IMG_Load("../img/quatre.bmp");
+        coinnb = create_texture("../img/quatre.bmp");
         break;
 
         case 5 :
-        coinnb = IMG_Load("../img/cinq.bmp");
+        coinnb = create_texture("../img/cinq.bmp");
         break;
 
         case 6 :
-        coinnb = IMG_Load("../img/six.bmp");
+        coinnb = create_texture("../img/six.bmp");
         break;
 
         case 7 :
-        coinnb = IMG_Load("../img/sept.bmp");
+        coinnb = create_texture("../img/sept.bmp");
         break;
 
         case 8 :
-        coinnb = IMG_Load("../img/huit.bmp");
+        coinnb = create_texture("../img/huit.bmp");
         break;
 
         case 9 :
-        coinnb = IMG_Load("../img/neuf.bmp");
+        coinnb = create_texture("../img/neuf.bmp");
         break;
-
     }
-    if(coinnb == NULL){printf("coinnb not found\n");}
-    else{SDL_SetColorKey(coinnb, SDL_TRUE, SDL_MapRGB(coinnb->format, 0, 0, 0));}
+
 	// ALORS ALORS
-    SDL_BlitSurface(coinnb, NULL, background, &pos_coinnb);
-    SDL_BlitSurface(coinmeter, NULL, background, &pos_coinmeter);
-    // SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, coinnb);
-    // SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, coinmeter);
-    // SDL_FreeSurface(coinnb);
-    // SDL_FreeSurface(coinmeter);
-    // display_texture(texture, NULL, &pos_coinnb);
-    // display_texture(texture2, NULL, &pos_coinmeter);
-    // SDL_DestroyTexture (texture);
-    // SDL_DestroyTexture (texture2);
+    display_texture(coinnb, NULL, &pos_cadre);
+    display_texture(coinmeter, NULL, &pos_coinmeter);
 }
 
 void refresh(){
     if(run_game == 1){
         origine.x = -decalage;
 
+        // On nettoie l'écran
+        clear_screen();
+
         niveauAfficher(decalage);
 
         //-----------------------Timer-----------------------//
         printf("timerr\n");
         // ALORS ALORS ALORS ALORS
-        SDL_BlitSurface(barre, NULL, background, &pos_barre);
-        SDL_BlitSurface(noir, NULL, background, &pos_noir);
-        SDL_BlitSurface(cadre, NULL, background, &pos_cadre);
-        SDL_BlitSurface(carre, NULL, background, &pos_carre);
-        // SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, barre);
-        // SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, noir);
-        // SDL_Texture *texture3 = SDL_CreateTextureFromSurface(renderer, cadre);
-        // SDL_Texture *texture4 = SDL_CreateTextureFromSurface(renderer, carre);
-        // SDL_FreeSurface(barre);
-        // SDL_FreeSurface(noir);
-        // SDL_FreeSurface(cadre);
-        // SDL_FreeSurface(carre);
-        // display_texture(texture1, NULL, &pos_barre);
-        // display_texture(texture2, NULL, &pos_noir);
-        // display_texture(texture3, NULL, &pos_cadre);
-        // display_texture(texture4, NULL, &pos_carre);
-        // SDL_DestroyTexture (texture1);
-        // SDL_DestroyTexture (texture2);
-        // SDL_DestroyTexture (texture3);
-        // SDL_DestroyTexture (texture4);
+        display_texture(barre, NULL, &pos_barre);
+        display_texture(noir, NULL, &pos_noir);
+        display_texture(cadre, NULL, &pos_cadre);
+        display_texture(carre, NULL, &pos_carre);
 
         //-----------------------Mechant-----------------------//
         printf("afficher mechant\n");
@@ -168,12 +134,7 @@ void refresh(){
         //-----------------------Perso-----------------------//
         printf("pos perso\n");
 		// ALORS
-        SDL_BlitSurface(perso, NULL, background, &pos_perso);
-        // SDL_Texture *texture5 = SDL_CreateTextureFromSurface(renderer, perso);
-        // SDL_FreeSurface(perso);
-        // display_texture(texture5, NULL, &pos_perso);
-        // SDL_DestroyTexture (texture5);
-
+        display_texture(perso, NULL, &pos_perso);
 
         //-----------------------vies-----------------------//
         printf("vie\n");
@@ -182,8 +143,9 @@ void refresh(){
         printf("coin");
 
         coinAff();
-        // SDL_Flip(background); /* Mise � jour de l'�cran*/
-        SDL_RenderPresent(renderer);
+
+        // Affiche tout ce qui a été display
+        present_screen();
     }
 }
 
@@ -238,7 +200,6 @@ void GAME(){
                 printf("timer\n");
                 timer();
                 if (jean ==1){break;}
-
             }
             refresh();
             printf("test jean\n");

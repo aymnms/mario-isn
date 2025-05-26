@@ -7,8 +7,6 @@
 
 
 extern SDL_Rect origine;
-extern SDL_Surface *img, *background;
-
 
 void init_fenetre(){
     init_mus();
@@ -35,14 +33,8 @@ void init_fenetre(){
     SDL_ShowCursor(SDL_ENABLE);
 
     // Charge une image
-    SDL_Surface *img = IMG_Load("../img/menu.bmp");
-    SDL_Texture *background = SDL_CreateTextureFromSurface(renderer, img);
-    SDL_FreeSurface(img); // plus besoin du SDL_Surface après création de la texture
-
-    // Efface l’écran, dessine le fond, affiche
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, background, NULL, NULL); // Dessine toute l’image
-    SDL_RenderPresent(renderer); // Met à jour l’écran
+    SDL_Texture *texture = create_texture("../img/menu.bmp");
+    update_texture(texture, NULL, NULL);
 }
 
 void init_menu(){ //gère l'organisation de l'execution des fonctions

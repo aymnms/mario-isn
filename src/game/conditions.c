@@ -11,7 +11,7 @@
 #include "MARIO_musique.h"
 
 extern SDL_Rect origine, pos_perso;
-extern SDL_Surface *img, *background, *perso;
+extern SDL_Texture *img, *perso;
 extern SDL_Event event;
 extern int decalage;
 extern int coin, niveau, vie;
@@ -43,18 +43,12 @@ void game_over(){
         playMus(3);
         origine.x = 0;
         origine.y = 0;
-        img = IMG_Load("../img/dommage.bmp");
+        img = create_texture("../img/dommage.bmp");
 
         // ALORS
-        SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-        // SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
-        // SDL_FreeSurface(img);
-        // display_texture(texture, NULL, &origine);
-        // SDL_DestroyTexture (texture);
+        update_texture(img, NULL, &origine);
+        // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
 
-
-        // SDL_Flip(background); /* Mise � jour de l'�cran*/
-        SDL_RenderPresent(renderer);
         SDL_Delay(3146);
         playMus(1);
         init_game();
@@ -63,17 +57,12 @@ void game_over(){
         playMus(4);
         origine.x = 0;
         origine.y = 0;
-        img = IMG_Load("../img/game_over.bmp");
+        img = create_texture("../img/game_over.bmp");
 
         // ALORS
-        SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-        // SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
-        // SDL_FreeSurface(img);
-        // display_texture(texture, NULL, &origine);
-        // SDL_DestroyTexture (texture);
+        update_texture(img, NULL, &origine);
+        // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
 
-        // SDL_Flip(background); /* Mise � jour de l'�cran*/
-        SDL_RenderPresent(renderer);
         SDL_Delay(5000);
         SDL_WaitEvent(&event);
         quit_game();
@@ -88,7 +77,7 @@ int victory() {
     origine.x = 0;
     origine.y = 0;
     playMus(5);
-    img = IMG_Load("../img/victory.bmp");
+    img = create_texture("../img/victory.bmp");
     for(int i = 0; i<=19; i++)
     {
         statue[i] = '0';
@@ -100,57 +89,38 @@ int victory() {
     }
         pos_perso.x = 280;
         pos_perso.y = 550;
-        perso = IMG_Load("../img/mario_saut_droite.bmp");
-        SDL_SetColorKey(perso, SDL_TRUE, SDL_MapRGB(perso->format, 255, 255, 255));//transparence d'une couleur
+        perso = create_texture("../img/mario_saut_droite.bmp");
         for ( pos_perso.y = 550; pos_perso.y >= 150; pos_perso.y -=2){
+            clear_screen();
             // ALORS
-            SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-            SDL_BlitSurface(perso, NULL, background, &pos_perso);
-            // SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
-            // SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, perso);
-            // SDL_FreeSurface(img);
-            // SDL_FreeSurface(perso);
-            // display_texture(texture, NULL, &origine);
-            // display_texture(texture2, NULL, &pos_perso);
-            // SDL_DestroyTexture (texture);
-            // SDL_DestroyTexture (texture2);
+            display_texture(img, NULL, &origine);
+            display_texture(perso, NULL, &pos_perso);
+            // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+            // SDL_BlitSurface(perso, NULL, background, &pos_perso);
+            present_screen();
 
-            // SDL_Flip(background); /* Mise � jour de l'�cran*/
-            SDL_RenderPresent(renderer);
             SDL_Delay(10);
         }
         for ( pos_perso.y = 150; pos_perso.y <= 200; pos_perso.y+=2){
+            clear_screen();
             // ALORS
-            SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-            SDL_BlitSurface(perso, NULL, background, &pos_perso);
-            // SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
-            // SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, perso);
-            // SDL_FreeSurface(img);
-            // SDL_FreeSurface(perso);
-            // display_texture(texture, NULL, &origine);
-            // display_texture(texture2, NULL, &pos_perso);
-            // SDL_DestroyTexture (texture);
-            // SDL_DestroyTexture (texture2);
+            display_texture(img, NULL, &origine);
+            display_texture(perso, NULL, &pos_perso);
+            // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+            // SDL_BlitSurface(perso, NULL, background, &pos_perso);
+            present_screen();
 
-            // SDL_Flip(background); /* Mise � jour de l'�cran*/
-            SDL_RenderPresent(renderer);
             SDL_Delay(8);
         }
 
     // ALORS
-    SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-    SDL_BlitSurface(perso, NULL, background, &pos_perso);
-    // SDL_Texture *texture3 = SDL_CreateTextureFromSurface(renderer, img);
-    // SDL_Texture *texture4 = SDL_CreateTextureFromSurface(renderer, perso);
-    // SDL_FreeSurface(img);
-    // SDL_FreeSurface(perso);
-    // display_texture(texture3, NULL, &origine);
-    // display_texture(texture4, NULL, &pos_perso);
-    // SDL_DestroyTexture (texture3);
-    // SDL_DestroyTexture (texture4);
+    clear_screen();
+    display_texture(img, NULL, &origine);
+    display_texture(perso, NULL, &pos_perso);
+    // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+    // SDL_BlitSurface(perso, NULL, background, &pos_perso);
+    present_screen();
 
-    // SDL_Flip(background); /* Mise � jour de l'�cran*/
-    SDL_RenderPresent(renderer);
     SDL_Delay(5541);
     playMus(1);
     SDL_WaitEvent(&event);

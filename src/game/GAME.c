@@ -31,8 +31,6 @@ SDL_Rect pos_barre, pos_noir, pos_cadre;
 SDL_Texture *barre, *noir, *cadre;
 int decoule, alfred = 0;
 
-SDL_Rect pos_carre;
-SDL_Texture *carre;
 int fois = 0;
 
 SDL_Texture *coinmeter, *coinnb;
@@ -125,7 +123,6 @@ void refresh(){
         display_texture(barre, NULL, &pos_barre);
         display_texture(noir, NULL, &pos_noir);
         display_texture(cadre, NULL, &pos_cadre);
-        display_texture(carre, NULL, &pos_carre);
 
         //-----------------------Mechant-----------------------//
         printf("afficher mechant\n");

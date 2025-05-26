@@ -48,6 +48,7 @@ void timer(){
     if ( decoule <= 400){
      game_over();
     }
+
 }
 
 void systeme_vie(){ // affiche les vies à l'écran
@@ -173,11 +174,11 @@ void joueur(){
 }
 
 void GAME(){
-    auto int fps = 60;
-    auto int frameDelay = 1000/fps;
-    auto Uint32 frameStart;
-    auto int frameTime;
-    auto int a =0;
+    int fps = 60;
+    int frameDelay = 1000/fps;
+    Uint32 frameStart;
+    int frameTime;
+    int a =0;
 
     while(run_game){
         printf("init_game\n");

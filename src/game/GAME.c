@@ -51,7 +51,7 @@ void timer(){
 }
 
 void systeme_vie(){ // affiche les vies à l'écran
-    SDL_Texture *champi = create_texture("../img/champi.bmp");
+    SDL_Texture *champi = create_texture("../img/champi.png");
     pos_champi.y= 0;
     for (int i = 0; i <= vie-1; i++){
         pos_champi.x = i*55;
@@ -64,43 +64,43 @@ void coinAff(){
     switch (coin){
 
         case 0 :
-        coinnb = create_texture("../img/zero.bmp");
+        coinnb = create_texture("../img/zero.png");
         break;
 
         case 1 :
-        coinnb = create_texture("../img/un.bmp");
+        coinnb = create_texture("../img/un.png");
         break;
 
         case 2 :
-        coinnb = create_texture("../img/deux.bmp");
+        coinnb = create_texture("../img/deux.png");
         break;
 
         case 3 :
-        coinnb = create_texture("../img/trois.bmp");
+        coinnb = create_texture("../img/trois.png");
         break;
 
         case 4 :
-        coinnb = create_texture("../img/quatre.bmp");
+        coinnb = create_texture("../img/quatre.png");
         break;
 
         case 5 :
-        coinnb = create_texture("../img/cinq.bmp");
+        coinnb = create_texture("../img/cinq.png");
         break;
 
         case 6 :
-        coinnb = create_texture("../img/six.bmp");
+        coinnb = create_texture("../img/six.png");
         break;
 
         case 7 :
-        coinnb = create_texture("../img/sept.bmp");
+        coinnb = create_texture("../img/sept.png");
         break;
 
         case 8 :
-        coinnb = create_texture("../img/huit.bmp");
+        coinnb = create_texture("../img/huit.png");
         break;
 
         case 9 :
-        coinnb = create_texture("../img/neuf.bmp");
+        coinnb = create_texture("../img/neuf.png");
         break;
     }
 
@@ -153,7 +153,7 @@ void refresh(){
 //     printf("init_coin\n");
 //     pos_coinmeter.x = 0;
 //     pos_coinmeter.y = 65;
-//     coinmeter = SDL_LoadBMP("./img/coinx.bmp");
+//     coinmeter = SDL_LoadBMP("./img/coinx.png");
 //     if (coinmeter == NULL) {printf("coinx not found\n");}
 //     else{SDL_SetColorKey(coinmeter, SDL_SRCCOLORKEY, SDL_MapRGB(coinmeter->format, 0, 0, 0));}
 //

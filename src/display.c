@@ -40,7 +40,6 @@ void update_texture(SDL_Texture *texture, SDL_Rect *src, SDL_Rect *dest) {
 
 SDL_Texture *create_texture(char *surface_path) {
     SDL_Surface *img = IMG_Load(surface_path);
-    SDL_SetColorKey(img, SDL_TRUE, SDL_MapRGB(img->format, 255, 255, 255));
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
     SDL_FreeSurface(img);
     return texture;

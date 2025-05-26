@@ -13,15 +13,15 @@ extern int nb_mechant;
 
 void afficher_mechant(){
 	if(statue[nb_mechant] == 'V'){ //SI LE MECHANT EST VIVANT
-		imgMechant = create_texture("../img/goomba.bmp"); //on définit l'image du mechant
+		imgMechant = create_texture("../img/goomba.png"); //on définit l'image du mechant
 	}else if(statue[nb_mechant] == 'M'){
-		imgMechant = create_texture("../img/goomba_mort.bmp"); //on définit l'image du mechant
+		imgMechant = create_texture("../img/goomba_mort.png"); //on définit l'image du mechant
 	}else if(statue[nb_mechant] == 'B'){//si c'est un champignon
-		imgMechant = create_texture("../img/bowser.bmp");
+		imgMechant = create_texture("../img/bowser.png");
 	}else if(statue[nb_mechant] == '0'){
-		// imgMechant = create_texture("../img/void.bmp");
+		// imgMechant = create_texture("../img/void.png");
 	}else if(statue[nb_mechant] == 'U'){
-		imgMechant = create_texture("../img/bowserMort.bmp");
+		imgMechant = create_texture("../img/bowserMort.png");
 	}
 
 	

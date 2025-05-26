@@ -31,13 +31,13 @@ extern int decalage;
 
 void init_skin() {
 	printf ("initialisation skin\n");
-	bloc = create_texture("../img/block.bmp");
-	fond = create_texture("../img/fondNuage.bmp");
-	cadeau = create_texture("../img/cadeau.bmp");
-	eau = create_texture("../img/eau.bmp");
-	pic = create_texture("../img/pic.bmp");
-    drapeau = create_texture("../img/drapeau.bmp");
-    hache = create_texture("../img/axe.bmp");
+	bloc = create_texture("../img/block.png");
+	fond = create_texture("../img/fondNuage.png");
+	cadeau = create_texture("../img/cadeau.png");
+	eau = create_texture("../img/eau.png");
+	pic = create_texture("../img/pic.png");
+    drapeau = create_texture("../img/drapeau.png");
+    hache = create_texture("../img/axe.png");
 }
 
 void addMechant(int x, int y) {
@@ -57,7 +57,7 @@ void addMechant(int x, int y) {
 
 void init_mechant(int ngh){
     printf("init_mechant\n");
-    imgMechant = create_texture("../img/goomba.bmp"); //on définit l'image du mechant
+    imgMechant = create_texture("../img/goomba.png"); //on définit l'image du mechant
 
     switch(ngh) {
         case 1:

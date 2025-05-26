@@ -37,7 +37,7 @@ void init_niveau() {
     pos_perso.x = 50; // coordonn�s en x
     pos_perso.y = 100;// coordonn�s en y
 
-    perso = create_texture("../img/mario_idle.bmp");
+    perso = create_texture("../img/mario_idle.png");
     display_texture(perso, NULL, &pos_perso);
 
     SDL_ShowCursor(SDL_FALSE); //enleve le cusrseur dans la fenetre
@@ -48,13 +48,13 @@ void init_niveau() {
 void init_timer (){
     pos_barre.x = 400;
     pos_barre.y = 0;
-    barre = create_texture("../img/barre.bmp");
+    barre = create_texture("../img/barre.png");
     pos_noir.x = 600;
     pos_noir.y = 0;
-    noir = create_texture("../img/noir.bmp");
+    noir = create_texture("../img/noir.png");
     pos_cadre.x = 400;
     pos_cadre.y = 0;
-    cadre = create_texture ("../img/cadre.bmp");
+    cadre = create_texture ("../img/cadre.png");
     decoule = 600;
 }
 

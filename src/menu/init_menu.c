@@ -23,7 +23,7 @@ void init_fenetre(){
     }
 
     // Définit l’icône de la fenêtre
-    SDL_Surface *icon = IMG_Load("../img/sdl_icone.bmp");
+    SDL_Surface *icon = IMG_Load("../img/sdl_icone.png");
     if (icon != NULL) {
         SDL_SetWindowIcon(window, icon);
         SDL_FreeSurface(icon);
@@ -33,7 +33,7 @@ void init_fenetre(){
     SDL_ShowCursor(SDL_ENABLE);
 
     // Charge une image
-    SDL_Texture *texture = create_texture("../img/menu.bmp");
+    SDL_Texture *texture = create_texture("../img/menu.png");
     update_texture(texture, NULL, NULL);
 }
 

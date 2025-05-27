@@ -25,7 +25,6 @@ extern int coin, niveau, vie;
 extern char statue[20];
 extern SDL_Rect tableau_mechant[20][4]; 
 extern int direction_mechant[20];
-extern SDL_Texture *imgMechant; //surface du mechant
 extern SDL_Rect pos_perso;
 extern int decalage;
 
@@ -57,7 +56,6 @@ void addMechant(int x, int y) {
 
 void init_mechant(int ngh){
     printf("init_mechant\n");
-    imgMechant = create_texture("../img/goomba.png"); //on définit l'image du mechant
 
     switch(ngh) {
         case 1:

@@ -31,8 +31,6 @@ SDL_Rect pos_barre, pos_noir, pos_cadre;
 SDL_Texture *barre, *noir, *cadre;
 int decoule, alfred = 0;
 
-int fois = 0;
-
 SDL_Texture *coinmeter, *coinnb;
 SDL_Rect pos_coinmeter, pos_coinnb;
 

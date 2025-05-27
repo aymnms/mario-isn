@@ -19,7 +19,7 @@ void afficher_mechant(){
 	}else if(statue[nb_mechant] == 'B'){//si c'est un champignon
 		imgMechant = create_texture("../img/bowser.png");
 	}else if(statue[nb_mechant] == '0'){
-		// imgMechant = create_texture("../img/void.png");
+		imgMechant = create_texture("../img/void.png");
 	}else if(statue[nb_mechant] == 'U'){
 		imgMechant = create_texture("../img/bowserMort.png");
 	}

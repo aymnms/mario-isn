@@ -38,7 +38,7 @@ void addBowser(int x, int y) {
 int goB(int direction){
     int rep = 0;
 
-    auto SDL_Rect test1, test2, test3, test4;
+    SDL_Rect test1, test2, test3, test4;
 
     //on définit 4 points pour positionner le mechant sur la grille du niveau
 

@@ -22,13 +22,6 @@ void init_fenetre(){
         exit(EXIT_FAILURE);
     }
 
-    // Définit l’icône de la fenêtre
-    SDL_Surface *icon = IMG_Load("../img/sdl_icone.png");
-    if (icon != NULL) {
-        SDL_SetWindowIcon(window, icon);
-        SDL_FreeSurface(icon);
-    }
-
     // Montre le curseur (activé par défaut)
     SDL_ShowCursor(SDL_ENABLE);
 

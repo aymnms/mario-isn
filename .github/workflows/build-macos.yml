@@ -7,32 +7,6 @@ on:
     branches: [ main ]
 
 jobs:
-  build-macos-intel:
-    name: Build for macOS Intel
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install dependencies for x86_64
-        run: arch -x86_64 brew install sdl2 sdl2_image sdl2_mixer
-
-      - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64"
-
-      - name: Build
-        run: cmake --build build --config Release
-
-      - name: Package .app
-        run: |
-          cd build
-          zip -r MarioISN-macos-intel.zip mario_isn.app
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: MarioISN-macos-intel
-          path: build/MarioISN-macos-intel.zip
-
   build-macos-arm:
     name: Build for macOS ARM
     runs-on: macos-latest

@@ -1,0 +1,60 @@
+name: Build MarioISN
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-macos-intel:
+    name: Build for macOS Intel
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: brew install sdl2 sdl2_image sdl2_mixer
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64"
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Package .app
+        run: |
+          cd build
+          zip -r MarioISN-macos-intel.zip mario_isn.app
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: MarioISN-macos-intel
+          path: build/MarioISN-macos-intel.zip
+
+  build-macos-arm:
+    name: Build for macOS ARM
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: brew install sdl2 sdl2_image sdl2_mixer
+
+      - name: Configure CMake
+        run: cmake -B build-arm -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64"
+
+      - name: Build
+        run: cmake --build build-arm --config Release
+
+      - name: Package .app
+        run: |
+          cd build-arm
+          zip -r MarioISN-macos-arm.zip mario_isn.app
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: MarioISN-macos-arm
+          path: build-arm/MarioISN-macos-arm.zip

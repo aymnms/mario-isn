@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: brew install sdl2 sdl2_image sdl2_mixer
+      - name: Install dependencies for x86_64
+        run: arch -x86_64 brew install sdl2 sdl2_image sdl2_mixer
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64"
@@ -47,6 +47,12 @@ jobs:
 
       - name: Build
         run: cmake --build build-arm --config Release
+
+      - name: Remove quarantine attribute
+        run: xattr -rd com.apple.quarantine build-arm/mario_isn.app
+
+      - name: Sign app
+        run: codesign --force --deep --sign - build-arm/mario_isn.app
 
       - name: Package .app
         run: |

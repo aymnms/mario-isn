@@ -1,22 +1,13 @@
-/*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxCONTACT_MECHANT.Cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int goM(int direction)
-void mechantMort()
-void contact_lateral()
-void contact_vertical()
-void contact()
-
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
-#include "headers/MARIO_conditions.h"
-#include "headers/MARIO_mechant.h"
-#include "headers/MARIO_joueur.h"
-#include "headers/MARIO_game.h"
-#include "Headers/MARIO_niveau.h"
-#include "headers/MARIO_musique.h"
+#include "MARIO_conditions.h"
+#include "MARIO_mechant.h"
+#include "MARIO_joueur.h"
+#include "MARIO_game.h"
+#include "MARIO_niveau.h"
+#include "MARIO_musique.h"
 
 
 //--------------------------Variable-générale--------------------------//

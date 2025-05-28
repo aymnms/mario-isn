@@ -1,32 +1,23 @@
-/*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxCONDITIONS.Cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-void conditions()
-void game_over()
-void victory()
-
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
-#include "Headers/MARIO_conditions.h"
-#include "headers/MARIO_quit.h"
-#include "Headers/MARIO_game.h"
-#include "Headers/MARIO_niveau.h"
-#include "headers/MARIO_musique.h"
+#include "display.h"
+#include "MARIO_conditions.h"
+#include "MARIO_quit.h"
+#include "MARIO_game.h"
+#include "MARIO_niveau.h"
+#include "MARIO_musique.h"
 
-
-//------------Variable-générale------------//
 extern SDL_Rect origine, pos_perso;
-extern SDL_Surface *img, *background, *perso;
+extern SDL_Texture *img, *perso;
 extern SDL_Event event;
 extern int decalage;
 extern int coin, niveau, vie;
 extern char statue[20];
 extern SDL_Rect tableau_mechant[20][4]; 
 extern int vic;
-//-----------------------------------------//
-
 
 int conditions(){
     auto int rep = 0;
@@ -52,10 +43,12 @@ void game_over(){
         playMus(3);
         origine.x = 0;
         origine.y = 0;
-        img = SDL_LoadBMP("./img/dommage.bmp");
+        img = create_texture("../img/dommage.png");
 
-        SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-        SDL_Flip(background); /* Mise � jour de l'�cran*/
+        // ALORS
+        update_texture(img, NULL, &origine);
+        // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+
         SDL_Delay(3146);
         playMus(1);
         init_game();
@@ -64,10 +57,12 @@ void game_over(){
         playMus(4);
         origine.x = 0;
         origine.y = 0;
-        img = SDL_LoadBMP("./img/game_over.bmp");
+        img = create_texture("../img/game_over.png");
 
-        SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-        SDL_Flip(background); /* Mise � jour de l'�cran*/
+        // ALORS
+        update_texture(img, NULL, &origine);
+        // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+
         SDL_Delay(5000);
         SDL_WaitEvent(&event);
         quit_game();
@@ -82,7 +77,7 @@ int victory() {
     origine.x = 0;
     origine.y = 0;
     playMus(5);
-    img = SDL_LoadBMP("./img/victory.bmp");
+    img = create_texture("../img/victory.png");
     for(int i = 0; i<=19; i++)
     {
         statue[i] = '0';
@@ -94,26 +89,38 @@ int victory() {
     }
         pos_perso.x = 280;
         pos_perso.y = 550;
-        perso = SDL_LoadBMP("./img/mario_saut_droite.bmp");
-        SDL_SetColorKey(perso, SDL_SRCCOLORKEY, SDL_MapRGB(perso->format, 255, 255, 255));//transparence d'une couleur
+        perso = create_texture("../img/mario_saut_droite.png");
         for ( pos_perso.y = 550; pos_perso.y >= 150; pos_perso.y -=2){
-            SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-            SDL_BlitSurface(perso, NULL, background, &pos_perso);
-            SDL_Flip(background); /* Mise � jour de l'�cran*/
+            clear_screen();
+            // ALORS
+            display_texture(img, NULL, &origine);
+            display_texture(perso, NULL, &pos_perso);
+            // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+            // SDL_BlitSurface(perso, NULL, background, &pos_perso);
+            present_screen();
+
             SDL_Delay(10);
         }
-            for ( pos_perso.y = 150; pos_perso.y <= 200; pos_perso.y+=2){
-            SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-            SDL_BlitSurface(perso, NULL, background, &pos_perso);
-            SDL_Flip(background); /* Mise � jour de l'�cran*/
+        for ( pos_perso.y = 150; pos_perso.y <= 200; pos_perso.y+=2){
+            clear_screen();
+            // ALORS
+            display_texture(img, NULL, &origine);
+            display_texture(perso, NULL, &pos_perso);
+            // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+            // SDL_BlitSurface(perso, NULL, background, &pos_perso);
+            present_screen();
+
             SDL_Delay(8);
         }
 
-    
+    // ALORS
+    clear_screen();
+    display_texture(img, NULL, &origine);
+    display_texture(perso, NULL, &pos_perso);
+    // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+    // SDL_BlitSurface(perso, NULL, background, &pos_perso);
+    present_screen();
 
-    SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-    SDL_BlitSurface(perso, NULL, background, &pos_perso);
-    SDL_Flip(background); /* Mise � jour de l'�cran*/
     SDL_Delay(5541);
     playMus(1);
     SDL_WaitEvent(&event);

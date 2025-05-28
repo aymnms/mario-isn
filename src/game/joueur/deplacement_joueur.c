@@ -1,29 +1,15 @@
-/*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxDEPLACEMENT_JOUEUR.Cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-SDL_Rect set_position(SDL_Rect Point)
-void droite()
-void gauche()
-void deplacement()
-void deplacement_joueur()
-int go(char direction)
-
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
-#include "headers/MARIO_quit.h"
-#include "headers/MARIO_joueur.h"
-#include "Headers/MARIO_niveau.h"
-#include "Headers/MARIO_conditions.h"
-#include "Headers/MARIO_game.h"
-#include "headers/MARIO_musique.h"
+#include "MARIO_quit.h"
+#include "MARIO_joueur.h"
+#include "MARIO_niveau.h"
+#include "MARIO_conditions.h"
+#include "MARIO_game.h"
+#include "MARIO_musique.h"
 
-
-
-//-------------Variable-generale-------------//
 extern int run_game, run;
-extern SDL_Surface *img, *background, *perso;
 extern SDL_Rect pos_perso, origine;
 extern SDL_Event event;
 extern int nb_mechant;
@@ -34,8 +20,6 @@ extern int temps;
 extern int coin, niveau, vie;
 extern int vic;
 int jean = 0;
-//-------------------------------------------//
-
 
 SDL_Rect set_position(SDL_Rect Point){
     SDL_Rect resultat;
@@ -125,7 +109,7 @@ void deplacement_joueur(){
 
 int go(char direction){
     auto int rep = 0;
-    auto SDL_Rect test1, test2;
+    SDL_Rect test1, test2;
 
     SDL_Rect position_perso_NO = pos_perso;
     position_perso_NO.x +=8;

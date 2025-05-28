@@ -1,45 +1,38 @@
-/*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxANIMATION.Cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-void animation(void)
-
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
-#include "headers/MARIO_joueur.h"
+#include "MARIO_joueur.h"
+#include "display.h"
 
-//--------Variable-générale--------//
-extern SDL_Surface *perso, *img;
+extern SDL_Texture *perso, *img;
 extern int emp;
 extern int bool_droite, bool_gauche;
 extern int temps;
 int test_bas;
-//---------------------------------//
 
-void animation()
-{
+void animation() {
 	test_bas = go('B');
 	if (test_bas == 0) //si le perso ne touche pas le sol
 		{  if (bool_droite == 1 || bool_gauche == 1)
 			{
 				if (bool_droite == 1)
 				{ 
-					perso = SDL_LoadBMP("./img/mario_saut_droite.bmp");
+					perso = create_texture("../img/mario_saut_droite.png");
 				}
 				else
 				{
-					perso = SDL_LoadBMP("./img/mario_saut_gauche.bmp");
+					perso = create_texture("../img/mario_saut_gauche.png");
 				}
 			}
 			else if (emp == 0)
 			{
-				perso = SDL_LoadBMP("./img/mario_saut_droite.bmp");
+				perso = create_texture("../img/mario_saut_droite.png");
 			}
 			else
 			{
-				perso = SDL_LoadBMP("./img/mario_saut_gauche.bmp");
+				perso = create_texture("../img/mario_saut_gauche.png");
 			}
 		}
 	else if (bool_droite == 1 || bool_gauche == 1) // si le perso touche le sol et qu'une touche est appuyée
@@ -51,15 +44,15 @@ void animation()
 		
 			if (temps == 0){
 				temps  = SDL_GetTicks(); // on donne à la variable temps le nombre de miiseconde deuis le début du programme
-				perso = SDL_LoadBMP("./img/frame_1_gauche.bmp"); //frame 1
+				perso = create_texture("../img/frame_1_gauche.png"); //frame 1
 			}
 
 			if(temps + 100 <= SDL_GetTicks())//si la var temps +100 msec est inferieure au nb de ms depuis lme début du programme
 			{
-				perso = SDL_LoadBMP("./img/frame_2_gauche.bmp"); //frame 2
+				perso = create_texture("../img/frame_2_gauche.png"); //frame 2
 			}
 			if(temps + 200 <= SDL_GetTicks()){
-				perso = SDL_LoadBMP("./img/frame_3_gauche.bmp"); //frame 3
+				perso = create_texture("../img/frame_3_gauche.png"); //frame 3
 				temps = 0; //on remet la variable temps à 0 pour recommencer l'annimation
 			}
 
@@ -74,15 +67,15 @@ void animation()
 
 			if (temps == 0){
 				temps  = SDL_GetTicks(); // on donne à la variable temps le nombre de miiseconde deuis le début du programme
-				perso = SDL_LoadBMP("./img/frame_1_droite.bmp"); //frame 1
+				perso = create_texture("../img/frame_1_droite.png"); //frame 1
 			}
 
 			if(temps + 100 <= SDL_GetTicks())//si la var temps +100 msec est inferieure au nb de ms depuis lme début du programme
 			{
-				perso = SDL_LoadBMP("./img/frame_2_droite.bmp"); //frame 2
+				perso = create_texture("../img/frame_2_droite.png"); //frame 2
 			}
 			if(temps + 200 <= SDL_GetTicks()){
-				perso = SDL_LoadBMP("./img/frame_3_droite.bmp"); //frame 3
+				perso = create_texture("../img/frame_3_droite.png"); //frame 3
 				temps = 0; //on remet la variable temps à 0 pour recommencer l'annimation
 			}
 
@@ -94,12 +87,11 @@ void animation()
 	{
 		if ( emp == 0)
 		{
-			perso = SDL_LoadBMP("./img/mario_idle.bmp");
+			perso = create_texture("../img/mario_idle.png");
 		}
 		else
 		{
-			perso = SDL_LoadBMP("./img/mario_idle_gauche.bmp");
+			perso = create_texture("../img/mario_idle_gauche.png");
 		}
 	}
-	SDL_SetColorKey(perso, SDL_SRCCOLORKEY, SDL_MapRGB(perso->format, 255, 255, 255));//transparence d'une couleur (blanc)
 }

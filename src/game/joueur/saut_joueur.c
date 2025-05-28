@@ -1,32 +1,16 @@
-/*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxSAUT_JOUEUR.Cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-double fonction(double i)
-double fonction2(double i)
-void statue_saut()
-void saut()
-void gravite()
-
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
-#include "headers/MARIO_joueur.h"
-#include "Headers/MARIO_conditions.h"
+#include "MARIO_joueur.h"
+#include "MARIO_conditions.h"
 
-
-//-------------Variable-generale---------------//
 extern SDL_Rect pos_perso;
 extern int jump, chute;
 extern int init_hauteur_saut, init_hauteur_chute;
 extern int bool_saut, bool_saut_sur_mechant;
 extern double x;
-//---------------------------------------------//
 
-
-
-//--------------------------------------------------SAUT----------------------------------------------------//
 
 double fonction(double i){
     double auto solution = -i*i+22*i;
@@ -120,5 +104,3 @@ void gravite(){ //gere la position en y du personnage
         }
         if (pos_perso.y > 440){game_over();}
 }
-
-//----------------------------------------------------------------------------------------------------------//

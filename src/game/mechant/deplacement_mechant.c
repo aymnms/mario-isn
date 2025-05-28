@@ -1,15 +1,9 @@
-/*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxDEPLACEMENT_MECHANT.Cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-SDL_Rect setRectMechant(SDL_Rect Point)
-void deplacement_mechant()
-
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <time.h> //Ne pas oublier d'inclure le fichier time.h
 
-#include "Headers/MARIO_mechant.h"
+#include "MARIO_mechant.h"
 
 
 //--------------------------Variable-générale--------------------------//

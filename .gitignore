@@ -177,7 +177,6 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -271,5 +270,5 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,linux,c,cmake,ninja,clion
 
 .vscode/
-PROJECT_SNAPSHOT.txt
-update-gpt.sh
+SNAPSHOT.txt
+Makefile.local

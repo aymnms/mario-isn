@@ -26,7 +26,7 @@ void init_fenetre(){
     SDL_ShowCursor(SDL_ENABLE);
 
     // Charge une image
-    SDL_Texture *texture = create_texture("../img/menu.png");
+    SDL_Texture *texture = create_texture("img/menu.png");
     update_texture(texture, NULL, NULL);
 }
 

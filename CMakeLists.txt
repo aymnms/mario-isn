@@ -20,6 +20,7 @@ include_directories(
 add_executable(mario_isn MACOSX_BUNDLE
         src/main.c
         src/display.c
+        src/path.c
         src/menu/init_menu.c
         src/menu/menu.c
         src/game/init_game.c
@@ -38,14 +39,16 @@ add_executable(mario_isn MACOSX_BUNDLE
 )
 
 add_custom_command(TARGET mario_isn POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory
-        $<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/Resources
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/Resources
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/img/MyIcon.icns $<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/Resources/MyIcon.icns
 )
-add_custom_command(TARGET mario_isn POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_SOURCE_DIR}/img/MyIcon.icns
-        $<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/Resources/MyIcon.icns
-)
+
+# add_custom_command(TARGET mario_isn POST_BUILD
+#         COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/../Resources"
+#         COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}/img" "$<TARGET_FILE_DIR:mario_isn>/../Resources/img"
+#         COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}/musique" "$<TARGET_FILE_DIR:mario_isn>/../Resources/musique"
+#         COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}/bin" "$<TARGET_FILE_DIR:mario_isn>/../Resources/bin"
+# )
 
 set_source_files_properties(${CMAKE_SOURCE_DIR}/img/MyIcon.icns
         PROPERTIES

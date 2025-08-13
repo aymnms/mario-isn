@@ -269,3 +269,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,linux,c,cmake,ninja,clion
+
+.vscode/
+PROJECT_SNAPSHOT.txt
+update-gpt.sh

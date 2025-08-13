@@ -14,12 +14,8 @@ case "$1" in
         ;;
     run)
         echo "🚀 Lancement du projet..."
-        # MAUVAIS COMPORTEMENT
-        # NORMALEMENT PAS BESOIN D'ÊTRE DANS DOSSIER POUR EXECUTER
         if [ -f build/mario_isn.app/Contents/MacOS/mario_isn ]; then
-            cd build/mario_isn.app/Contents/MacOS/
-            ./mario_isn
-            cd ../../../../
+            build/mario_isn.app/Contents/MacOS/mario_isn
         else
             echo "Erreur: le projet n'est pas compilé. Lancez '$0 build' d'abord."
             exit 1

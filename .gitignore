@@ -103,6 +103,9 @@ dkms.conf
 # CMake
 cmake-build-*/
 build/
+build-arm/
+build-intel/
+build-macos/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml

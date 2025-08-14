@@ -1,9 +1,10 @@
 ﻿#include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "display.h"
+#include "path.h"
 
 extern int decalage;
 extern char statue[20];
@@ -23,8 +24,6 @@ void afficher_mechant(){
 	}else if(statue[nb_mechant] == 'U'){
 		imgMechant = create_texture(path_img("bowserMort.png"));
 	}
-
-	
 
 	tableau_mechant[nb_mechant][3] = tableau_mechant[nb_mechant][1];
 	tableau_mechant[nb_mechant][3].x -= decalage;

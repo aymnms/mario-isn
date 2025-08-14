@@ -13,7 +13,10 @@ BUILD_TYPE = Debug
 all: build
 
 configure:
-	@$(CMAKE) -S . -B $(BUILD_DIR) -G $(GENERATOR) -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+	@$(CMAKE) -S . -B $(BUILD_DIR) -G $(GENERATOR) \
+		-DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
+		$(if $(ARCH),-DCMAKE_OSX_ARCHITECTURES="$(ARCH)") \
+		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 build: configure
 	@$(CMAKE) --build $(BUILD_DIR)
@@ -23,3 +26,14 @@ run: build
 
 clean:
 	@rm -rf $(BUILD_DIR)
+
+prod-arm:
+	$(MAKE) BUILD_DIR=build-arm BUILD_TYPE=Release ARCH="arm64" configure build
+
+# # Ne fonctionne pas encore
+# prod-intel:
+# 	$(MAKE) BUILD_DIR=build-intel BUILD_TYPE=Release ARCH="x86_64" configure build
+
+# # Ne fonctionne pas encore
+# prod-macos:
+# 	$(MAKE) BUILD_DIR=build-macos BUILD_TYPE=Release ARCH="universal" configure build

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #define PATH_MAX_LEN 4096
 static char g_path_buf[PATH_MAX_LEN];
@@ -28,29 +28,27 @@ char* asset_path(const char *subpath) {
 
     // 1) base + subpath
     join2(g_path_buf, base, subpath);
-    if (file_exists(g_path_buf)) { SDL_free(base); return g_path_buf; }
-
-    // 2) cas bundle macOS: .../Contents/MacOS/
-    if (strstr(base, "/Contents/MacOS/")) {
-        char buf2[PATH_MAX_LEN];
-
-        // Resources dans le bundle
-        join3(buf2, base, "../Resources/", subpath);
-        if (file_exists(buf2)) { SDL_free(base); snprintf(g_path_buf, PATH_MAX_LEN, "%s", buf2); return g_path_buf; }
-
-        // Layout de dev (depuis MacOS -> racine projet)
-        join3(buf2, base, "../../../", subpath);
-        if (file_exists(buf2)) { SDL_free(base); snprintf(g_path_buf, PATH_MAX_LEN, "%s", buf2); return g_path_buf; }
+    if (file_exists(g_path_buf)) {
+        SDL_free(base);
+        return g_path_buf;
     } else {
-        // 3) exécutable hors bundle : remonter d'1–2 niveaux
+        // 2) exécutable hors bundle : remonter d'1–2 niveaux
         char buf2[PATH_MAX_LEN];
         join3(buf2, base, "../", subpath);
-        if (file_exists(buf2)) { SDL_free(base); snprintf(g_path_buf, PATH_MAX_LEN, "%s", buf2); return g_path_buf; }
+        if (file_exists(buf2)) {
+            SDL_free(base);
+            snprintf(g_path_buf, PATH_MAX_LEN, "%s", buf2);
+            return g_path_buf;
+        }
         join3(buf2, base, "../../", subpath);
-        if (file_exists(buf2)) { SDL_free(base); snprintf(g_path_buf, PATH_MAX_LEN, "%s", buf2); return g_path_buf; }
+        if (file_exists(buf2)) {
+            SDL_free(base);
+            snprintf(g_path_buf, PATH_MAX_LEN, "%s", buf2);
+            return g_path_buf;
+        }
     }
-
-    // 4) fallback : renvoyer tel quel (permet l'exécution depuis la racine projet)
+    
+    // 3) fallback : renvoyer tel quel (permet l'exécution depuis la racine projet)
     SDL_free(base);
     snprintf(g_path_buf, PATH_MAX_LEN, "%s", subpath);
     return g_path_buf;

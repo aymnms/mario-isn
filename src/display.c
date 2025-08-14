@@ -1,5 +1,5 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include "display.h"
 #include "path.h"
 
@@ -39,17 +39,16 @@ void update_texture(SDL_Texture *texture, SDL_Rect *src, SDL_Rect *dest) {
     present_screen();
 }
 
-SDL_Texture *create_texture(char *surface_path) {
-    char *absPath = asset_path(surface_path);
-    SDL_Surface *img = IMG_Load(absPath);
+SDL_Texture *create_texture(char *abs_surface_path) {
+    SDL_Surface *img = IMG_Load(abs_surface_path);
     if (!img) {
-        fprintf(stderr, "IMG_Load failed for '%s': %s\n", absPath, IMG_GetError());
+        fprintf(stderr, "IMG_Load failed for '%s': %s\n", abs_surface_path, IMG_GetError());
         return NULL;
     }
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
     SDL_FreeSurface(img);
     if (!texture) {
-        fprintf(stderr, "SDL_CreateTextureFromSurface failed for '%s'\n", absPath);
+        fprintf(stderr, "SDL_CreateTextureFromSurface failed for '%s'\n", abs_surface_path);
     }
     return texture;
 }

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <time.h> //Ne pas oublier d'inclure le fichier time.h
 
 #include "MARIO_mechant.h"

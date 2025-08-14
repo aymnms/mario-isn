@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "display.h"
 #include "MARIO_conditions.h"
@@ -9,6 +9,7 @@
 #include "MARIO_game.h"
 #include "MARIO_niveau.h"
 #include "MARIO_musique.h"
+#include "path.h"
 
 extern SDL_Rect origine, pos_perso;
 extern SDL_Texture *img, *perso;

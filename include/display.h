@@ -1,7 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;

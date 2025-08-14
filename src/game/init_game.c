@@ -1,10 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "display.h"
 #include "MARIO_niveau.h"
+#include "path.h"
 
 
 extern SDL_Texture *perso, *img, *background;
@@ -39,8 +40,6 @@ void init_niveau() {
 
     perso = create_texture(path_img("mario_idle.png"));
     display_texture(perso, NULL, &pos_perso);
-
-    // SDL_ShowCursor(SDL_FALSE); //enleve le cusrseur dans la fenetre
 }
 
 
@@ -54,7 +53,7 @@ void init_timer (){
     noir = create_texture(path_img("noir.png"));
     pos_cadre.x = 400;
     pos_cadre.y = 0;
-    cadre = create_texture ("../img/cadre.png"));
+    cadre = create_texture(path_img("cadre.png")); // vérifier
     decoule = 600;
 }
 

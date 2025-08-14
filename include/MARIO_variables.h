@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
 //-------------------------------------------------Variable-générale-------------------------------------------------//
 int run = 1, run_game = 1;
 int niveau = 1;

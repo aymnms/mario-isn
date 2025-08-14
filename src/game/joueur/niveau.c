@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "display.h"
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
 #include "MARIO_niveau.h"
 #include "MARIO_conditions.h"
 #include "MARIO_mechant.h"

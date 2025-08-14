@@ -43,7 +43,7 @@ add_executable(mario_isn MACOSX_BUNDLE
 )
 
 # Indique où la placer dans le bundle
-set_source_files_properties(${CMAKE_SOURCE_DIR}/img/MyIcon.icns
+set_source_files_properties(${CMAKE_SOURCE_DIR}/ressources/MyIcon.icns
     PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 # Portée des includes du projet (headers locaux)

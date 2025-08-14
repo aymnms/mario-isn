@@ -275,3 +275,4 @@ $RECYCLE.BIN/
 .vscode/
 SNAPSHOT.txt
 Makefile.local
+node_modules/

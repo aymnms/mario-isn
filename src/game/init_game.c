@@ -53,7 +53,7 @@ void init_timer (){
     noir = create_texture(path_img("noir.png"));
     pos_cadre.x = 400;
     pos_cadre.y = 0;
-    cadre = create_texture(path_img("cadre.png")); // vérifier
+    cadre = create_texture(path_img("cadre.png"));
     decoule = 600;
 }
 

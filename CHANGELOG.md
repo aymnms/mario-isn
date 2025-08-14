@@ -1,0 +1,38 @@
+# 1.0.0 (2025-08-14)
+
+
+### Bug Fixes
+
+* add void image to remove the image of the villain at the start of the level ([d533fef](https://github.com/aymnms/mario-isn/commit/d533fef641f527b84662829802f042e7660268ce))
+* coin display info ([e22a4ad](https://github.com/aymnms/mario-isn/commit/e22a4adf609b467258399af53a649ce07f0a18cc))
+* modify chronometer display ([10c56b0](https://github.com/aymnms/mario-isn/commit/10c56b092ecbc0848c897ff13ce229ef5c4d1b25))
+* remove carre texture ([5d980e1](https://github.com/aymnms/mario-isn/commit/5d980e1ab07479d75ce3390b685655baf48894ad))
+
+
+### Features
+
+* add license ([105ad7e](https://github.com/aymnms/mario-isn/commit/105ad7e29d30a3e7c0506d4c75aac1333373fffc))
+* add Makefile ([5590f1d](https://github.com/aymnms/mario-isn/commit/5590f1dde95188a3b70c63edeb10b8ecf44cffe6))
+* add script.sh ([6edbf29](https://github.com/aymnms/mario-isn/commit/6edbf2984678aabd21aea942556ab9700c43036b))
+* add SDL2 lib & start to implement main.c ([85426f9](https://github.com/aymnms/mario-isn/commit/85426f924be2de76526f16378b585c1b812bbfa2))
+* add workflow to build app on macos intel & arm ([c295c84](https://github.com/aymnms/mario-isn/commit/c295c846792db22682eb90a725e2f286a8994163))
+* build .app ([8643d66](https://github.com/aymnms/mario-isn/commit/8643d66c443fa8477f7660ac7752224304900e5e))
+* game included with display ([2cc110f](https://github.com/aymnms/mario-isn/commit/2cc110f88b7b2959d30b46aa3d59a67ba75db9f8))
+* game included without display ([eff7c15](https://github.com/aymnms/mario-isn/commit/eff7c15c194d964afd75392e8bb8d0d45116ef71))
+* hello world ([bb415a0](https://github.com/aymnms/mario-isn/commit/bb415a06096b3e41f593164122ff5bdf46306a1e))
+* implement semantic release [#7](https://github.com/aymnms/mario-isn/issues/7) ([2cf4465](https://github.com/aymnms/mario-isn/commit/2cf4465a510781983657dd4e2f4d15a329184a78))
+* init_game included ([787e210](https://github.com/aymnms/mario-isn/commit/787e21062e70b7c4ea6844f91acef3e3fa679d7c))
+* init_menu.c & music.c implemented ([eac3cfc](https://github.com/aymnms/mario-isn/commit/eac3cfcf3549efdd5ebb0995a0c511859795c147))
+* menu implemented ([ad45ce8](https://github.com/aymnms/mario-isn/commit/ad45ce8610b2994984734ae94a9aba0916c13a02))
+* modify build-macos.yml ([cdf80dd](https://github.com/aymnms/mario-isn/commit/cdf80ddadb7ed6a88b0e1edc7f214a88facdb109))
+* modify cicd macos-arm ([39fe6e1](https://github.com/aymnms/mario-isn/commit/39fe6e1b8697133c6299d945938edbbb8671e586))
+* modify readme ([dd5637b](https://github.com/aymnms/mario-isn/commit/dd5637bb25fcc13e6d2fde62e80699b0d41acf2e))
+* modify readme ([77073cd](https://github.com/aymnms/mario-isn/commit/77073cd7097f78102e815273d36b693dc55d595f))
+* modify readme ([49fb7da](https://github.com/aymnms/mario-isn/commit/49fb7da2e313962b3493afad3110c9767156cb3b))
+* modify Readme ([6f119e1](https://github.com/aymnms/mario-isn/commit/6f119e16b9754d061f496a8327c92110e4978478))
+* remove build cicd on pull_request ([c9dc932](https://github.com/aymnms/mario-isn/commit/c9dc932768fcb7518d505f0849e1a6736dc6ba64))
+* remove macos intelworkflow ([492731b](https://github.com/aymnms/mario-isn/commit/492731b253a286b4c30443ccad5871bf6b8f88d0))
+* Remove quarantine attribute and Sign app into workflow ([9ae652a](https://github.com/aymnms/mario-isn/commit/9ae652aa80124608b7941615a770950e7fab125b))
+* remove SDL icon ([c06ebe3](https://github.com/aymnms/mario-isn/commit/c06ebe37f5994b2741bc3c093d2b968a48429256))
+* update Readme ([f9e7d14](https://github.com/aymnms/mario-isn/commit/f9e7d145ce7e3e8d3156c7449b83f7aaac378cde))
+* update README ([c31dc5c](https://github.com/aymnms/mario-isn/commit/c31dc5cffdb44d4306516540e2335d2131c24f21))

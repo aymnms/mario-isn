@@ -14,13 +14,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: brew install sdl2 sdl2_image sdl2_mixer
+        run: brew install cmake ninja sdl2 sdl2_image sdl2_mixer
 
-      - name: Configure CMake
-        run: cmake -B build-arm -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64"
-
-      - name: Build
-        run: cmake --build build-arm --config Release
+      - name: Configure CMake and Build
+        run: make prod-arm
 
       - name: Remove quarantine attribute
         run: xattr -rd com.apple.quarantine build-arm/mario_isn.app

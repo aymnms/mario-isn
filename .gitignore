@@ -102,6 +102,10 @@ dkms.conf
 
 # CMake
 cmake-build-*/
+build/
+build-arm/
+build-intel/
+build-macos/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
@@ -176,7 +180,6 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -268,3 +271,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,linux,c,cmake,ninja,clion
+
+.vscode/
+SNAPSHOT.txt
+Makefile.local

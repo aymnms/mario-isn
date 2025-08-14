@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
+#include <SDL.h>
+#include <SDL_mixer.h>
+#include "path.h"
 
 Mix_Music *musiqueFond; //Création d'un pointeur de type Mix_Music
    Mix_Music *musiqueMenu;
@@ -29,15 +30,15 @@ void init_mus()
       printf("%s", Mix_GetError());
    }
 
-   musiqueFond = Mix_LoadMUS("../musique/gameTheme.mp3"); //Chargement de la musique
-   musiqueMenu = Mix_LoadMUS("../musique/mainTheme.mp3");
-   sonSaut = Mix_LoadWAV("../musique/jumpSound.wav");
-   sonBloc = Mix_LoadWAV("../musique/coinSound.wav");
-   sonEnemy = Mix_LoadWAV("../musique/EnnemySound.wav");
-   musiqueGameOver= Mix_LoadMUS("../musique/gameOver.wav");
-   musiqueMiss= Mix_LoadMUS("../musique/miss.wav");
-   musiquevictory= Mix_LoadMUS("../musique/victory.wav");
-   sonUp= Mix_LoadWAV("../musique/up.wav");
+   musiqueFond = Mix_LoadMUS(path_music("gameTheme.mp3")); //Chargement de la musique
+   musiqueMenu = Mix_LoadMUS(path_music("mainTheme.mp3"));
+   sonSaut = Mix_LoadWAV(path_music("jumpSound.wav"));
+   sonBloc = Mix_LoadWAV(path_music("coinSound.wav"));
+   sonEnemy = Mix_LoadWAV(path_music("EnnemySound.wav"));
+   musiqueGameOver= Mix_LoadMUS(path_music("gameOver.wav"));
+   musiqueMiss= Mix_LoadMUS(path_music("miss.wav"));
+   musiquevictory= Mix_LoadMUS(path_music("victory.wav"));
+   sonUp= Mix_LoadWAV(path_music("up.wav"));
 }
 
 void playSon(const int son){

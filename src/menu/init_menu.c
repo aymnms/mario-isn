@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include "MARIO_musique.h"
 #include "display.h"
+#include "path.h"
 
 
 extern SDL_Rect origine;
@@ -26,7 +27,7 @@ void init_fenetre(){
     SDL_ShowCursor(SDL_ENABLE);
 
     // Charge une image
-    SDL_Texture *texture = create_texture("../img/menu.png");
+    SDL_Texture *texture = create_texture(path_img("menu.png"));
     update_texture(texture, NULL, NULL);
 }
 

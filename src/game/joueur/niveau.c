@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "display.h"
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
 #include "MARIO_niveau.h"
 #include "MARIO_conditions.h"
 #include "MARIO_mechant.h"
+#include "path.h"
 
 int hautBlock = 50;
 int largBlock = 50;
@@ -30,13 +31,13 @@ extern int decalage;
 
 void init_skin() {
 	printf ("initialisation skin\n");
-	bloc = create_texture("../img/block.png");
-	fond = create_texture("../img/fondNuage.png");
-	cadeau = create_texture("../img/cadeau.png");
-	eau = create_texture("../img/eau.png");
-	pic = create_texture("../img/pic.png");
-    drapeau = create_texture("../img/drapeau.png");
-    hache = create_texture("../img/axe.png");
+	bloc = create_texture(path_img("block.png"));
+	fond = create_texture(path_img("fondNuage.png"));
+	cadeau = create_texture(path_img("cadeau.png"));
+	eau = create_texture(path_img("eau.png"));
+	pic = create_texture(path_img("pic.png"));
+    drapeau = create_texture(path_img("drapeau.png"));
+    hache = create_texture(path_img("axe.png"));
 }
 
 void addMechant(int x, int y) {
@@ -159,7 +160,7 @@ void niveauSelect(int nb)
 	auto char num;
     auto int *nbM, xM, yM;
 
-    fichier = fopen("../bin/niveau.lvl", "r");
+    fichier = fopen(path_bin("niveau.lvl"), "r");
     char caract;
     switch (nb)
     {

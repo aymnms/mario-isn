@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "display.h"
 #include "MARIO_conditions.h"
@@ -9,6 +9,7 @@
 #include "MARIO_game.h"
 #include "MARIO_niveau.h"
 #include "MARIO_musique.h"
+#include "path.h"
 
 extern SDL_Rect origine, pos_perso;
 extern SDL_Texture *img, *perso;
@@ -43,7 +44,7 @@ void game_over(){
         playMus(3);
         origine.x = 0;
         origine.y = 0;
-        img = create_texture("../img/dommage.png");
+        img = create_texture(path_img("dommage.png"));
 
         // ALORS
         update_texture(img, NULL, &origine);
@@ -57,7 +58,7 @@ void game_over(){
         playMus(4);
         origine.x = 0;
         origine.y = 0;
-        img = create_texture("../img/game_over.png");
+        img = create_texture(path_img("game_over.png"));
 
         // ALORS
         update_texture(img, NULL, &origine);
@@ -77,7 +78,7 @@ int victory() {
     origine.x = 0;
     origine.y = 0;
     playMus(5);
-    img = create_texture("../img/victory.png");
+    img = create_texture(path_img("victory.png"));
     for(int i = 0; i<=19; i++)
     {
         statue[i] = '0';
@@ -89,7 +90,7 @@ int victory() {
     }
         pos_perso.x = 280;
         pos_perso.y = 550;
-        perso = create_texture("../img/mario_saut_droite.png");
+        perso = create_texture(path_img("mario_saut_droite.png"));
         for ( pos_perso.y = 550; pos_perso.y >= 150; pos_perso.y -=2){
             clear_screen();
             // ALORS

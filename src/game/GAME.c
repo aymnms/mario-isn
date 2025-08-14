@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "display.h"
 #include "MARIO_niveau.h"
@@ -10,6 +10,7 @@
 #include "MARIO_joueur.h"
 #include "MARIO_menu.h"
 #include "MARIO_game.h"
+#include "path.h"
 
 
 extern int run_game;
@@ -48,7 +49,7 @@ void timer(){
 }
 
 void systeme_vie(){ // affiche les vies à l'écran
-    SDL_Texture *champi = create_texture("../img/champi.png");
+    SDL_Texture *champi = create_texture(path_img("champi.png"));
     pos_champi.y= 0;
     for (int i = 0; i <= vie-1; i++){
         pos_champi.x = i*55;
@@ -61,43 +62,43 @@ void coinAff(){
     switch (coin){
 
         case 0 :
-        coinnb = create_texture("../img/zero.png");
+        coinnb = create_texture(path_img("zero.png"));
         break;
 
         case 1 :
-        coinnb = create_texture("../img/un.png");
+        coinnb = create_texture(path_img("un.png"));
         break;
 
         case 2 :
-        coinnb = create_texture("../img/deux.png");
+        coinnb = create_texture(path_img("deux.png"));
         break;
 
         case 3 :
-        coinnb = create_texture("../img/trois.png");
+        coinnb = create_texture(path_img("trois.png"));
         break;
 
         case 4 :
-        coinnb = create_texture("../img/quatre.png");
+        coinnb = create_texture(path_img("quatre.png"));
         break;
 
         case 5 :
-        coinnb = create_texture("../img/cinq.png");
+        coinnb = create_texture(path_img("cinq.png"));
         break;
 
         case 6 :
-        coinnb = create_texture("../img/six.png");
+        coinnb = create_texture(path_img("six.png"));
         break;
 
         case 7 :
-        coinnb = create_texture("../img/sept.png");
+        coinnb = create_texture(path_img("sept.png"));
         break;
 
         case 8 :
-        coinnb = create_texture("../img/huit.png");
+        coinnb = create_texture(path_img("huit.png"));
         break;
 
         case 9 :
-        coinnb = create_texture("../img/neuf.png");
+        coinnb = create_texture(path_img("neuf.png"));
         break;
     }
 
@@ -149,7 +150,7 @@ void init_coin(){
     printf("init_coin\n");
     pos_coinmeter.x = 0;
     pos_coinmeter.y = 65;
-    coinmeter = create_texture("../img/coinx.png");
+    coinmeter = create_texture(path_img("coinx.png"));
     if (coinmeter == NULL) {printf("coinx not found\n");}
 
     pos_coinnb.x = 70;

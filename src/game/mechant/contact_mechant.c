@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "MARIO_conditions.h"
 #include "MARIO_mechant.h"

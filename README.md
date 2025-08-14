@@ -37,19 +37,17 @@
   <ol>
     <li>
       <a href="#about-the-project">About the Project</a>
-      <ul>
-        <li><a href="#built-with">Technologies Used</a></li>
-      </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#commands">Commands</a></li>
+        <li><a href="#download-release">Download release</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -69,13 +67,6 @@ Initially developed in 2017/2018 with 2 fellow students, the project has been up
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Technologies Used
-
-* C
-* CMake
-* SDL2, SDL2_image, SDL2_mixer
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -85,13 +76,15 @@ Here are the steps to run the project locally (currently only on macOS ARM64 - w
 ### Prerequisites
 
 * C
+* Makefile
 * CMake
+* Ninja
 * SDL2, SDL2_image, SDL2_mixer
-
-#### macOS (arm - Apple Silicon):
-* [Homebrew](https://brew.sh/) to manage dependencies
+* homebrew (macos)
 
 ### Installation
+
+**⚠️ only for macos for moment**
 
 1. **Clone the repository**
 
@@ -102,44 +95,29 @@ cd mario-isn
 
 2. **Install dependencies**
 
-macOS
 ```sh
-brew install sdl2 sdl2_image sdl2_mixer
+xcode-select --install                                 # Outils Apple (clang, lldb…)
+brew install cmake ninja sdl2 sdl2_image sdl2_mixer    # CMake + (optionnel) Ninja
 ```
 
-3. **Config CMake**
+3. **Build and Run**
 
-macOS:
 ```sh
-cmake -B build-arm -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64"
+make run
+```
+### Commands
+
+To know what command you can to execute
+```sh
+make
 ```
 
-4. **Build**
-
-macOS:
-```sh
-cmake --build build-arm --config Release
-```
-
-5. **Run the game**
-
-macOS:
-```sh
-cd build-arm
-./mario-isn
-```
 
 ### Download release
 
 #### macOS (only arm)
 
-ℹ️ **Note for distribution**: The generated `.app` may be marked as coming from an unidentified source (attribute `com.apple.quarantine`). To run the application directly:
-
-```
-xattr -d com.apple.quarantine ./mario_isn.app
-```
-
-Or you can go to system settings to “execute anyway”.
+ℹ️ **Note for distribution**: The generated `.app` may be marked as coming from an unidentified source (attribute `com.apple.quarantine`). To run the application, go to system settings to “execute anyway”.
 
 [![Game screenshot][product-screenshot-8]](#)
 
@@ -155,19 +133,6 @@ Use the keyboard arrows to move the player, jump and interact with enemies.
 |-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
 | [![Game screenshot][product-screenshot-4]](#) | [![Game screenshot][product-screenshot-5]](#) | [![Game screenshot][product-screenshot-6]](#) |
 
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Redesign of the graphical interface
-- [x] Added animations for the player
-- [x] Collision handling with enemies
-- [ ] Rendering optimization
-- [ ] Adding additional levels
-
-See the [open issues](https://github.com/aymnms/mario-isn/issues) for more.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -213,11 +178,11 @@ Distributed under the MIT License. See `LICENSE` for more information.
 [issues-url]: https://github.com/aymnms/mario-isn/issues
 [license-shield]: https://img.shields.io/github/license/aymnms/mario-isn.svg?style=for-the-badge
 [license-url]: https://github.com/aymnms/mario-isn/blob/main/LICENSE
-[product-screenshot-1]: img/screenshot-1.png
-[product-screenshot-2]: img/screenshot-2.png
-[product-screenshot-3]: img/screenshot-3.png
-[product-screenshot-4]: img/screenshot-4.png
-[product-screenshot-5]: img/screenshot-5.png
-[product-screenshot-6]: img/screenshot-6.png
-[product-screenshot-7]: img/screenshot-7.gif
-[product-screenshot-8]: img/screenshot-8.png
+[product-screenshot-1]: ressources/img/screenshot-1.png
+[product-screenshot-2]: ressources/img/screenshot-2.png
+[product-screenshot-3]: ressources/img/screenshot-3.png
+[product-screenshot-4]: ressources/img/screenshot-4.png
+[product-screenshot-5]: ressources/img/screenshot-5.png
+[product-screenshot-6]: ressources/img/screenshot-6.png
+[product-screenshot-7]: ressources/img/screenshot-7.gif
+[product-screenshot-8]: ressources/img/screenshot-8.png

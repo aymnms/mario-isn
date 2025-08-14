@@ -1,6 +1,7 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include "display.h"
+#include "path.h"
 
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
@@ -38,10 +39,17 @@ void update_texture(SDL_Texture *texture, SDL_Rect *src, SDL_Rect *dest) {
     present_screen();
 }
 
-SDL_Texture *create_texture(char *surface_path) {
-    SDL_Surface *img = IMG_Load(surface_path);
+SDL_Texture *create_texture(char *abs_surface_path) {
+    SDL_Surface *img = IMG_Load(abs_surface_path);
+    if (!img) {
+        fprintf(stderr, "IMG_Load failed for '%s': %s\n", abs_surface_path, IMG_GetError());
+        return NULL;
+    }
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
     SDL_FreeSurface(img);
+    if (!texture) {
+        fprintf(stderr, "SDL_CreateTextureFromSurface failed for '%s'\n", abs_surface_path);
+    }
     return texture;
 }
 

@@ -78,10 +78,13 @@ Here are the steps to run the project locally (currently only on macOS ARM64 - w
 * C
 * Makefile
 * CMake
+* Ninja
 * SDL2, SDL2_image, SDL2_mixer
 * homebrew (macos)
 
 ### Installation
+
+**⚠️ only for macos for moment**
 
 1. **Clone the repository**
 
@@ -92,7 +95,6 @@ cd mario-isn
 
 2. **Install dependencies**
 
-macOS
 ```sh
 xcode-select --install                                 # Outils Apple (clang, lldb…)
 brew install cmake ninja sdl2 sdl2_image sdl2_mixer    # CMake + (optionnel) Ninja
@@ -100,11 +102,10 @@ brew install cmake ninja sdl2 sdl2_image sdl2_mixer    # CMake + (optionnel) Nin
 
 3. **Build and Run**
 
-macOS:
 ```sh
 make run
 ```
-## Usage
+### Commands
 
 To know what command you can to execute
 ```sh
@@ -116,13 +117,7 @@ make
 
 #### macOS (only arm)
 
-ℹ️ **Note for distribution**: The generated `.app` may be marked as coming from an unidentified source (attribute `com.apple.quarantine`). To run the application directly:
-
-```
-xattr -d com.apple.quarantine ./mario_isn.app
-```
-
-Or you can go to system settings to “execute anyway”.
+ℹ️ **Note for distribution**: The generated `.app` may be marked as coming from an unidentified source (attribute `com.apple.quarantine`). To run the application, go to system settings to “execute anyway”.
 
 [![Game screenshot][product-screenshot-8]](#)
 

@@ -6,13 +6,13 @@
 #include "display.h"
 #include "MARIO_niveau.h"
 #include "path.h"
+#include "globals.h"
 
 
-extern SDL_Texture *perso, *img, *background;
+extern SDL_Texture *img, *background;
 extern SDL_Rect pos_perso, origine;
 
 extern int decalage;
-extern int emp;
 extern int coin, niveau, vie;
 
 extern int jump, chute; //saut
@@ -22,10 +22,6 @@ extern int bool_saut_sur_mechant;
 extern char statue[10];
 extern int direction_mechant[10];
 extern SDL_Rect tableau_mechant[10][4];
-
-SDL_Rect pos_barre, pos_noir, pos_cadre, pos_champi;
-SDL_Texture *barre, *noir, *cadre, *champi;
-int decoule;
 
 
 void init_niveau() {

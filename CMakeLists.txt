@@ -43,6 +43,7 @@ endif()
 # Executable target
 # =====================================
 add_executable(mario_isn ${PLATFORM_BUNDLE}
+        src/globals.c
         src/main.c
         src/display.c
         src/path.c

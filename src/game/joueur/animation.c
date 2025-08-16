@@ -6,11 +6,10 @@
 #include "MARIO_joueur.h"
 #include "display.h"
 #include "path.h"
+#include "globals.h"
 
-extern SDL_Texture *perso, *img;
-extern int emp;
+extern SDL_Texture *img;
 extern int bool_droite, bool_gauche;
-extern int temps;
 int test_bas;
 
 void animation() {

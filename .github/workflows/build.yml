@@ -90,7 +90,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           cd build-linux
-          tar -czf MarioISN-linux.tar.gz mario_isn img musique bin || true
+          tar -czf MarioISN-linux.tar.gz mario_isn img musique bin lib || true
 
       # - name: Package artifact (Windows)
       #   if: runner.os == 'Windows'

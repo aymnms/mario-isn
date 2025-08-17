@@ -101,7 +101,7 @@ if(APPLE)
 	
 	# Chercher les libs à runtime dans Contents/Frameworks
 	set(CMAKE_MACOSX_RPATH ON)
-			set_target_properties(mario_isn PROPERTIES
+	set_target_properties(mario_isn PROPERTIES
 			BUILD_RPATH "@executable_path/../Frameworks"
 			INSTALL_RPATH "@executable_path/../Frameworks"
 	)
@@ -121,7 +121,7 @@ if(APPLE)
               $<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/Resources/bin
   )
 
-	# --- Copie/réécriture des dylibs dans Contents/Frameworks via fixup_bundle ---
+	# --- Copie/réécriture des dylibs dans Contents/Frameworks via macos_fixup ---
 	add_custom_command(TARGET mario_isn POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E make_directory
 							$<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/Frameworks
@@ -129,7 +129,7 @@ if(APPLE)
 			COMMAND ${CMAKE_COMMAND}
 							-DAPP="$<TARGET_BUNDLE_DIR:mario_isn>"
 							-DSEARCH_DIRS="$<TARGET_FILE_DIR:SDL2::SDL2>;$<TARGET_FILE_DIR:SDL2_image::SDL2_image>;$<TARGET_FILE_DIR:SDL2_mixer::SDL2_mixer>;/opt/homebrew/lib;/opt/homebrew/opt"
-							-P "${CMAKE_SOURCE_DIR}/cmake/fixup_bundle.cmake"
+							-P "${CMAKE_SOURCE_DIR}/cmake/macos_fixup.cmake"
 	)
 
 	add_custom_command(TARGET mario_isn POST_BUILD
@@ -152,6 +152,12 @@ elseif(WIN32)
   )
 
 elseif(UNIX)
+	# --- RPATH: l’exe cherchera d’abord ses libs dans ./lib (relatif à l’exe) ---
+	set_target_properties(mario_isn PROPERTIES
+		BUILD_RPATH "\$ORIGIN/lib"
+		INSTALL_RPATH "\$ORIGIN/lib"
+	)
+
   # On Linux, copy assets next to the executable
   add_custom_command(TARGET mario_isn POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -164,4 +170,18 @@ elseif(UNIX)
               ${CMAKE_SOURCE_DIR}/ressources/bin
               $<TARGET_FILE_DIR:mario_isn>/bin
   )
+
+	if (TARGET SDL2::SDL2 AND TARGET SDL2_image::SDL2_image AND TARGET SDL2_mixer::SDL2_mixer)
+			add_custom_command(TARGET mario_isn POST_BUILD
+					COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:mario_isn>/lib
+					COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:SDL2::SDL2>             $<TARGET_FILE_DIR:mario_isn>/lib/ || true
+					COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:SDL2_image::SDL2_image> $<TARGET_FILE_DIR:mario_isn>/lib/ || true
+					COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:SDL2_mixer::SDL2_mixer> $<TARGET_FILE_DIR:mario_isn>/lib/ || true
+			)
+	else()
+		# Cas 2 : fallback pkg-config -> on scanne l’exe avec ldd et on copie les libs utiles
+			add_custom_command(TARGET mario_isn POST_BUILD
+					COMMAND ${CMAKE_COMMAND} -DAPP_DIR="$<TARGET_FILE_DIR:mario_isn>" -P "${CMAKE_SOURCE_DIR}/cmake/linux_fixup.cmake"
+			)
+	endif()
 endif()

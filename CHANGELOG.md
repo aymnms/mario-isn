@@ -1,3 +1,13 @@
+# [1.1.0](https://github.com/aymnms/mario-isn/compare/v1.0.0...v1.1.0) (2025-08-17)
+
+
+### Features
+
+* centralize global variables ([4f3a3aa](https://github.com/aymnms/mario-isn/commit/4f3a3aac698f7c819233a7cf80d31f4ed5dde0e3))
+* compile on linux ([7716ca0](https://github.com/aymnms/mario-isn/commit/7716ca066df393b287de81ea745fecf6aa4cd939))
+* Modify the existing sementic release pipeline to add builds for the multi-OS pipline. ([8bb896d](https://github.com/aymnms/mario-isn/commit/8bb896d792d1a19ce2a057ebd16831ae3c40ac0e))
+* Modify the macos pipeline into a multi-OS pipeline to build on github actions ([79d72bb](https://github.com/aymnms/mario-isn/commit/79d72bb00d9319b1e3e0178b343c9ce9541a65ed))
+
 # 1.0.0 (2025-08-14)
 
 

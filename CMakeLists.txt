@@ -98,6 +98,13 @@ if(APPLE)
   target_sources(mario_isn PRIVATE ${CMAKE_SOURCE_DIR}/ressources/MyIcon.icns)
   set_source_files_properties(${CMAKE_SOURCE_DIR}/ressources/MyIcon.icns
       PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+	
+	# Chercher les libs à runtime dans Contents/Frameworks
+	set(CMAKE_MACOSX_RPATH ON)
+			set_target_properties(mario_isn PROPERTIES
+			BUILD_RPATH "@executable_path/../Frameworks"
+			INSTALL_RPATH "@executable_path/../Frameworks"
+	)
 
   # Copy assets into the app bundle Resources so SDL_GetBasePath() finds img/, musique/, bin/
   add_custom_command(TARGET mario_isn POST_BUILD
@@ -113,6 +120,22 @@ if(APPLE)
               ${CMAKE_SOURCE_DIR}/ressources/bin
               $<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/Resources/bin
   )
+
+	# --- Copie/réécriture des dylibs dans Contents/Frameworks via fixup_bundle ---
+	add_custom_command(TARGET mario_isn POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E make_directory
+							$<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/Frameworks
+			# On passe au script: l'app et une liste de dossiers où chercher les .dylib
+			COMMAND ${CMAKE_COMMAND}
+							-DAPP="$<TARGET_BUNDLE_DIR:mario_isn>"
+							-DSEARCH_DIRS="$<TARGET_FILE_DIR:SDL2::SDL2>;$<TARGET_FILE_DIR:SDL2_image::SDL2_image>;$<TARGET_FILE_DIR:SDL2_mixer::SDL2_mixer>;/opt/homebrew/lib;/opt/homebrew/opt"
+							-P "${CMAKE_SOURCE_DIR}/cmake/fixup_bundle.cmake"
+	)
+
+	add_custom_command(TARGET mario_isn POST_BUILD
+			COMMAND codesign --force --deep --sign - $<TARGET_BUNDLE_DIR:mario_isn>
+			VERBATIM
+	)
 
 elseif(WIN32)
   # On Windows, copy assets next to the .exe

@@ -1,4 +1,3 @@
-<!-- Improved compatibility of back to top link -->
 <a id="readme-top"></a>
 
 <!-- PROJECT SHIELDS -->
@@ -71,7 +70,7 @@ Initially developed in 2017/2018 with 2 fellow students, the project has been up
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Here are the steps to run the project locally (currently only on macOS ARM64 - windows and linux in progress).
+Here are the steps to run the project locally (currently works on macOS ARM64 and Linux - Windows still in progress).
 
 ### Prerequisites
 
@@ -80,11 +79,14 @@ Here are the steps to run the project locally (currently only on macOS ARM64 - w
 * CMake
 * Ninja
 * SDL2, SDL2_image, SDL2_mixer
-* homebrew (macos)
+* homebrew (for macOS)
+* apt (for Linux)
 
 ### Installation
 
-**⚠️ only for macos for moment**
+**⚠️ Instructions are split for macOS and Linux**
+
+#### macOS
 
 1. **Clone the repository**
 
@@ -105,6 +107,29 @@ brew install cmake ninja sdl2 sdl2_image sdl2_mixer    # CMake + (optionnel) Nin
 ```sh
 make run
 ```
+
+#### Linux
+
+1. **Clone the repository**
+
+```sh
+git clone https://github.com/aymnms/mario-isn.git
+cd mario-isn
+```
+
+2. **Install dependencies**
+
+```sh
+sudo apt update
+sudo apt install build-essential cmake ninja-build libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
+```
+
+3. **Build and Run**
+
+```sh
+make run
+```
+
 ### Commands
 
 To know what command you can to execute
@@ -120,6 +145,12 @@ make
 ℹ️ **Note for distribution**: The generated `.app` may be marked as coming from an unidentified source (attribute `com.apple.quarantine`). To run the application, go to system settings to “execute anyway”.
 
 [![Game screenshot][product-screenshot-8]](#)
+
+#### Linux
+
+ℹ️ To run the Linux release, make sure you have SDL2, SDL2_image, and SDL2_mixer installed on your system. You can install them via your package manager (e.g., `apt`).
+
+You can run the provided tarball release directly. If SDL2 libraries are not installed system-wide, you might need to set your `LD_LIBRARY_PATH` accordingly.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

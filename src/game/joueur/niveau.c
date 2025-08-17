@@ -8,6 +8,7 @@
 #include "MARIO_conditions.h"
 #include "MARIO_mechant.h"
 #include "path.h"
+#include "globals.h"
 
 int hautBlock = 50;
 int largBlock = 50;

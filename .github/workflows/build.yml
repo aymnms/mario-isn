@@ -1,0 +1,124 @@
+name: Build MarioISN (macOS & Linux)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        # os: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ---------------------
+      # Dependencies per OS
+      # ---------------------
+      - name: Install deps (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install cmake ninja sdl2 sdl2_image sdl2_mixer
+
+      - name: Install deps (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build pkg-config \
+            libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
+
+      # - name: Install deps (Windows via vcpkg)
+      #   if: runner.os == 'Windows'
+      #   shell: bash
+      #   run: |
+      #     git clone https://github.com/microsoft/vcpkg.git
+      #     ./vcpkg/bootstrap-vcpkg.sh
+      #     ./vcpkg/vcpkg install sdl2 sdl2-image sdl2-mixer --triplet x64-windows
+      #     echo "CMAKE_TOOLCHAIN_FILE=$PWD/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
+
+      # ---------------------
+      # Configure & Build
+      # ---------------------
+      - name: Configure & Build (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          make prod-arm
+
+      - name: Configure & Build (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          make prod-linux
+
+      # - name: Configure & Build (Windows)
+      #   if: runner.os == 'Windows'
+      #   shell: bash
+      #   run: |
+      #     cmake -S . -B build-win -G Ninja -DCMAKE_BUILD_TYPE=Release \
+      #       -DCMAKE_TOOLCHAIN_FILE="${CMAKE_TOOLCHAIN_FILE}"
+      #     cmake --build build-win --config Release
+
+      # ---------------------
+      # macOS-specific post steps
+      # ---------------------
+      - name: Ad-hoc sign app (macOS)
+        if: runner.os == 'macOS'
+        run: codesign --force --deep --sign - build-arm/mario_isn.app
+
+      - name: Package artifact (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          cd build-arm
+          zip -r MarioISN-macos-arm.zip mario_isn.app
+
+      # ---------------------
+      # Linux packaging
+      # ---------------------
+      - name: Package artifact (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          cd build-linux
+          tar -czf MarioISN-linux.tar.gz mario_isn img musique bin || true
+
+      # - name: Package artifact (Windows)
+      #   if: runner.os == 'Windows'
+      #   shell: bash
+      #   run: |
+      #     cd build-win
+      #     7z a MarioISN-windows.zip .\Release\mario_isn.exe
+
+      # ---------------------
+      # Upload artifacts
+      # ---------------------
+      - name: Upload artifact (macOS)
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MarioISN-macos-arm
+          path: build-arm/MarioISN-macos-arm.zip
+
+      - name: Upload artifact (Linux)
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MarioISN-linux
+          path: build-linux/MarioISN-linux.tar.gz
+
+      # - name: Upload artifact (Windows)
+      #   if: runner.os == 'Windows'
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: MarioISN-windows
+      #     path: build-win/MarioISN-windows.zip

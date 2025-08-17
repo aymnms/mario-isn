@@ -12,7 +12,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/aymnms/mario-isn">
-    <img src="img/sdl_icone.png" alt="Logo" width="80" height="80">
+    <img src="ressources/img/sdl_icone.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Mario-ISN</h3>

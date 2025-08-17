@@ -30,6 +30,9 @@ clean:
 prod-arm:
 	$(MAKE) BUILD_DIR=build-arm BUILD_TYPE=Release ARCH="arm64" configure build
 
+prod-linux:
+	$(MAKE) BUILD_DIR=build-linux BUILD_TYPE=Release GENERATOR="Ninja" configure build
+
 # # Ne fonctionne pas encore
 # prod-intel:
 # 	$(MAKE) BUILD_DIR=build-intel BUILD_TYPE=Release ARCH="x86_64" configure build

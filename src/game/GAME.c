@@ -11,29 +11,27 @@
 #include "MARIO_menu.h"
 #include "MARIO_game.h"
 #include "path.h"
+#include "globals.h"
 
 
 extern int run_game;
-extern SDL_Texture *perso, *img, *champi;
+extern SDL_Texture *img, *champi;
 extern int nb_mechant;
 extern int decalage;
-extern SDL_Rect origine, pos_perso, pos_champi;
+extern SDL_Rect origine, pos_perso;
 extern int decalage;
 extern char statue[10];
 extern SDL_Texture *imgMechant; //surface du mechant
 extern SDL_Rect tableau_mechant[10][4]; 
 extern int nb_mechant;
-extern int repeat, x, y;
+extern int repeat, y;
 extern int coin, niveau, vie;
 extern int jean;
 
-
-SDL_Rect pos_barre, pos_noir, pos_cadre;
-SDL_Texture *barre, *noir, *cadre;
-int decoule, alfred = 0;
+int alfred = 0;
 
 SDL_Texture *coinmeter, *coinnb;
-SDL_Rect pos_coinmeter, pos_coinnb;
+SDL_Rect pos_coinmeter, pos_coinnb, pos_champi;
 
 void timer(){
     alfred++;

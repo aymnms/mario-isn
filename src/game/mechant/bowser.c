@@ -10,6 +10,7 @@
 #include "MARIO_game.h"
 #include "MARIO_niveau.h"
 #include "MARIO_musique.h"
+#include "globals.h"
 
 extern char statue[20];
 extern SDL_Rect tableau_mechant[20][4];  

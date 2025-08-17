@@ -8,15 +8,14 @@
 #include "MARIO_conditions.h"
 #include "MARIO_game.h"
 #include "MARIO_musique.h"
+#include "globals.h"
 
 extern int run_game, run;
 extern SDL_Rect pos_perso, origine;
 extern SDL_Event event;
 extern int nb_mechant;
 extern int decalage; //strawling
-extern int emp;
 extern int bool_droite, bool_gauche, bool_saut;
-extern int temps;
 extern int coin, niveau, vie;
 extern int vic;
 int jean = 0;

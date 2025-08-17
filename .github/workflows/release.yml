@@ -1,17 +1,18 @@
 name: Release
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Build MarioISN (macOS & Linux)"]  # nom du workflow build
+    types: [completed]
 
 permissions:
   contents: write
   issues: write
   pull-requests: write
+  actions: read  # nécessaire pour télécharger les artefacts d’un autre workflow run
 
 jobs:
   release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,6 +24,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+       # Télécharge les artefacts du run qui vient de finir
+      - name: Download artifacts from build run
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.workflow_run.id }}
+          path: dist
 
       - name: Install
         run: npm ci

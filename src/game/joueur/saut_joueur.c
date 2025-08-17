@@ -4,12 +4,12 @@
 
 #include "MARIO_joueur.h"
 #include "MARIO_conditions.h"
+#include "globals.h"
 
 extern SDL_Rect pos_perso;
 extern int jump, chute;
 extern int init_hauteur_saut, init_hauteur_chute;
 extern int bool_saut, bool_saut_sur_mechant;
-extern double x;
 
 
 double fonction(double i){

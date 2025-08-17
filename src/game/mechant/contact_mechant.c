@@ -8,6 +8,7 @@
 #include "MARIO_game.h"
 #include "MARIO_niveau.h"
 #include "MARIO_musique.h"
+#include "globals.h"
 
 
 //--------------------------Variable-générale--------------------------//
@@ -19,7 +20,6 @@ extern SDL_Rect tableau_mechant[20][4];
 extern int nb_mechant;
 extern int jump, chute, bool_saut_sur_mechant;
 extern int init_hauteur_saut, init_hauteur_chute;
-extern double x;
 extern int vie;
 //---------------------------------------------------------------------//
 

@@ -1,3 +1,5 @@
+// FILE DONT USED
+
 #include <SDL.h>
 //-------------------------------------------------Variable-générale-------------------------------------------------//
 int run = 1, run_game = 1;
@@ -19,11 +21,10 @@ int bool_droite = 0, bool_gauche = 0, bool_saut = 0, bool_saut_sur_mechant = 0;
 int decalage; //strawling
 int jump, chute;
 int init_hauteur_saut, init_hauteur_chute;
-double x = 0;
+// double x = 0;
 //------------------------------------------------Variable-animation-------------------------------------------------//
 int emp = 0;
 int temps = 0;
-char lvl[10][71];
 //-------------------------------------------------------------------------------------------------------------------//
 SDL_Surface *champi;
 SDL_Rect pos_champi;

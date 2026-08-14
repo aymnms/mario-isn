@@ -30,6 +30,23 @@ jobs:
           brew update
           brew install cmake ninja sdl2 sdl2_image sdl2_mixer
 
+      # GitHub's macos-latest runners are Apple Silicon; there is no reliable
+      # native Intel runner anymore. clang cross-compiles to x86_64 directly
+      # (no Rosetta needed for that part), but Homebrew's arm64 prefix
+      # (/opt/homebrew) only ships arm64 SDL2 libs, so a second, x86_64
+      # Homebrew installed under Rosetta at /usr/local provides those.
+      - name: Install Rosetta 2 (macOS)
+        if: runner.os == 'macOS'
+        run: softwareupdate --install-rosetta --agree-to-license || true
+
+      - name: Install Intel SDL2 deps via Rosetta Homebrew (macOS)
+        if: runner.os == 'macOS'
+        env:
+          NONINTERACTIVE: "1"
+        run: |
+          arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          arch -x86_64 /usr/local/bin/brew install sdl2 sdl2_image sdl2_mixer
+
       - name: Install deps (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -54,6 +71,11 @@ jobs:
         run: |
           make prod-arm
 
+      - name: Configure & Build (macOS Intel via Rosetta)
+        if: runner.os == 'macOS'
+        run: |
+          make prod-intel
+
       - name: Configure & Build (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -72,13 +94,17 @@ jobs:
       # ---------------------
       - name: Ad-hoc sign app (macOS)
         if: runner.os == 'macOS'
-        run: codesign --force --deep --sign - build-arm/mario_isn.app
+        run: |
+          codesign --force --deep --sign - build-arm/mario_isn.app
+          codesign --force --deep --sign - build-intel/mario_isn.app
 
       - name: Package artifact (macOS)
         if: runner.os == 'macOS'
         run: |
           cd build-arm
           zip -r MarioISN-macos-arm.zip mario_isn.app
+          cd ../build-intel
+          zip -r MarioISN-macos-intel.zip mario_isn.app
 
       # ---------------------
       # Linux packaging
@@ -105,6 +131,13 @@ jobs:
         with:
           name: MarioISN-macos-arm
           path: build-arm/MarioISN-macos-arm.zip
+
+      - name: Upload artifact (macOS Intel)
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MarioISN-macos-intel
+          path: build-intel/MarioISN-macos-intel.zip
 
       - name: Upload artifact (Linux)
         if: runner.os == 'Linux'

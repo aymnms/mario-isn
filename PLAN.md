@@ -11,6 +11,7 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 - **J1** — Fix pipeline de release — corriger le téléchargement d'artefact dans `release.yml` pour que `semantic-release` publie enfin une release (#16).
 - **J2** — Bundler les libs SDL2 — embarquer SDL2/SDL2_image/SDL2_mixer dans les artefacts macOS et Linux pour une exécution sans dépendances système (#15).
 - **J3** — Build et CI Windows — réactiver le job Windows de `build.yml` (vcpkg + build + packaging) (#8, #9).
+- **J4** — Build macOS Intel via Rosetta — demande explicite de l'utilisateur (hors des 4 issues initiales), sur le modèle d'une recette déjà validée sur un autre de ses projets (PyInstaller/Python) : cross-compilation `clang -arch x86_64` depuis le runner Apple Silicon `macos-latest` (pas de runner Intel natif fiable disponible), avec un second Homebrew x86_64 sous Rosetta pour les libs SDL2.
 
 ## 🔵 En cours
 
@@ -21,7 +22,8 @@ _(vide)_
 - [ ] `J2-3` Ajouter un smoke test CI isolé (conteneur Linux sans SDL2 installé, Xvfb) validant que l'artefact packagé démarre sans les libs système — non fait dans cette session : nécessite d'itérer sur de vrais runs GitHub Actions (dlopen de libs X11/ALSA côté SDL2 à vérifier en conditions réelles), risque de flakiness à gérer avec plus de cycles CI que ce tour n'en permettait
 - [ ] `J3-5` (optionnel, hors scope #8/#9) : passer en subsystem `WINDOWS` pour supprimer la fenêtre console qui s'ouvre à côté du jeu sur Windows (`SDL2::SDL2main` est déjà lié, cf. J3-4 — il ne manque que le flag de subsystem)
 - [ ] `J3-6` (optionnel) : cache `actions/cache` pour l'arbre vcpkg installé, le run Windows compile SDL2/SDL2_image/SDL2_mixer depuis les sources à chaque fois (~2 min avec les binaires GitHub-hébergés mais sans cache local, à surveiller si ça grossit)
-- [ ] Fusionner les 3 branches (`fix/release-artifact-download`, `feat/bundle-sdl2-libs`, `feat/windows-build`) dans `main` — restent en attente de revue/merge par l'utilisateur
+- [ ] Fusionner les branches (`fix/release-artifact-download`, `feat/bundle-sdl2-libs`, `feat/windows-build`, `feat/macos-intel-build`) dans `main` — restent en attente de revue/merge par l'utilisateur
+- [ ] `J4-1` Valider le build macOS Intel en CI réelle (cross-compile `clang -arch x86_64` + second Homebrew x86_64 sous Rosetta pour SDL2/SDL2_image/SDL2_mixer à `/usr/local`, pointé explicitement via `SDL2_DIR`/`SDL2_image_DIR`/`SDL2_mixer_DIR` pour ne pas confondre avec le Homebrew arm64 de `/opt/homebrew`) — implémenté (`make prod-intel`, job CI), pas testé en local à la demande de l'utilisateur (pour ne pas installer un second Homebrew persistant sur sa machine), à valider via un run CI réel
 
 ## ✅ Terminé
 

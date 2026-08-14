@@ -15,9 +15,10 @@
     ],
     ["@semantic-release/github",
       { "assets": [
-          { "path": "dist/MarioISN-macos-arm.zip", "label": "macOS (Apple Silicon)" },
-          { "path": "dist/MarioISN-linux.tar.gz",   "label": "Linux" },
-          { "path": "dist/MarioISN-windows.zip",    "label": "Windows (x64)" }
+          { "path": "dist/MarioISN-macos-arm.zip",    "label": "macOS (Apple Silicon)" },
+          { "path": "dist/MarioISN-macos-intel.zip",  "label": "macOS (Intel)" },
+          { "path": "dist/MarioISN-linux.tar.gz",     "label": "Linux" },
+          { "path": "dist/MarioISN-windows.zip",      "label": "Windows (x64)" }
         ]
       }
     ]

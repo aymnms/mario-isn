@@ -200,3 +200,52 @@ jobs:
         with:
           name: MarioISN-windows
           path: build-win/MarioISN-windows.zip
+
+  smoke-test-linux:
+    name: Linux smoke test (no system SDL2)
+    needs: build
+    runs-on: ubuntu-latest
+    # Plain container -- deliberately does NOT install libsdl2/libsdl2-image/
+    # libsdl2-mixer, to prove the artifact really is self-contained (issue
+    # #15) rather than only tested on a runner that happens to have those
+    # libs from the build step.
+    container: ubuntu:24.04
+
+    steps:
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MarioISN-linux
+          path: dist
+
+      - name: Install a virtual display only (no SDL2 packages)
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends xvfb ca-certificates
+          rm -rf /var/lib/apt/lists/*
+
+      - name: Confirm the container has no system SDL2
+        run: |
+          ! ldconfig -p | grep -qi 'libsdl2'
+
+      - name: Extract artifact
+        run: |
+          cd dist
+          tar -xzf MarioISN-linux.tar.gz
+
+      - name: Run the game headlessly for a few seconds
+        run: |
+          cd dist
+          set +e
+          xvfb-run --auto-servernum timeout 5 ./mario_isn
+          code=$?
+          set -e
+          # `timeout` exits 124 only when it had to kill the still-running
+          # process itself -- i.e. the game made it to its main menu loop and
+          # stayed up. Any other exit code means it died on its own within
+          # the 5s window (most likely a missing bundled shared library).
+          if [ "$code" -ne 124 ]; then
+            echo "Game exited early with code $code instead of staying up -- see output above"
+            exit 1
+          fi
+          echo "Game stayed up for 5s -- bundled libs resolved correctly"

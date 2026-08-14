@@ -1,3 +1,13 @@
+## [1.2.3](https://github.com/aymnms/mario-isn/compare/v1.2.2...v1.2.3) (2026-08-14)
+
+
+### Bug Fixes
+
+* accept exit code 137 alongside 124 in the smoke test ([9bbd3f1](https://github.com/aymnms/mario-isn/commit/9bbd3f1577bb6c7cb768365d68b6ce5a6304f77f))
+* drop the nested container from the Linux smoke test job ([3d5f453](https://github.com/aymnms/mario-isn/commit/3d5f4539e526bf5a8ff099dc6f5010f9de44451b))
+* force-kill the smoke-tested game process with timeout --kill-after ([214112c](https://github.com/aymnms/mario-isn/commit/214112ce72a515dd3bc80a91edf586cc996e1876))
+* unblock the Linux smoke test's apt-get install ([d2350ab](https://github.com/aymnms/mario-isn/commit/d2350aba815c9aef30e58e8810b2bd1715f6e13c))
+
 ## [1.2.2](https://github.com/aymnms/mario-isn/compare/v1.2.1...v1.2.2) (2026-08-14)
 
 

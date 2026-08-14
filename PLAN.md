@@ -19,26 +19,28 @@ _(vide)_
 ## ⬜ À faire
 
 - [ ] `J2-3` Ajouter un smoke test CI isolé (conteneur Linux sans SDL2 installé, Xvfb) validant que l'artefact packagé démarre sans les libs système — non fait dans cette session : nécessite d'itérer sur de vrais runs GitHub Actions (dlopen de libs X11/ALSA côté SDL2 à vérifier en conditions réelles), risque de flakiness à gérer avec plus de cycles CI que ce tour n'en permettait
-- [ ] `J3-4` Valider que le build Windows compile réellement en CI — 3 runs jusqu'ici :
-  - Run 1 (31808483132) : Linux et Windows échouent, macOS ✅.
-  - Run 2 (31819481890) après fix générateur/pipefail : Linux ✅ et macOS ✅ (les deux définitivement verts), Windows échoue toujours mais **plus loin** — vcpkg installe SDL2/SDL2_image/SDL2_mixer, CMake détecte auto "Visual Studio 18 2026", les 19 fichiers `.c` compilent, mais le link échoue : `LNK2019: unresolved external symbol main`. Cause : `SDL.h` `#define main SDL_main` sur Windows ; il fallait lier `SDL2::SDL2main` (absent de `CMakeLists.txt`). Corrigé avec `$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>` (no-op sur macOS/Linux où la cible n'existe pas).
-  - Run 3 : à surveiller.
-- [ ] `J3-5` (optionnel, hors scope #8/#9) : lier `SDL2::SDL2main` + passer en subsystem `WINDOWS` pour supprimer la fenêtre console qui s'ouvre à côté du jeu sur Windows
-- [ ] `J3-6` (optionnel) : cache `actions/cache` pour l'arbre vcpkg installé, le run Windows compile SDL2/SDL2_image/SDL2_mixer depuis les sources à chaque fois (~15-30 min sans cache)
+- [ ] `J3-5` (optionnel, hors scope #8/#9) : passer en subsystem `WINDOWS` pour supprimer la fenêtre console qui s'ouvre à côté du jeu sur Windows (`SDL2::SDL2main` est déjà lié, cf. J3-4 — il ne manque que le flag de subsystem)
+- [ ] `J3-6` (optionnel) : cache `actions/cache` pour l'arbre vcpkg installé, le run Windows compile SDL2/SDL2_image/SDL2_mixer depuis les sources à chaque fois (~2 min avec les binaires GitHub-hébergés mais sans cache local, à surveiller si ça grossit)
+- [ ] Fusionner les 3 branches (`fix/release-artifact-download`, `feat/bundle-sdl2-libs`, `feat/windows-build`) dans `main` — restent en attente de revue/merge par l'utilisateur
 
 ## ✅ Terminé
 
 - [x] `J0-1` Audit du dépôt (`AUDIT.md`)
 - [x] `J1-1` Ajouter `github-token` au step `download-artifact@v4` de `release.yml`
-- [x] `J2-1` Bundling macOS : `cmake/FixupBundleMacOS.cmake` (CMake `BundleUtilities`/`fixup_bundle`), Release-only, vérifié localement (`otool -L` confirme `@executable_path/../Frameworks/...`, 114 dylibs copiées/réécrites, binaire lancé avec succès)
-- [x] `J2-2` Bundling Linux : `scripts/bundle_libs_linux.sh` (copie récursive via `ldd` + rpath `patchelf`), Release-only, no-op si `patchelf` absent ; `patchelf` ajouté aux dépendances CI Linux dans `build.yml`, artefact `tar.gz` inclut désormais `lib/`
-- [x] `J3-1` Job Windows dans `build.yml` : installation SDL2/SDL2_image/SDL2_mixer via vcpkg (triplet `x64-windows`)
-- [x] `J3-2` Configure/build CMake Windows : générateur Visual Studio 17 2022 (déjà présent sur `windows-latest`, évite d'installer Ninja) + toolchain vcpkg
-- [x] `J3-3` Packaging (7z, tout le dossier `Release/` — exe + DLLs déployées automatiquement par `VCPKG_APPLOCAL_DEPS` + assets) et upload d'artefact Windows ; `windows-latest` ajouté à la matrice ; workflow renommé `Build MarioISN` (et `release.yml` mis à jour en conséquence pour rester déclenché)
+- [x] `J2-1` Bundling macOS : `cmake/FixupBundleMacOS.cmake` (CMake `BundleUtilities`/`fixup_bundle`), Release-only, vérifié localement et en CI (`otool -L` confirme `@executable_path/../Frameworks/...`, 114 dylibs copiées/réécrites, binaire lancé avec succès)
+- [x] `J2-2` Bundling Linux : `scripts/bundle_libs_linux.sh` (copie récursive via `ldd` + rpath `patchelf`), Release-only, no-op si `patchelf` absent ; vérifié en CI après correction d'un piège `pipefail`/`grep`
+- [x] `J3-1` Job Windows dans `build.yml` : installation SDL2/SDL2_image/SDL2_mixer via vcpkg (triplet `x64-windows`), vérifié en CI (~2 min d'install)
+- [x] `J3-2` Configure/build CMake Windows : générateur Visual Studio auto-détecté (pas de version figée, pour survivre aux mises à niveau d'image runner) + toolchain vcpkg + link `SDL2::SDL2main`, vérifié en CI (19 fichiers compilés, link réussi)
+- [x] `J3-3` Packaging (7z, tout le dossier `Release/` — exe + DLLs déployées automatiquement par `VCPKG_APPLOCAL_DEPS` + assets) et upload d'artefact Windows ; `windows-latest` ajouté à la matrice ; workflow renommé `Build MarioISN` (et `release.yml` mis à jour en conséquence pour rester déclenché) ; vérifié en CI
+- [x] `J3-4` Valider que le build Windows compile réellement en CI — 3 runs, 2 bugs réels trouvés et corrigés à partir des logs collés par l'utilisateur (générateur CMake figé sur une version de VS absente du runner ; `SDL2::SDL2main` manquant). Run 3 (31819979158) : **macOS ✅ / Linux ✅ / Windows ✅**, les 3 OS buildent et publient leur artefact pour la première fois.
 
 ## Journal
 
 - 2026-08-14 — `J0-1` déplacé en ✅ Terminé — audit complet du dépôt et des 4 issues GitHub ouvertes, cause racine de #16 identifiée via les logs CI publics.
 - 2026-08-14 — `J1-1` déplacé en 🔵 En cours puis ✅ Terminé — ajout de `github-token: ${{ secrets.GITHUB_TOKEN }}` au step de téléchargement d'artefact dans `release.yml`.
 - 2026-08-14 — `J2-1`/`J2-2` déplacés en 🔵 En cours puis ✅ Terminé — bundling SDL2 macOS (fixup_bundle) validé localement en conditions réelles ; bundling Linux (patchelf) implémenté, restreint aux builds Release pour ne pas ralentir `make run` (mesuré : +5,6s par relink Debug si non restreint). `J2-3` (smoke test CI isolé) laissé en backlog, hors périmètre réalisable dans cette session.
-- 2026-08-14 — `J3-1`/`J3-2`/`J3-3` déplacés en 🔵 En cours puis ✅ Terminé (implémentation) — job Windows vcpkg + Visual Studio generator ajouté à `build.yml`, `windows-latest` réactivé dans la matrice, `release.yml`/`.releaserc.json` mis à jour pour inclure l'artefact Windows. `J3-4` (validation réelle en CI) reste ouvert : aucune machine Windows locale ni accès aux logs CI détaillés (API anonyme) — l'utilisateur fournira les logs du run `windows-latest` en cas d'échec pour itérer.
+- 2026-08-14 — `J3-1`/`J3-2`/`J3-3` déplacés en 🔵 En cours puis ✅ Terminé (implémentation) — job Windows vcpkg + build.yml élargi à `windows-latest`.
+- 2026-08-14 — CI ouverte à toutes les branches (`build.yml` sans filtre de branche) à la demande de l'utilisateur, pour pouvoir tester le job Windows sans passer par une PR.
+- 2026-08-14 — Run CI 1 (31808483132) : Linux et Windows échouent, macOS ✅. Logs collés par l'utilisateur → diagnostic : Linux, piège `pipefail`+`grep` sans match dans `bundle_libs_linux.sh` (le build avait pourtant réussi) ; Windows, générateur CMake figé `"Visual Studio 17 2022"` introuvable sur le runner `windows-2025-vs2026` (VS2026 installé). Les deux corrigés et repoussés.
+- 2026-08-14 — Run CI 2 (31819481890) : Linux ✅ et macOS ✅ définitivement verts. Windows échoue encore, mais plus loin (vcpkg + compilation OK) : `LNK2019: unresolved external symbol main`, causé par `SDL.h` qui redéfinit `main` en `SDL_main` sur Windows sans `SDL2::SDL2main` lié. Corrigé et repoussé.
+- 2026-08-14 — Run CI 3 (31819979158) : **macOS ✅ / Linux ✅ / Windows ✅** — `J3-4` déplacé en ✅ Terminé. Les 4 issues GitHub (#16, #15, #8, #9) ont désormais une implémentation vérifiée en CI réelle, sur 3 branches distinctes prêtes à être revues/mergées.

@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/aymnms/mario-isn/compare/v1.2.3...v1.2.4) (2026-08-14)
+
+
+### Bug Fixes
+
+* preserve symlinks when zipping macOS release artifacts ([30d2371](https://github.com/aymnms/mario-isn/commit/30d237194ccc00084dc0ecfed308309140000aac))
+
 ## [1.2.3](https://github.com/aymnms/mario-isn/compare/v1.2.2...v1.2.3) (2026-08-14)
 
 

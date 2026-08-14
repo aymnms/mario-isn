@@ -209,11 +209,6 @@ jobs:
     # interactive apt-get prompt with no TTY, see the fix below) should fail
     # fast instead of silently burning CI minutes for hours.
     timeout-minutes: 10
-    # Plain container -- deliberately does NOT install libsdl2/libsdl2-image/
-    # libsdl2-mixer, to prove the artifact really is self-contained (issue
-    # #15) rather than only tested on a runner that happens to have those
-    # libs from the build step.
-    container: ubuntu:24.04
 
     steps:
       - name: Download Linux artifact
@@ -222,23 +217,28 @@ jobs:
           name: MarioISN-linux
           path: dist
 
+      # No container/Docker image here on purpose: this job already runs on
+      # its own fresh ubuntu-latest VM, which has never had libsdl2-dev
+      # installed (that only happens in the separate "Build on ubuntu-latest"
+      # job, on its own runner) -- so it's already a clean "no system SDL2"
+      # environment without needing a nested container pull. An earlier
+      # version used `container: ubuntu:24.04` for this and the job hung for
+      # 10+ minutes on every run, most likely stuck on an anonymous Docker
+      # Hub image pull (a well-known rate-limit trap for GitHub-hosted
+      # runner IPs) -- dropping the container sidesteps that entirely.
+      - name: Confirm the runner has no system SDL2
+        run: |
+          ! ldconfig -p | grep -qi 'libsdl2'
+
       - name: Install a virtual display only (no SDL2 packages)
-        # DEBIAN_FRONTEND=noninteractive is required here: on a bare
-        # ubuntu:24.04 container, installing xvfb pulls in tzdata, which
-        # otherwise blocks forever on an interactive timezone prompt with no
-        # TTY to answer it -- silently hanging the job instead of failing.
-        # xauth is listed explicitly since --no-install-recommends would
-        # otherwise drop it, and xvfb-run hard-requires it.
+        # DEBIAN_FRONTEND=noninteractive: installing xvfb pulls in tzdata,
+        # which otherwise blocks on an interactive timezone prompt with no
+        # TTY to answer it.
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          apt-get update
-          apt-get install -y --no-install-recommends xvfb xauth ca-certificates
-          rm -rf /var/lib/apt/lists/*
-
-      - name: Confirm the container has no system SDL2
-        run: |
-          ! ldconfig -p | grep -qi 'libsdl2'
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb xauth
 
       - name: Extract artifact
         run: |

@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/aymnms/mario-isn/compare/v1.2.0...v1.2.1) (2026-08-14)
+
+
+### Bug Fixes
+
+* suppress the Windows console window ([57a2d27](https://github.com/aymnms/mario-isn/commit/57a2d2772bf080a51be71f04f884776a893b81a2))
+
 # [1.2.0](https://github.com/aymnms/mario-isn/compare/v1.1.0...v1.2.0) (2026-08-14)
 
 

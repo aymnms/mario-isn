@@ -21,6 +21,10 @@ if(APPLE)
   set(MACOSX_BUNDLE_LONG_VERSION_STRING  "1.0")
   set(MACOSX_BUNDLE_BUNDLE_VERSION       "1.2.0")
   set(MACOSX_BUNDLE_ICON_FILE MyIcon.icns)
+elseif(WIN32)
+  # GUI subsystem: without this, Windows opens a console window alongside
+  # the game (SDL2::SDL2main still provides the real entry point either way).
+  set(PLATFORM_BUNDLE WIN32)
 endif()
 
 # =====================================

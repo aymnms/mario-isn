@@ -19,20 +19,16 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 
 ## 🔵 En cours
 
-_(vide)_
+- [ ] `J2-3` Ajouter un smoke test CI isolé (conteneur Linux sans SDL2 installé, Xvfb) validant que l'artefact packagé démarre sans les libs système — en cours sur `feat/ci-linux-smoke-test`
+- [ ] `J3-6` Cache `actions/cache` pour l'arbre vcpkg installé — en cours sur `feat/ci-vcpkg-cache`
+- [ ] `J3-5` Passer en subsystem `WINDOWS` pour supprimer la fenêtre console qui s'ouvre à côté du jeu sur Windows (`SDL2::SDL2main` est déjà lié, cf. J3-4 — il ne manque que le flag de subsystem)
 
 ## ⬜ À faire
 
 - [ ] Fermer manuellement les issues #16, #15, #8, #9 sur GitHub — corrigées et vérifiées (release v1.2.0), mais aucun token disponible dans cette session pour les clore via l'API
 
-### J5 — Phase 1 (fiabiliser)
-
-- [ ] `J2-3` Ajouter un smoke test CI isolé (conteneur Linux sans SDL2 installé, Xvfb) validant que l'artefact packagé démarre sans les libs système
-- [ ] `J3-6` Cache `actions/cache` pour l'arbre vcpkg installé, le run Windows compile SDL2/SDL2_image/SDL2_mixer depuis les sources à chaque fois (~2 min avec les binaires GitHub-hébergés mais sans cache local, à surveiller si ça grossit)
-
 ### J5 — Phase 2 (hygiène rapide)
 
-- [ ] `J3-5` Passer en subsystem `WINDOWS` pour supprimer la fenêtre console qui s'ouvre à côté du jeu sur Windows (`SDL2::SDL2main` est déjà lié, cf. J3-4 — il ne manque que le flag de subsystem)
 - [ ] `J5-1` `clang-format`/`.editorconfig` pour un style C homogène (AUDIT §7 reco #4)
 
 ### J5 — Phase 3 (dette technique de fond)

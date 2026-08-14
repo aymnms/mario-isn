@@ -12,7 +12,9 @@ permissions:
 
 jobs:
   release:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # build.yml now runs on every branch/PR (for local testing), but a
+    # release must only ever be cut from main.
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

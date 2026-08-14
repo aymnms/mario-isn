@@ -8,6 +8,7 @@
 #include "MARIO_conditions.h"
 #include "MARIO_game.h"
 #include "MARIO_musique.h"
+#include "domain/grid.h"
 #include "globals.h"
 
 extern int run_game, run;
@@ -21,12 +22,7 @@ extern int vic;
 int jean = 0;
 
 SDL_Rect set_position(SDL_Rect Point) {
-    SDL_Rect resultat;
-
-    resultat.x = (Point.x + decalage) / 50;
-    resultat.y = Point.y / 50;
-
-    return resultat;
+    return domain_to_grid_cell(Point, decalage);
 }
 
 void droite() { //si le personnage peut se deplacer vers la droite

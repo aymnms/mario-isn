@@ -122,6 +122,21 @@ jobs:
           cmake --build build-win --config Release
 
       # ---------------------
+      # Unit tests (SDL-free domain logic, see src/domain/)
+      # ---------------------
+      - name: Run unit tests (macOS)
+        if: runner.os == 'macOS'
+        run: ctest --test-dir build-arm --output-on-failure
+
+      - name: Run unit tests (Linux)
+        if: runner.os == 'Linux'
+        run: ctest --test-dir build-linux --output-on-failure
+
+      - name: Run unit tests (Windows)
+        if: runner.os == 'Windows'
+        run: ctest --test-dir build-win -C Release --output-on-failure
+
+      # ---------------------
       # macOS-specific post steps
       # ---------------------
       - name: Ad-hoc sign app (macOS)

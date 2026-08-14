@@ -4,22 +4,13 @@
 
 #include "MARIO_joueur.h"
 #include "MARIO_conditions.h"
+#include "domain/physics.h"
 #include "globals.h"
 
 extern SDL_Rect pos_perso;
 extern int jump, chute;
 extern int init_hauteur_saut, init_hauteur_chute;
 extern int bool_saut, bool_saut_sur_mechant;
-
-double fonction(double i) {
-    double auto solution = -i * i + 22 * i;
-    return solution;
-}
-
-double fonction2(double i) {
-    double auto solution = -i * i + 15 * i;
-    return solution;
-}
 
 void statue_saut() {
     if (go('B') == 1 && go('H') == 0 &&
@@ -48,9 +39,9 @@ void saut() {
     if (jump == 1 && go('H') == 0) {
         x += 0.1;
         if (bool_saut_sur_mechant == 1 && x <= 7) {
-            pos_perso.y = init_hauteur_saut - fonction2(x);
+            pos_perso.y = init_hauteur_saut - domain_on_enemy_jump_arc(x);
         } else if (bool_saut_sur_mechant == 0 && x <= 11) {
-            pos_perso.y = init_hauteur_saut - fonction(x);
+            pos_perso.y = init_hauteur_saut - domain_jump_arc(x);
         }
     }
     if (bool_saut_sur_mechant == 0 && jump == 1 && go('H') == 0 && x >= 11 ||
@@ -69,10 +60,10 @@ void gravite() { //gere la position en y du personnage
     if (jump == 0 && chute == 0 && go('B') == 0) {
         chute = 1;
         if (bool_saut_sur_mechant == 1) {
-            init_hauteur_chute = pos_perso.y + fonction2(x);
+            init_hauteur_chute = pos_perso.y + domain_on_enemy_jump_arc(x);
             x = 8;
         } else {
-            init_hauteur_chute = pos_perso.y + fonction(11);
+            init_hauteur_chute = pos_perso.y + domain_jump_arc(11);
             x = 11;
         }
     }
@@ -80,10 +71,10 @@ void gravite() { //gere la position en y du personnage
     if (bool_saut_sur_mechant == 1) {
         if (chute == 1 && go('B') == 0 && x >= 7) {
             x += 0.1;
-            pos_perso.y = init_hauteur_chute - fonction2(x);
+            pos_perso.y = init_hauteur_chute - domain_on_enemy_jump_arc(x);
             if (go('B') == 1) {
                 x -= 0.1;
-                pos_perso.y = init_hauteur_chute - fonction2(x);
+                pos_perso.y = init_hauteur_chute - domain_on_enemy_jump_arc(x);
                 while (go('B') != 1) {
                     pos_perso.y += 1;
                 }
@@ -93,10 +84,10 @@ void gravite() { //gere la position en y du personnage
     } else {
         if (chute == 1 && go('B') == 0 && x >= 11) {
             x += 0.1;
-            pos_perso.y = init_hauteur_chute - fonction(x);
+            pos_perso.y = init_hauteur_chute - domain_jump_arc(x);
             if (go('B') == 1) {
                 x -= 0.1;
-                pos_perso.y = init_hauteur_chute - fonction(x);
+                pos_perso.y = init_hauteur_chute - domain_jump_arc(x);
                 while (go('B') != 1) {
                     pos_perso.y += 1;
                 }

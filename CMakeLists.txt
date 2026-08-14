@@ -46,7 +46,14 @@ endif()
 # =====================================
 # Executable target
 # =====================================
+set(DOMAIN_SOURCES
+        src/domain/physics.c
+        src/domain/grid.c
+        src/domain/collision.c
+)
+
 add_executable(mario_isn ${PLATFORM_BUNDLE}
+        ${DOMAIN_SOURCES}
         src/globals.c
         src/main.c
         src/display.c
@@ -92,6 +99,25 @@ else()
   target_link_libraries(mario_isn PRIVATE
     ${SDL2_LINK_LIBRARIES} ${SDL2_image_LINK_LIBRARIES} ${SDL2_mixer_LINK_LIBRARIES})
 endif()
+
+# =====================================
+# Unit tests (SDL-free domain logic only -- see src/domain/)
+# =====================================
+add_executable(domain_tests
+        ${DOMAIN_SOURCES}
+        tests/domain_tests.c
+)
+target_include_directories(domain_tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+if(NOT HAVE_SDL_PKGCFG)
+  target_link_libraries(domain_tests PRIVATE SDL2::SDL2)
+else()
+  target_include_directories(domain_tests PRIVATE ${SDL2_INCLUDE_DIRS})
+  target_link_libraries(domain_tests PRIVATE ${SDL2_LINK_LIBRARIES})
+endif()
+
+enable_testing()
+add_test(NAME domain_tests COMMAND domain_tests)
 
 # =====================================
 # Resources / Assets

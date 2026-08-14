@@ -7,7 +7,10 @@ static char g_path_buf[PATH_MAX_LEN];
 
 static int file_exists(const char *p) {
     FILE *f = fopen(p, "rb");
-    if (f) { fclose(f); return 1; }
+    if (f) {
+        fclose(f);
+        return 1;
+    }
     return 0;
 }
 
@@ -19,7 +22,7 @@ static void join3(char *dst, const char *a, const char *b, const char *c) {
     snprintf(dst, PATH_MAX_LEN, "%s%s%s", a, b, c);
 }
 
-char* asset_path(const char *subpath) {
+char *asset_path(const char *subpath) {
     char *base = SDL_GetBasePath(); // heap-alloc par SDL
     if (!base) {
         snprintf(g_path_buf, PATH_MAX_LEN, "%s", subpath);
@@ -47,19 +50,19 @@ char* asset_path(const char *subpath) {
             return g_path_buf;
         }
     }
-    
+
     // 3) fallback : renvoyer tel quel (permet l'exécution depuis la racine projet)
     SDL_free(base);
     snprintf(g_path_buf, PATH_MAX_LEN, "%s", subpath);
     return g_path_buf;
 }
 
-static char* asset_path_cat(const char *prefix, const char *filename) {
+static char *asset_path_cat(const char *prefix, const char *filename) {
     char sub[PATH_MAX_LEN];
     snprintf(sub, PATH_MAX_LEN, "%s%s", prefix, filename);
     return asset_path(sub);
 }
 
-char* path_img(const char *filename)   { return asset_path_cat("img/", filename); }
-char* path_music(const char *filename) { return asset_path_cat("musique/", filename); }
-char* path_bin(const char *filename)   { return asset_path_cat("bin/", filename); }
+char *path_img(const char *filename) { return asset_path_cat("img/", filename); }
+char *path_music(const char *filename) { return asset_path_cat("musique/", filename); }
+char *path_bin(const char *filename) { return asset_path_cat("bin/", filename); }

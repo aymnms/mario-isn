@@ -8,7 +8,6 @@
 #include "path.h"
 #include "globals.h"
 
-
 extern SDL_Texture *img, *background;
 extern SDL_Rect pos_perso, origine;
 
@@ -23,24 +22,24 @@ extern char statue[10];
 extern int direction_mechant[10];
 extern SDL_Rect tableau_mechant[10][4];
 
-
 void init_niveau() {
     init_skin();
-    origine.x = 0; origine.y = 0; decalage = 0;
+    origine.x = 0;
+    origine.y = 0;
+    decalage = 0;
     bool_droite = 0, bool_gauche = 0, bool_saut = 0, bool_saut_sur_mechant = 0;
-    jump = 0; chute = 0;
+    jump = 0;
+    chute = 0;
     emp = 0;
 
-    pos_perso.x = 50; // coordonn�s en x
-    pos_perso.y = 100;// coordonn�s en y
+    pos_perso.x = 50;  // coordonn�s en x
+    pos_perso.y = 100; // coordonn�s en y
 
     perso = create_texture(path_img("mario_idle.png"));
     display_texture(perso, NULL, &pos_perso);
 }
 
-
-
-void init_timer (){
+void init_timer() {
     pos_barre.x = 400;
     pos_barre.y = 0;
     barre = create_texture(path_img("barre.png"));
@@ -53,9 +52,7 @@ void init_timer (){
     decoule = 600;
 }
 
-
-
-void init_game(){
+void init_game() {
     niveauSelect(niveau);
     init_niveau();
     init_timer();

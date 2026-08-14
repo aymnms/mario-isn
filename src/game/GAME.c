@@ -13,7 +13,6 @@
 #include "path.h"
 #include "globals.h"
 
-
 extern int run_game;
 extern SDL_Texture *img, *champi;
 extern int nb_mechant;
@@ -22,7 +21,7 @@ extern SDL_Rect origine, pos_perso;
 extern int decalage;
 extern char statue[10];
 extern SDL_Texture *imgMechant; //surface du mechant
-extern SDL_Rect tableau_mechant[10][4]; 
+extern SDL_Rect tableau_mechant[10][4];
 extern int nb_mechant;
 extern int repeat, y;
 extern int coin, niveau, vie;
@@ -33,80 +32,79 @@ int alfred = 0;
 SDL_Texture *coinmeter, *coinnb;
 SDL_Rect pos_coinmeter, pos_coinnb, pos_champi;
 
-void timer(){
+void timer() {
     alfred++;
-    if (alfred == 100){
+    if (alfred == 100) {
         decoule--;
-       pos_noir.x = decoule;
-       alfred = 0;
+        pos_noir.x = decoule;
+        alfred = 0;
     }
-    if ( decoule <= 400){
-     game_over();
+    if (decoule <= 400) {
+        game_over();
     }
-
 }
 
-void systeme_vie(){ // affiche les vies à l'écran
+void systeme_vie() { // affiche les vies à l'écran
     SDL_Texture *champi = create_texture(path_img("champi.png"));
-    pos_champi.y= 0;
-    for (int i = 0; i <= vie-1; i++){
-        pos_champi.x = i*55;
+    pos_champi.y = 0;
+    for (int i = 0; i <= vie - 1; i++) {
+        pos_champi.x = i * 55;
         // ALORS
         display_texture(champi, NULL, &pos_champi);
     }
 }
 
-void coinAff(){
-    switch (coin){
+void coinAff() {
+    switch (coin) {
 
-        case 0 :
-        coinnb = create_texture(path_img("zero.png"));
-        break;
+        case 0:
+            coinnb = create_texture(path_img("zero.png"));
+            break;
 
-        case 1 :
-        coinnb = create_texture(path_img("un.png"));
-        break;
+        case 1:
+            coinnb = create_texture(path_img("un.png"));
+            break;
 
-        case 2 :
-        coinnb = create_texture(path_img("deux.png"));
-        break;
+        case 2:
+            coinnb = create_texture(path_img("deux.png"));
+            break;
 
-        case 3 :
-        coinnb = create_texture(path_img("trois.png"));
-        break;
+        case 3:
+            coinnb = create_texture(path_img("trois.png"));
+            break;
 
-        case 4 :
-        coinnb = create_texture(path_img("quatre.png"));
-        break;
+        case 4:
+            coinnb = create_texture(path_img("quatre.png"));
+            break;
 
-        case 5 :
-        coinnb = create_texture(path_img("cinq.png"));
-        break;
+        case 5:
+            coinnb = create_texture(path_img("cinq.png"));
+            break;
 
-        case 6 :
-        coinnb = create_texture(path_img("six.png"));
-        break;
+        case 6:
+            coinnb = create_texture(path_img("six.png"));
+            break;
 
-        case 7 :
-        coinnb = create_texture(path_img("sept.png"));
-        break;
+        case 7:
+            coinnb = create_texture(path_img("sept.png"));
+            break;
 
-        case 8 :
-        coinnb = create_texture(path_img("huit.png"));
-        break;
+        case 8:
+            coinnb = create_texture(path_img("huit.png"));
+            break;
 
-        case 9 :
-        coinnb = create_texture(path_img("neuf.png"));
-        break;
+        case 9:
+            coinnb = create_texture(path_img("neuf.png"));
+            break;
     }
 
-	// ALORS ALORS
+    // ALORS ALORS
     display_texture(coinmeter, NULL, &pos_coinmeter);
     display_texture(coinnb, NULL, &pos_coinnb);
 }
 
-void refresh(){
-    if(run_game == 1){
+void refresh() {
+    if (run_game == 1) {
         origine.x = -decalage;
 
         // On nettoie l'écran
@@ -123,12 +121,12 @@ void refresh(){
 
         //-----------------------Mechant-----------------------//
         printf("afficher mechant\n");
-        for(nb_mechant = 0; nb_mechant <= 19; nb_mechant++){
+        for (nb_mechant = 0; nb_mechant <= 19; nb_mechant++) {
             afficher_mechant();
         }
         //-----------------------Perso-----------------------//
         printf("pos perso\n");
-		// ALORS
+        // ALORS
         display_texture(perso, NULL, &pos_perso);
 
         //-----------------------vies-----------------------//
@@ -144,47 +142,47 @@ void refresh(){
     }
 }
 
-void init_coin(){
+void init_coin() {
     printf("init_coin\n");
     pos_coinmeter.x = 0;
     pos_coinmeter.y = 65;
     coinmeter = create_texture(path_img("coinx.png"));
-    if (coinmeter == NULL) {printf("coinx not found\n");}
+    if (coinmeter == NULL) {
+        printf("coinx not found\n");
+    }
 
     pos_coinnb.x = 70;
     pos_coinnb.y = 65;
 }
 
-void mechant(){
-    for(nb_mechant = 0; nb_mechant <= 19; nb_mechant++){
+void mechant() {
+    for (nb_mechant = 0; nb_mechant <= 19; nb_mechant++) {
         deplacement_mechant();
         contact(); //test contact si tue ou meurt
     }
 }
 
-void joueur(){
+void joueur() {
     deplacement_joueur();
     gravite();
 }
 
-void GAME(){
+void GAME() {
     int fps = 60;
-    int frameDelay = 1000/fps;
+    int frameDelay = 1000 / fps;
     Uint32 frameStart;
     int frameTime;
-    int a =0;
+    int a = 0;
 
-    while(run_game){
+    while (run_game) {
         printf("init_game\n");
         init_game();
         init_coin();
-        while (run_game){
+        while (run_game) {
             printf("GAME bcl");
 
-
-
             frameStart = SDL_GetTicks();
-            for (int i = 1; i<=5; i++){
+            for (int i = 1; i <= 5; i++) {
                 printf("joueur\n");
                 joueur();
                 printf("mechant\n");
@@ -193,19 +191,26 @@ void GAME(){
                 conditions();
                 printf("timer\n");
                 timer();
-                if (jean ==1){break;}
+                if (jean == 1) {
+                    break;
+                }
             }
             refresh();
             printf("test jean\n");
-            if (jean == 1){printf ("victoire!\n");victory();jean = 0;break;}
+            if (jean == 1) {
+                printf("victoire!\n");
+                victory();
+                jean = 0;
+                break;
+            }
 
             //timer
             frameTime = SDL_GetTicks() - frameStart;
-            if(frameDelay > frameTime)
-            {
-            SDL_Delay(frameDelay - frameTime);
-            }else{printf("laaaag\n");}
+            if (frameDelay > frameTime) {
+                SDL_Delay(frameDelay - frameTime);
+            } else {
+                printf("laaaag\n");
+            }
         }
     }
 }
-

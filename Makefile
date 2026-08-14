@@ -40,7 +40,7 @@ prod-linux:
 # /usr/local provides the x86_64 SDL2 CMake configs pointed to below.
 prod-intel:
 	$(MAKE) BUILD_DIR=build-intel BUILD_TYPE=Release ARCH="x86_64" \
-		EXTRA_CMAKE_ARGS='-DSDL2_DIR=/usr/local/lib/cmake/SDL2 -DSDL2_image_DIR=/usr/local/lib/cmake/SDL2_image -DSDL2_mixer_DIR=/usr/local/lib/cmake/SDL2_mixer' \
+		EXTRA_CMAKE_ARGS='-DSDL2_DIR=/usr/local/lib/cmake/SDL2 -DSDL2_image_DIR=/usr/local/lib/cmake/SDL2_image -DSDL2_mixer_DIR=/usr/local/lib/cmake/SDL2_mixer -DSDL3_DIR=/usr/local/lib/cmake/SDL3' \
 		configure build
 
 # # Ne fonctionne pas encore

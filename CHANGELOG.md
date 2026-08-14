@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/aymnms/mario-isn/compare/v1.2.1...v1.2.2) (2026-08-14)
+
+
+### Bug Fixes
+
+* define SDL_MAIN_HANDLED in the domain_tests binary ([814c06d](https://github.com/aymnms/mario-isn/commit/814c06d04059af88588cc195c23df856cfd2dc45))
+
 ## [1.2.1](https://github.com/aymnms/mario-isn/compare/v1.2.0...v1.2.1) (2026-08-14)
 
 

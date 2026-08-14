@@ -25,10 +25,6 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 
 - [ ] Fermer manuellement les issues #16, #15, #8, #9 sur GitHub — corrigées et vérifiées (release v1.2.0), mais aucun token disponible dans cette session pour les clore via l'API
 
-### J5 — Phase 2 (hygiène rapide)
-
-- [ ] `J5-1` `clang-format`/`.editorconfig` pour un style C homogène (AUDIT §7 reco #4)
-
 ### J5 — Phase 3 (dette technique de fond)
 
 - [ ] `J5-2` Extraire un noyau de logique de jeu (déplacement, collisions, IA ennemis) découplé de SDL, dans un module dédié (`domain/`) — prérequis bloquant pour tout test unitaire (AUDIT §7 reco #5)
@@ -46,6 +42,7 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 - [x] `J4-1` Build macOS Intel via Rosetta : `make prod-intel` (cross-compile `clang -arch x86_64`, `SDL2_DIR`/`SDL2_image_DIR`/`SDL2_mixer_DIR` pointés explicitement vers le second Homebrew x86_64 sous Rosetta à `/usr/local`), job CI ajouté (`build.yml`), asset ajouté (`.releaserc.json`). Vérifié en CI dès le premier run (31821880623) : **macOS ARM ✅ / macOS Intel ✅ / Linux ✅ / Windows ✅** — les 4 cibles buildent et publient leur artefact avec succès.
 - [x] `J3-6` Cache `actions/cache` du binary cache vcpkg (`~/AppData/Local/vcpkg/archives`, clé `run_id` + restore-keys en préfixe). Vérifié en CI : les 3 OS buildent toujours (run 31827750421). Mergé dans `main`.
 - [x] `J3-5` Subsystem `WIN32` sur la cible CMake pour supprimer la console Windows superflue. Vérifié en CI : les 3 OS buildent toujours (run 31827885237). Mergé dans `main`.
+- [x] `J5-1` `.clang-format`/`.editorconfig` ajoutés, codebase (`src/`, `include/`) reformatée. Vérifié localement (`make run` compile sans warning, jeu lancé) et en CI (les 3 OS buildent toujours, run 31828065772). Mergé dans `main`.
 
 ## Journal
 

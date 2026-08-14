@@ -6,10 +6,9 @@
 #include "display.h"
 #include "path.h"
 
-
 extern SDL_Rect origine;
 
-void init_fenetre(){
+void init_fenetre() {
     init_mus();
     origine.x = 0; //on définit l'origine de la fenetre
     origine.y = 0;
@@ -31,6 +30,6 @@ void init_fenetre(){
     update_texture(texture, NULL, NULL);
 }
 
-void init_menu(){ //gère l'organisation de l'execution des fonctions
+void init_menu() { //gère l'organisation de l'execution des fonctions
     init_fenetre();
 }

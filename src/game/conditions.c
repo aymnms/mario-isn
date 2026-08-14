@@ -17,30 +17,34 @@ extern SDL_Event event;
 extern int decalage;
 extern int coin, niveau, vie;
 extern char statue[20];
-extern SDL_Rect tableau_mechant[20][4]; 
+extern SDL_Rect tableau_mechant[20][4];
 extern int vic;
 
-int conditions(){
+int conditions() {
     auto int rep = 0;
-    if(pos_perso.y >=450){game_over();} //condition de défaite
+    if (pos_perso.y >= 450) {
+        game_over();
+    } //condition de défaite
     //if(vic == 1){victory();vic++;} //condition de Victoire
-    if(coin >= 10){vie++; coin = 0;playSon(4);}
+    if (coin >= 10) {
+        vie++;
+        coin = 0;
+        playSon(4);
+    }
     return rep;
 }
 
-void game_over(){
+void game_over() {
     vie--;
-    for(int i = 0; i<=19; i++)
-    {
+    for (int i = 0; i <= 19; i++) {
         statue[i] = '0';
     }
-    for(int i = 0; i<=19; i++)
-    {
+    for (int i = 0; i <= 19; i++) {
         tableau_mechant[i][1].x = 0;
         tableau_mechant[i][1].y = 0;
     }
-    
-    if ( vie > 0){
+
+    if (vie > 0) {
         playMus(3);
         origine.x = 0;
         origine.y = 0;
@@ -53,8 +57,7 @@ void game_over(){
         SDL_Delay(3146);
         playMus(1);
         init_game();
-    }
-    else {
+    } else {
         playMus(4);
         origine.x = 0;
         origine.y = 0;
@@ -70,49 +73,45 @@ void game_over(){
         vie = 3;
         niveau = 1;
     }
-
 }
-   
 
 int victory() {
     origine.x = 0;
     origine.y = 0;
     playMus(5);
     img = create_texture(path_img("victory.png"));
-    for(int i = 0; i<=19; i++)
-    {
+    for (int i = 0; i <= 19; i++) {
         statue[i] = '0';
     }
-    for(int i = 0; i<=19; i++)
-    {
+    for (int i = 0; i <= 19; i++) {
         tableau_mechant[i][1].x = 0;
         tableau_mechant[i][1].y = 0;
     }
-        pos_perso.x = 280;
-        pos_perso.y = 550;
-        perso = create_texture(path_img("mario_saut_droite.png"));
-        for ( pos_perso.y = 550; pos_perso.y >= 150; pos_perso.y -=2){
-            clear_screen();
-            // ALORS
-            display_texture(img, NULL, &origine);
-            display_texture(perso, NULL, &pos_perso);
-            // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-            // SDL_BlitSurface(perso, NULL, background, &pos_perso);
-            present_screen();
+    pos_perso.x = 280;
+    pos_perso.y = 550;
+    perso = create_texture(path_img("mario_saut_droite.png"));
+    for (pos_perso.y = 550; pos_perso.y >= 150; pos_perso.y -= 2) {
+        clear_screen();
+        // ALORS
+        display_texture(img, NULL, &origine);
+        display_texture(perso, NULL, &pos_perso);
+        // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+        // SDL_BlitSurface(perso, NULL, background, &pos_perso);
+        present_screen();
 
-            SDL_Delay(10);
-        }
-        for ( pos_perso.y = 150; pos_perso.y <= 200; pos_perso.y+=2){
-            clear_screen();
-            // ALORS
-            display_texture(img, NULL, &origine);
-            display_texture(perso, NULL, &pos_perso);
-            // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
-            // SDL_BlitSurface(perso, NULL, background, &pos_perso);
-            present_screen();
+        SDL_Delay(10);
+    }
+    for (pos_perso.y = 150; pos_perso.y <= 200; pos_perso.y += 2) {
+        clear_screen();
+        // ALORS
+        display_texture(img, NULL, &origine);
+        display_texture(perso, NULL, &pos_perso);
+        // SDL_BlitSurface(img, NULL, background, &origine); //on d�clare l'image comme fond de fenetre
+        // SDL_BlitSurface(perso, NULL, background, &pos_perso);
+        present_screen();
 
-            SDL_Delay(8);
-        }
+        SDL_Delay(8);
+    }
 
     // ALORS
     clear_screen();
@@ -125,6 +124,11 @@ int victory() {
     SDL_Delay(5541);
     playMus(1);
     SDL_WaitEvent(&event);
-    if (niveau == 6){quit(); return 0;}
-    else{niveau++;return 1;}
+    if (niveau == 6) {
+        quit();
+        return 0;
+    } else {
+        niveau++;
+        return 1;
+    }
 }

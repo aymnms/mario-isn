@@ -10,20 +10,15 @@ SDL_Texture *texture_background = NULL;
 void init_display() {
     SDL_Init(SDL_INIT_VIDEO);
 
-    window = SDL_CreateWindow("Super Mario ISN",
-                              SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    window = SDL_CreateWindow("Super Mario ISN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                               600, 500, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
-void present_screen() {
-    SDL_RenderPresent(renderer);
-}
+void present_screen() { SDL_RenderPresent(renderer); }
 
-void clear_screen() {
-    SDL_RenderClear(renderer);
-}
+void clear_screen() { SDL_RenderClear(renderer); }
 
 // a terme, on pourrait supprimer *src car on le met constamment à NULL
 void display_texture(SDL_Texture *texture, SDL_Rect *src, SDL_Rect *dest) {
@@ -52,8 +47,6 @@ SDL_Texture *create_texture(char *abs_surface_path) {
     }
     return texture;
 }
-
-
 
 // void cleanup_display() {
 //     SDL_DestroyRenderer(renderer);

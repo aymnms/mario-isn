@@ -74,7 +74,11 @@ target_include_directories(mario_isn PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 # Link SDL depending on how it was found
 if(NOT HAVE_SDL_PKGCFG)
+  # On Windows, SDL.h #defines main to SDL_main; SDL2::SDL2main provides the
+  # real entry point that calls back into it. $<TARGET_NAME_IF_EXISTS:...>
+  # is a no-op on macOS/Linux where that target doesn't exist.
   target_link_libraries(mario_isn PRIVATE
+    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
     SDL2::SDL2
     SDL2_image::SDL2_image
     SDL2_mixer::SDL2_mixer)

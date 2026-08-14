@@ -71,6 +71,21 @@ jobs:
           sudo apt-get install -y cmake ninja-build pkg-config patchelf \
             libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
 
+      # vcpkg's default binary cache (enabled automatically, no extra config)
+      # lives here; restoring it across runs skips recompiling
+      # SDL2/SDL2_image/SDL2_mixer from source every time (~2 min saved).
+      # Keyed on run_id so every run saves a fresh entry (cache keys are
+      # immutable), and restored via the shared prefix so each run picks up
+      # the most recent previous cache.
+      - name: Cache vcpkg binary cache (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/cache@v4
+        with:
+          path: ~/AppData/Local/vcpkg/archives
+          key: vcpkg-archives-windows-x64-sdl2-${{ github.run_id }}
+          restore-keys: |
+            vcpkg-archives-windows-x64-sdl2-
+
       - name: Install deps (Windows via vcpkg)
         if: runner.os == 'Windows'
         shell: bash

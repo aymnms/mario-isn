@@ -219,9 +219,17 @@ jobs:
           path: dist
 
       - name: Install a virtual display only (no SDL2 packages)
+        # DEBIAN_FRONTEND=noninteractive is required here: on a bare
+        # ubuntu:24.04 container, installing xvfb pulls in tzdata, which
+        # otherwise blocks forever on an interactive timezone prompt with no
+        # TTY to answer it -- silently hanging the job instead of failing.
+        # xauth is listed explicitly since --no-install-recommends would
+        # otherwise drop it, and xvfb-run hard-requires it.
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends xvfb ca-certificates
+          apt-get install -y --no-install-recommends xvfb xauth ca-certificates
           rm -rf /var/lib/apt/lists/*
 
       - name: Confirm the container has no system SDL2

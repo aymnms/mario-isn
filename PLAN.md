@@ -20,7 +20,6 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 ## 🔵 En cours
 
 - [ ] `J2-3` Ajouter un smoke test CI isolé (conteneur Linux sans SDL2 installé, Xvfb) validant que l'artefact packagé démarre sans les libs système — en cours sur `feat/ci-linux-smoke-test`
-- [ ] `J3-6` Cache `actions/cache` pour l'arbre vcpkg installé, le run Windows compile SDL2/SDL2_image/SDL2_mixer depuis les sources à chaque fois (~2 min avec les binaires GitHub-hébergés mais sans cache local, à surveiller si ça grossit)
 
 ## ⬜ À faire
 
@@ -28,7 +27,6 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 
 ### J5 — Phase 2 (hygiène rapide)
 
-- [ ] `J3-5` Passer en subsystem `WINDOWS` pour supprimer la fenêtre console qui s'ouvre à côté du jeu sur Windows (`SDL2::SDL2main` est déjà lié, cf. J3-4 — il ne manque que le flag de subsystem)
 - [ ] `J5-1` `clang-format`/`.editorconfig` pour un style C homogène (AUDIT §7 reco #4)
 
 ### J5 — Phase 3 (dette technique de fond)
@@ -46,6 +44,8 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 - [x] `J3-3` Packaging (7z, tout le dossier `Release/` — exe + DLLs déployées automatiquement par `VCPKG_APPLOCAL_DEPS` + assets) et upload d'artefact Windows ; `windows-latest` ajouté à la matrice ; workflow renommé `Build MarioISN` (et `release.yml` mis à jour en conséquence pour rester déclenché) ; vérifié en CI
 - [x] `J3-4` Valider que le build Windows compile réellement en CI — 3 runs, 2 bugs réels trouvés et corrigés à partir des logs collés par l'utilisateur (générateur CMake figé sur une version de VS absente du runner ; `SDL2::SDL2main` manquant). Run 3 (31819979158) : **macOS ✅ / Linux ✅ / Windows ✅**, les 3 OS buildent et publient leur artefact pour la première fois.
 - [x] `J4-1` Build macOS Intel via Rosetta : `make prod-intel` (cross-compile `clang -arch x86_64`, `SDL2_DIR`/`SDL2_image_DIR`/`SDL2_mixer_DIR` pointés explicitement vers le second Homebrew x86_64 sous Rosetta à `/usr/local`), job CI ajouté (`build.yml`), asset ajouté (`.releaserc.json`). Vérifié en CI dès le premier run (31821880623) : **macOS ARM ✅ / macOS Intel ✅ / Linux ✅ / Windows ✅** — les 4 cibles buildent et publient leur artefact avec succès.
+- [x] `J3-6` Cache `actions/cache` du binary cache vcpkg (`~/AppData/Local/vcpkg/archives`, clé `run_id` + restore-keys en préfixe). Vérifié en CI : les 3 OS buildent toujours (run 31827750421). Mergé dans `main`.
+- [x] `J3-5` Subsystem `WIN32` sur la cible CMake pour supprimer la console Windows superflue. Vérifié en CI : les 3 OS buildent toujours (run 31827885237). Mergé dans `main`.
 
 ## Journal
 
@@ -63,3 +63,4 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 - 2026-08-14 — Stratégie de merge : les 4 branches étant empilées séquentiellement (chacune contient la précédente), `main` (non divergé) est fast-forward directement vers `feat/macos-intel-build` en un seul push, pour n'avoir qu'un seul cycle build→release plutôt que 4 en cascade. Les 4 branches sont supprimées (local + remote) une fois mergées. Release **v1.2.0** publiée avec succès, 4 artefacts attachés — les issues #16, #15, #8, #9 sont résolues (fermeture manuelle sur GitHub à faire par l'utilisateur, pas de token disponible pour le faire depuis cette session).
 - 2026-08-14 — Suite à la demande de l'utilisateur : réécriture complète du `README.md` (gabarit du skill), restriction du déclencheur `release.yml` à `head_branch == 'main'` uniquement (évite des runs `Release` inutiles sur les autres branches), puis restriction de `build.yml` à ne se déclencher que sur des changements de chemins pertinents pour le build (`src/`, `include/`, `ressources/`, `cmake/`, `scripts/`, `CMakeLists.txt`, `Makefile`, le workflow lui-même) — un commit `docs:`/`ci:` seul (README, PLAN, config release) ne lance plus toute la matrice 4 OS. Vérifié en CI : les commits `docs:`/`ci:` de cette étape n'ont déclenché ni build inutile après le filtre, ni nouvelle release (toujours v1.2.0).
 - 2026-08-14 — `J5` ajouté au plan à la demande de l'utilisateur (roadmap post-v1.2.0), phasé en 3 sous-groupes par risque/effort à partir de `AUDIT.md` §7 et de la Roadmap du README. `J2-3`/`J3-5`/`J3-6` reclassés sous `J5` (Phases 1/2), `J5-1`/`J5-2` ajoutés (Phases 2/3) pour couvrir les recommandations #4/#5 de l'audit, jusque-là non trackées comme tâches.
+- 2026-08-14 — 4 tâches Phase 1/2 de `J5` lancées en parallèle sur des branches dédiées, chacune vérifiée par un run CI complet avant merge : `J3-6` (cache vcpkg) et `J3-5` (subsystem Windows) verts sur les 3 OS, mergés dans `main` (conflit `PLAN.md` résolu manuellement). `J5-1` (clang-format) vert sur les 3 OS, formatage appliqué à `src/`/`include/`, vérifié en local (`make run` compile et le jeu tourne) avant merge. `J2-3` (smoke test Linux isolé) encore en cours de vérification CI au moment du merge des trois autres.

@@ -1,8 +1,25 @@
 name: Build MarioISN
 
+# Only runs for changes that can actually affect the compiled game (code,
+# assets, build scripts/config). Docs-only or release-metadata-only pushes
+# (README, CHANGELOG, .releaserc.json...) don't trigger a build -- and since
+# release.yml only fires via workflow_run off *this* workflow, they don't
+# trigger a release check either. That's fine: those commit types (docs/
+# chore) don't bump the version anyway, and any pending feat/fix ships on the
+# next push that does touch a build-relevant path.
 on:
   push:
+    paths: &build-relevant-paths
+      - 'src/**'
+      - 'include/**'
+      - 'ressources/**'
+      - 'cmake/**'
+      - 'scripts/**'
+      - 'CMakeLists.txt'
+      - 'Makefile'
+      - '.github/workflows/build.yml'
   pull_request:
+    paths: *build-relevant-paths
   workflow_dispatch:
 
 jobs:

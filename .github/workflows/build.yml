@@ -146,13 +146,37 @@ jobs:
           codesign --force --deep --sign - build-arm/mario_isn.app
           codesign --force --deep --sign - build-intel/mario_isn.app
 
+      # -y (store symlinks as symlinks) is required: Homebrew's bundled
+      # dylibs are versioned via symlinks (e.g. libfoo.1.dylib ->
+      # libfoo.1.2.3.dylib), and the ad-hoc code signature seals them as
+      # symlinks. Plain `zip -r` dereferences symlinks by default, so
+      # unzipping produced regular-file duplicates instead -- silently
+      # invalidating the signature ("a sealed resource is missing or
+      # invalid"). That's what turned into the hard Gatekeeper "app is
+      # damaged, move to Trash" error users hit on download (distinct from,
+      # and with no workaround unlike, the expected/documented "unidentified
+      # developer" prompt for a non-notarized app).
       - name: Package artifact (macOS)
         if: runner.os == 'macOS'
         run: |
           cd build-arm
-          zip -r MarioISN-macos-arm.zip mario_isn.app
+          zip -ry MarioISN-macos-arm.zip mario_isn.app
           cd ../build-intel
-          zip -r MarioISN-macos-intel.zip mario_isn.app
+          zip -ry MarioISN-macos-intel.zip mario_isn.app
+
+      # Round-trips the exact zip that gets uploaded and verifies the code
+      # signature survives it -- this is what would have caught the
+      # dereferenced-symlinks regression (zip missing -y) that shipped in
+      # 1.2.0: the app built and signed fine, only the packaged artifact
+      # was broken, so nothing before this step would have noticed.
+      - name: Verify code signature survives the zip round-trip (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          for arch in arm intel; do
+            rm -rf /tmp/verify-$arch && mkdir -p /tmp/verify-$arch
+            unzip -q build-$arch/MarioISN-macos-$arch.zip -d /tmp/verify-$arch
+            codesign --verify --deep --strict --verbose=2 /tmp/verify-$arch/mario_isn.app
+          done
 
       # ---------------------
       # Linux packaging

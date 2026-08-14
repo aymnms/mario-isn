@@ -31,6 +31,8 @@ jobs:
         with:
           run-id: ${{ github.event.workflow_run.id }}
           path: dist
+          merge-multiple: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install
         run: npm ci

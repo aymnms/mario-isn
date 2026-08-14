@@ -4,6 +4,7 @@
 #include <time.h> //Ne pas oublier d'inclure le fichier time.h
 
 #include "MARIO_mechant.h"
+#include "domain/grid.h"
 
 //--------------------------Variable-générale--------------------------//
 extern int direction_mechant[20]; //le mechant commence par aller à droite
@@ -16,12 +17,7 @@ int taille = 150;
 //---------------------------------------------------------------------//
 
 SDL_Rect setRectMechant(SDL_Rect Point) { //on place le point sur la grille
-    SDL_Rect resultat;
-
-    resultat.x = Point.x / 50;
-    resultat.y = Point.y / 50;
-
-    return resultat;
+    return domain_to_grid_cell(Point, 0);
 }
 
 void deplacement_mechant() {

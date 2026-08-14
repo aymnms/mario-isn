@@ -8,6 +8,7 @@
 #include "MARIO_game.h"
 #include "MARIO_niveau.h"
 #include "MARIO_musique.h"
+#include "domain/collision.h"
 #include "globals.h"
 
 //--------------------------Variable-générale--------------------------//
@@ -93,18 +94,8 @@ void mechantMort() { //detruit le perso
 void contact_lateral() { //si le mechant et le personnage se touchent verticalement
 
     if (statue[nb_mechant] != 'M') {
-        // I. déterminer si loe personnage est touché
-        // A. axe des x
-        // (coordonnés à partir du perso)
-        if ((((pos_perso.x + decalage + 39) >= tableau_mechant[nb_mechant][1].x) &&
-             (pos_perso.x + decalage + 39) <= tableau_mechant[nb_mechant][1].x + 2) ||
-            ((pos_perso.x + decalage) <= (tableau_mechant[nb_mechant][1].x + 40) &&
-             (pos_perso.x + decalage) >= (tableau_mechant[nb_mechant][1].x + 38))) {
-            // B. axe des y
-            if ((pos_perso.y >= tableau_mechant[nb_mechant][1].y - 45) &&
-                (pos_perso.y <= tableau_mechant[nb_mechant][1].y + 45)) {
-                game_over(); //le personnage perd une vie
-            }
+        if (domain_contact_lateral(pos_perso, decalage, tableau_mechant[nb_mechant][1])) {
+            game_over(); //le personnage perd une vie
         }
     }
 }
@@ -112,21 +103,13 @@ void contact_lateral() { //si le mechant et le personnage se touchent verticalem
 void contact_vertical() { //si le personnage est au dessus du méchant
 
     if (statue[nb_mechant] != 'M' && chute == 1) {
-        // II. déterminer si le personnage touche la haut du méchant
-        // A. axe des x
-        if ((pos_perso.x + decalage >= tableau_mechant[nb_mechant][1].x - 49) &&
-            (pos_perso.x + decalage <= tableau_mechant[nb_mechant][1].x + 48)) {
-
-            // B. axe des y
-            if (((pos_perso.y + 50) >= (tableau_mechant[nb_mechant][1].y - 5)) &&
-                ((pos_perso.y + 50) <= (tableau_mechant[nb_mechant][1].y + 5))) {
-                if (statue[nb_mechant] == 'V') {
-                    bool_saut_sur_mechant = 1;
-                    statue_saut();
-                    mechantMort(); //désactive le mechant
-                } else {
-                    game_over();
-                }
+        if (domain_lands_on_top(pos_perso, decalage, tableau_mechant[nb_mechant][1])) {
+            if (statue[nb_mechant] == 'V') {
+                bool_saut_sur_mechant = 1;
+                statue_saut();
+                mechantMort(); //désactive le mechant
+            } else {
+                game_over();
             }
         }
     }

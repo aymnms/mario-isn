@@ -18,9 +18,7 @@ _(vide)_
 
 ## ⬜ À faire
 
-- [ ] `J2-1` Ajouter la copie + réécriture des chemins de libs dynamiques SDL2 pour le bundle macOS (`install_name_tool`/`otool`)
-- [ ] `J2-2` Ajouter la copie + `patchelf`/rpath relatif pour le build Linux
-- [ ] `J2-3` Vérifier en CI que l'artefact packagé démarre sans les libs système (job de smoke test dans un environnement sans SDL2 préinstallé)
+- [ ] `J2-3` Ajouter un smoke test CI isolé (conteneur Linux sans SDL2 installé, Xvfb) validant que l'artefact packagé démarre sans les libs système — non fait dans cette session : nécessite d'itérer sur de vrais runs GitHub Actions (dlopen de libs X11/ALSA côté SDL2 à vérifier en conditions réelles), risque de flakiness à gérer avec plus de cycles CI que ce tour n'en permettait
 - [ ] `J3-1` Décommenter et fiabiliser l'installation des dépendances Windows via vcpkg dans `build.yml`
 - [ ] `J3-2` Décommenter et adapter le configure/build CMake pour Windows (toolchain vcpkg)
 - [ ] `J3-3` Décommenter et adapter le packaging (7z) + upload d'artefact Windows
@@ -30,8 +28,11 @@ _(vide)_
 
 - [x] `J0-1` Audit du dépôt (`AUDIT.md`)
 - [x] `J1-1` Ajouter `github-token` au step `download-artifact@v4` de `release.yml`
+- [x] `J2-1` Bundling macOS : `cmake/FixupBundleMacOS.cmake` (CMake `BundleUtilities`/`fixup_bundle`), Release-only, vérifié localement (`otool -L` confirme `@executable_path/../Frameworks/...`, 114 dylibs copiées/réécrites, binaire lancé avec succès)
+- [x] `J2-2` Bundling Linux : `scripts/bundle_libs_linux.sh` (copie récursive via `ldd` + rpath `patchelf`), Release-only, no-op si `patchelf` absent ; `patchelf` ajouté aux dépendances CI Linux dans `build.yml`, artefact `tar.gz` inclut désormais `lib/`
 
 ## Journal
 
 - 2026-08-14 — `J0-1` déplacé en ✅ Terminé — audit complet du dépôt et des 4 issues GitHub ouvertes, cause racine de #16 identifiée via les logs CI publics.
 - 2026-08-14 — `J1-1` déplacé en 🔵 En cours puis ✅ Terminé — ajout de `github-token: ${{ secrets.GITHUB_TOKEN }}` au step de téléchargement d'artefact dans `release.yml`.
+- 2026-08-14 — `J2-1`/`J2-2` déplacés en 🔵 En cours puis ✅ Terminé — bundling SDL2 macOS (fixup_bundle) validé localement en conditions réelles ; bundling Linux (patchelf) implémenté, restreint aux builds Release pour ne pas ralentir `make run` (mesuré : +5,6s par relink Debug si non restreint). `J2-3` (smoke test CI isolé) laissé en backlog, hors périmètre réalisable dans cette session.

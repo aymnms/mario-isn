@@ -114,6 +114,18 @@ if(APPLE)
               $<TARGET_BUNDLE_CONTENT_DIR:mario_isn>/Resources/bin
   )
 
+  # Bundle SDL2/SDL2_image/SDL2_mixer (and their transitive dylibs) into the
+  # .app so it runs without Homebrew SDL2 installed on the target machine.
+  # Release-only: re-fixing ~100 dylibs on every relink is too slow for the
+  # Debug dev loop (make run), and local dev already has Homebrew SDL2.
+  if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_custom_command(TARGET mario_isn POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+                -DBUNDLE_PATH=$<TARGET_BUNDLE_DIR:mario_isn>
+                -P ${CMAKE_SOURCE_DIR}/cmake/FixupBundleMacOS.cmake
+    )
+  endif()
+
 elseif(WIN32)
   # On Windows, copy assets next to the .exe
   add_custom_command(TARGET mario_isn POST_BUILD
@@ -141,4 +153,16 @@ elseif(UNIX)
               ${CMAKE_SOURCE_DIR}/ressources/bin
               $<TARGET_FILE_DIR:mario_isn>/bin
   )
+
+  # Bundle SDL2/SDL2_image/SDL2_mixer (and their transitive .so deps) next to
+  # the executable so it runs without those libs installed system-wide.
+  # Release-only, same rationale as the macOS fixup_bundle step above.
+  # No-op with a warning if `patchelf` isn't available (e.g. plain dev build).
+  if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_custom_command(TARGET mario_isn POST_BUILD
+        COMMAND ${CMAKE_SOURCE_DIR}/scripts/bundle_libs_linux.sh
+                $<TARGET_FILE:mario_isn>
+                $<TARGET_FILE_DIR:mario_isn>/lib
+    )
+  endif()
 endif()

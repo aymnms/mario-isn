@@ -37,7 +37,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build pkg-config \
+          sudo apt-get install -y cmake ninja-build pkg-config patchelf \
             libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
 
       # - name: Install deps (Windows via vcpkg)
@@ -90,7 +90,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           cd build-linux
-          tar -czf MarioISN-linux.tar.gz mario_isn img musique bin || true
+          tar -czf MarioISN-linux.tar.gz mario_isn img musique bin lib
 
       # - name: Package artifact (Windows)
       #   if: runner.os == 'Windows'

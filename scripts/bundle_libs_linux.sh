@@ -22,7 +22,15 @@ SYSTEM_LIB_PATTERN='^(linux-vdso|ld-linux|libc\.|libm\.|libdl\.|libpthread\.|lib
 
 copy_deps() {
   local target="$1"
-  ldd "$target" 2>/dev/null | awk '{print $3}' | grep '^/' | while read -r lib; do
+  local libs
+  # ldd/awk may legitimately produce zero matching lines (e.g. a leaf lib with
+  # no further non-system deps) -- `|| true` keeps that from tripping
+  # pipefail/set -e; a single awk filter (vs. piping into grep) avoids grep's
+  # own "no match" exit status doing the same.
+  libs=$(ldd "$target" 2>/dev/null | awk '$3 ~ /^\// {print $3}') || true
+  [ -z "$libs" ] && return 0
+  while IFS= read -r lib; do
+    [ -z "$lib" ] && continue
     base="$(basename "$lib")"
     if echo "$base" | grep -Eq "$SYSTEM_LIB_PATTERN"; then
       continue
@@ -34,7 +42,7 @@ copy_deps() {
       patchelf --set-rpath '$ORIGIN' "$dest"
       copy_deps "$dest"
     fi
-  done
+  done <<< "$libs"
 }
 
 copy_deps "$EXE"

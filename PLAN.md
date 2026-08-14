@@ -19,7 +19,7 @@ _(vide)_
 ## ⬜ À faire
 
 - [ ] `J2-3` Ajouter un smoke test CI isolé (conteneur Linux sans SDL2 installé, Xvfb) validant que l'artefact packagé démarre sans les libs système — non fait dans cette session : nécessite d'itérer sur de vrais runs GitHub Actions (dlopen de libs X11/ALSA côté SDL2 à vérifier en conditions réelles), risque de flakiness à gérer avec plus de cycles CI que ce tour n'en permettait
-- [ ] `J3-4` Valider que le build Windows compile réellement en CI — implémenté (J3-1/2/3 ci-dessous) mais **non vérifié** : pas de machine Windows locale, pas de token GitHub pour lire les logs CI en détail. L'utilisateur colle les logs du run `windows-latest` en cas d'échec pour itérer.
+- [ ] `J3-4` Valider que le build Windows compile réellement en CI — 1er run (31808483132) : Linux et Windows ont échoué, macOS ✅ (bundling J2 confirmé fonctionnel en CI réelle). Causes identifiées à partir des logs collés par l'utilisateur et corrigées : Windows — générateur figé `"Visual Studio 17 2022"` introuvable sur le runner `windows-2025-vs2026` (VS2026 installé) → générateur auto-détecté désormais ; Linux — `bundle_libs_linux.sh` mourait sur un piège `pipefail`/`grep` sans match (le link + la compilation avaient pourtant réussi) → réécrit sans `grep` intermédiaire. Re-push fait, run suivant à surveiller.
 - [ ] `J3-5` (optionnel, hors scope #8/#9) : lier `SDL2::SDL2main` + passer en subsystem `WINDOWS` pour supprimer la fenêtre console qui s'ouvre à côté du jeu sur Windows
 - [ ] `J3-6` (optionnel) : cache `actions/cache` pour l'arbre vcpkg installé, le run Windows compile SDL2/SDL2_image/SDL2_mixer depuis les sources à chaque fois (~15-30 min sans cache)
 

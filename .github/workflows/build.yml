@@ -205,6 +205,10 @@ jobs:
     name: Linux smoke test (no system SDL2)
     needs: build
     runs-on: ubuntu-latest
+    # Safety net: a stray hang here (this job already hit one -- an
+    # interactive apt-get prompt with no TTY, see the fix below) should fail
+    # fast instead of silently burning CI minutes for hours.
+    timeout-minutes: 10
     # Plain container -- deliberately does NOT install libsdl2/libsdl2-image/
     # libsdl2-mixer, to prove the artifact really is self-contained (issue
     # #15) rather than only tested on a runner that happens to have those

@@ -12,6 +12,7 @@ on:
     paths: &build-relevant-paths
       - 'src/**'
       - 'include/**'
+      - 'tests/**'
       - 'ressources/**'
       - 'cmake/**'
       - 'scripts/**'

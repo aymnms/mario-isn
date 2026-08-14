@@ -12,6 +12,10 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 - **J2** — Bundler les libs SDL2 — embarquer SDL2/SDL2_image/SDL2_mixer dans les artefacts macOS et Linux pour une exécution sans dépendances système (#15).
 - **J3** — Build et CI Windows — réactiver le job Windows de `build.yml` (vcpkg + build + packaging) (#8, #9).
 - **J4** — Build macOS Intel via Rosetta — demande explicite de l'utilisateur (hors des 4 issues initiales), sur le modèle d'une recette déjà validée sur un autre de ses projets (PyInstaller/Python) : cross-compilation `clang -arch x86_64` depuis le runner Apple Silicon `macos-latest` (pas de runner Intel natif fiable disponible), avec un second Homebrew x86_64 sous Rosetta pour les libs SDL2.
+- **J5** — Fiabilisation et dette technique post-v1.2.0 — les 4 issues initiales sont livrées (release v1.2.0) ; ce jalon reprend les points laissés en dette dans `AUDIT.md` §6-7 et la Roadmap du README, phasés par risque/effort :
+  - **Phase 1 (fiabiliser ce qui est livré)** : smoke test CI isolé validant le bundling Linux en conditions réelles (`J2-3`), cache vcpkg pour ne pas recompiler SDL2 à chaque run Windows (`J3-6`).
+  - **Phase 2 (hygiène rapide, effort faible)** : supprimer la console Windows superflue (`J3-5`), `clang-format`/`.editorconfig` (AUDIT §7 reco #4).
+  - **Phase 3 (dette technique de fond, effort élevé)** : extraire un noyau de logique de jeu découplé de SDL, prérequis bloquant pour tout test unitaire (AUDIT §7 reco #5).
 
 ## 🔵 En cours
 
@@ -19,10 +23,21 @@ _(vide)_
 
 ## ⬜ À faire
 
-- [ ] `J2-3` Ajouter un smoke test CI isolé (conteneur Linux sans SDL2 installé, Xvfb) validant que l'artefact packagé démarre sans les libs système — non fait dans cette session : nécessite d'itérer sur de vrais runs GitHub Actions (dlopen de libs X11/ALSA côté SDL2 à vérifier en conditions réelles), risque de flakiness à gérer avec plus de cycles CI que ce tour n'en permettait
-- [ ] `J3-5` (optionnel, hors scope #8/#9) : passer en subsystem `WINDOWS` pour supprimer la fenêtre console qui s'ouvre à côté du jeu sur Windows (`SDL2::SDL2main` est déjà lié, cf. J3-4 — il ne manque que le flag de subsystem)
-- [ ] `J3-6` (optionnel) : cache `actions/cache` pour l'arbre vcpkg installé, le run Windows compile SDL2/SDL2_image/SDL2_mixer depuis les sources à chaque fois (~2 min avec les binaires GitHub-hébergés mais sans cache local, à surveiller si ça grossit)
 - [ ] Fermer manuellement les issues #16, #15, #8, #9 sur GitHub — corrigées et vérifiées (release v1.2.0), mais aucun token disponible dans cette session pour les clore via l'API
+
+### J5 — Phase 1 (fiabiliser)
+
+- [ ] `J2-3` Ajouter un smoke test CI isolé (conteneur Linux sans SDL2 installé, Xvfb) validant que l'artefact packagé démarre sans les libs système
+- [ ] `J3-6` Cache `actions/cache` pour l'arbre vcpkg installé, le run Windows compile SDL2/SDL2_image/SDL2_mixer depuis les sources à chaque fois (~2 min avec les binaires GitHub-hébergés mais sans cache local, à surveiller si ça grossit)
+
+### J5 — Phase 2 (hygiène rapide)
+
+- [ ] `J3-5` Passer en subsystem `WINDOWS` pour supprimer la fenêtre console qui s'ouvre à côté du jeu sur Windows (`SDL2::SDL2main` est déjà lié, cf. J3-4 — il ne manque que le flag de subsystem)
+- [ ] `J5-1` `clang-format`/`.editorconfig` pour un style C homogène (AUDIT §7 reco #4)
+
+### J5 — Phase 3 (dette technique de fond)
+
+- [ ] `J5-2` Extraire un noyau de logique de jeu (déplacement, collisions, IA ennemis) découplé de SDL, dans un module dédié (`domain/`) — prérequis bloquant pour tout test unitaire (AUDIT §7 reco #5)
 
 ## ✅ Terminé
 
@@ -51,3 +66,4 @@ _(vide)_
 - 2026-08-14 — Run CI (31821880623) sur `feat/macos-intel-build` : **macOS ARM ✅ / macOS Intel ✅ / Linux ✅ / Windows ✅** dès la première tentative — `J4-1` déplacé en ✅ Terminé. Les 4 branches sont maintenant à jour du fix Node 22 et prêtes à être revues/mergées vers `main`.
 - 2026-08-14 — Stratégie de merge : les 4 branches étant empilées séquentiellement (chacune contient la précédente), `main` (non divergé) est fast-forward directement vers `feat/macos-intel-build` en un seul push, pour n'avoir qu'un seul cycle build→release plutôt que 4 en cascade. Les 4 branches sont supprimées (local + remote) une fois mergées. Release **v1.2.0** publiée avec succès, 4 artefacts attachés — les issues #16, #15, #8, #9 sont résolues (fermeture manuelle sur GitHub à faire par l'utilisateur, pas de token disponible pour le faire depuis cette session).
 - 2026-08-14 — Suite à la demande de l'utilisateur : réécriture complète du `README.md` (gabarit du skill), restriction du déclencheur `release.yml` à `head_branch == 'main'` uniquement (évite des runs `Release` inutiles sur les autres branches), puis restriction de `build.yml` à ne se déclencher que sur des changements de chemins pertinents pour le build (`src/`, `include/`, `ressources/`, `cmake/`, `scripts/`, `CMakeLists.txt`, `Makefile`, le workflow lui-même) — un commit `docs:`/`ci:` seul (README, PLAN, config release) ne lance plus toute la matrice 4 OS. Vérifié en CI : les commits `docs:`/`ci:` de cette étape n'ont déclenché ni build inutile après le filtre, ni nouvelle release (toujours v1.2.0).
+- 2026-08-14 — `J5` ajouté au plan à la demande de l'utilisateur (roadmap post-v1.2.0), phasé en 3 sous-groupes par risque/effort à partir de `AUDIT.md` §7 et de la Roadmap du README. `J2-3`/`J3-5`/`J3-6` reclassés sous `J5` (Phases 1/2), `J5-1`/`J5-2` ajoutés (Phases 2/3) pour couvrir les recommandations #4/#5 de l'audit, jusque-là non trackées comme tâches.

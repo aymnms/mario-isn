@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
        # Télécharge les artefacts du run qui vient de finir
       - name: Download artifacts from build run

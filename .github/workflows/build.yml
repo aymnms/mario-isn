@@ -265,10 +265,14 @@ jobs:
           # `timeout` exits 124 whenever it had to signal the still-running
           # process itself (whether that took just the SIGTERM or needed the
           # --kill-after SIGKILL escalation) -- i.e. the game made it to its
-          # main loop and stayed up. Any other exit code means it died on its
-          # own within the 5s window (most likely a missing bundled shared
-          # library).
-          if [ "$code" -ne 124 ]; then
+          # main loop and stayed up. Confirmed empirically in CI: this game
+          # needs the SIGKILL escalation (see comment above), and when it
+          # does, xvfb-run propagates the killed process's own termination
+          # status (128+9=137) instead of timeout's usual 124 -- so both are
+          # accepted as "the harness had to kill it" (i.e. success). Any
+          # other exit code means it died on its own within the window
+          # (most likely a missing bundled shared library).
+          if [ "$code" -ne 124 ] && [ "$code" -ne 137 ]; then
             echo "Game exited early with code $code instead of staying up -- see output above"
             exit 1
           fi

@@ -1,3 +1,9 @@
+/* This is a plain test binary, not an SDL app -- SDL.h is only pulled in
+ * for the SDL_Rect type via domain/{grid,collision}.h. Without this define,
+ * SDL_main.h #defines main to SDL_main on Windows, and linking would fail
+ * with "unresolved external symbol main" unless SDL2::SDL2main is also
+ * linked (see CMakeLists.txt's mario_isn target for that real app case). */
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 
 #include "domain/collision.h"

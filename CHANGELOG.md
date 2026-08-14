@@ -1,3 +1,20 @@
+# [1.2.0](https://github.com/aymnms/mario-isn/compare/v1.1.0...v1.2.0) (2026-08-14)
+
+
+### Bug Fixes
+
+* **build:** link SDL2main so the Windows executable resolves main() ([c52a7b3](https://github.com/aymnms/mario-isn/commit/c52a7b37a8f207d0d2f01c457c9e4fa9982dc1d5))
+* **ci:** authenticate and flatten cross-run artifact download in release workflow ([522977d](https://github.com/aymnms/mario-isn/commit/522977d0e128b0709e3078ddf32c8c9e99b99fc9)), closes [#16](https://github.com/aymnms/mario-isn/issues/16) [#16](https://github.com/aymnms/mario-isn/issues/16) [#15](https://github.com/aymnms/mario-isn/issues/15) [#8](https://github.com/aymnms/mario-isn/issues/8) [#9](https://github.com/aymnms/mario-isn/issues/9)
+* **ci:** bump release workflow to Node 22 ([f127cad](https://github.com/aymnms/mario-isn/commit/f127cad7233d022281c726c04e7d8605e79df448))
+* **ci:** fix Windows generator detection and Linux bundling pipefail bug ([d50b152](https://github.com/aymnms/mario-isn/commit/d50b15248436ed70cc6917b4269abcaa5132ae7e))
+
+
+### Features
+
+* **build:** add macOS Intel build via Rosetta cross-compile ([fa751cc](https://github.com/aymnms/mario-isn/commit/fa751cc54c79b47df1aa53668b5edffea5967033)), closes [#15](https://github.com/aymnms/mario-isn/issues/15)
+* **build:** bundle SDL2 libs into release artifacts (macOS + Linux) ([9200837](https://github.com/aymnms/mario-isn/commit/9200837a6dee87cd081870d10df7ac31a45b9884)), closes [#15](https://github.com/aymnms/mario-isn/issues/15)
+* **ci:** add Windows build to the CI matrix ([#8](https://github.com/aymnms/mario-isn/issues/8), [#9](https://github.com/aymnms/mario-isn/issues/9)) ([ee28795](https://github.com/aymnms/mario-isn/commit/ee287955be328c484ab1bb1c240f1962c1235800))
+
 # [1.1.0](https://github.com/aymnms/mario-isn/compare/v1.0.0...v1.1.0) (2025-08-17)
 
 

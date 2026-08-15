@@ -1,3 +1,10 @@
+## [1.2.6](https://github.com/aymnms/mario-isn/compare/v1.2.5...v1.2.6) (2026-08-15)
+
+
+### Bug Fixes
+
+* bundle the MSVC runtime on Windows, target older glibc on Linux ([f266f09](https://github.com/aymnms/mario-isn/commit/f266f091f46384a131d225725b8a4fec9a43b9ac))
+
 ## [1.2.5](https://github.com/aymnms/mario-isn/compare/v1.2.4...v1.2.5) (2026-08-15)
 
 

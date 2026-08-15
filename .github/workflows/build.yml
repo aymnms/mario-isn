@@ -266,9 +266,12 @@ jobs:
           VERSION=$(grep -oE '"[0-9]+\.[0-9]+\.[0-9]+"' CMakeLists.txt | head -1 | tr -d '"')
           PAYLOAD_DIR_WIN=$(cygpath -w "$PWD/build-win/Release")
           ICON_PATH_WIN=$(cygpath -w "$PWD/packaging/windows/mario_isn.ico")
+          OUTFILE_WIN=$(cygpath -w "$PWD/MarioISN-windows-setup.exe")
           "/c/Program Files (x86)/NSIS/makensis.exe" \
             "/DVERSION=$VERSION" "/DPAYLOAD_DIR=$PAYLOAD_DIR_WIN" "/DICON_PATH=$ICON_PATH_WIN" \
+            "/DOUTFILE=$OUTFILE_WIN" \
             packaging/windows/installer.nsi
+          ls -la MarioISN-windows-setup.exe
 
       # ---------------------
       # Upload artifacts

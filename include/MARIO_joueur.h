@@ -5,3 +5,4 @@ void saut();
 void gravite(void);
 int go(char direction);
 void animation();
+void init_perso_skin();

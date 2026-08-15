@@ -8,17 +8,38 @@
 #include "MARIO_quit.h"
 #include "MARIO_game.h"
 #include "MARIO_niveau.h"
+#include "MARIO_joueur.h"
 #include "MARIO_musique.h"
 #include "path.h"
 
 extern SDL_Rect origine, pos_perso;
 extern SDL_Texture *img, *perso;
+extern SDL_Texture *mario_saut_droite;
 extern SDL_Event event;
 extern int decalage;
 extern int coin, niveau, vie;
 extern char statue[20];
 extern SDL_Rect tableau_mechant[20][4];
 extern int vic;
+
+// game_over()/victory() each load a fixed, finite scene image (there are
+// only ever these 3), so they're loaded once and reused -- previously
+// every death/victory did a fresh create_texture(), leaking a texture each
+// time (never freed anywhere in the codebase). Lower frequency than the
+// per-frame leaks fixed elsewhere, but real over a long play session with
+// repeated deaths.
+static SDL_Texture *img_dommage, *img_game_over_screen, *img_victory;
+static int scene_skin_loaded = 0;
+
+static void init_scene_skin() {
+    if (scene_skin_loaded) {
+        return;
+    }
+    img_dommage = create_texture(path_img("dommage.png"));
+    img_game_over_screen = create_texture(path_img("game_over.png"));
+    img_victory = create_texture(path_img("victory.png"));
+    scene_skin_loaded = 1;
+}
 
 int conditions() {
     auto int rep = 0;
@@ -44,11 +65,12 @@ void game_over() {
         tableau_mechant[i][1].y = 0;
     }
 
+    init_scene_skin();
     if (vie > 0) {
         playMus(3);
         origine.x = 0;
         origine.y = 0;
-        img = create_texture(path_img("dommage.png"));
+        img = img_dommage;
 
         // ALORS
         update_texture(img, NULL, &origine);
@@ -61,7 +83,7 @@ void game_over() {
         playMus(4);
         origine.x = 0;
         origine.y = 0;
-        img = create_texture(path_img("game_over.png"));
+        img = img_game_over_screen;
 
         // ALORS
         update_texture(img, NULL, &origine);
@@ -79,7 +101,8 @@ int victory() {
     origine.x = 0;
     origine.y = 0;
     playMus(5);
-    img = create_texture(path_img("victory.png"));
+    init_scene_skin();
+    img = img_victory;
     for (int i = 0; i <= 19; i++) {
         statue[i] = '0';
     }
@@ -89,7 +112,8 @@ int victory() {
     }
     pos_perso.x = 280;
     pos_perso.y = 550;
-    perso = create_texture(path_img("mario_saut_droite.png"));
+    init_perso_skin();
+    perso = mario_saut_droite;
     for (pos_perso.y = 550; pos_perso.y >= 150; pos_perso.y -= 2) {
         clear_screen();
         // ALORS

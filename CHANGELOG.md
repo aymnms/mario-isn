@@ -1,3 +1,10 @@
+## [1.2.5](https://github.com/aymnms/mario-isn/compare/v1.2.4...v1.2.5) (2026-08-15)
+
+
+### Bug Fixes
+
+* bundle libSDL3.dylib, the runtime dependency fixup_bundle can't see ([862eb90](https://github.com/aymnms/mario-isn/commit/862eb90ab72240309e163b861f42b55091ccb004))
+
 ## [1.2.4](https://github.com/aymnms/mario-isn/compare/v1.2.3...v1.2.4) (2026-08-14)
 
 

@@ -10,6 +10,7 @@
 #include "MARIO_musique.h"
 #include "domain/grid.h"
 #include "domain/movement.h"
+#include "domain/tile.h"
 #include "globals.h"
 
 extern int run_game, run;
@@ -186,37 +187,56 @@ int go(char direction) {
             break;
     }
 
-    if (lvl[test1.y][test1.x] != '0' || lvl[test2.y][test2.x] != '0') {
+    // Pure classification of what test1/test2's tiles represent, then an
+    // impure dispatch on that result -- direction/jean/vic gating and the
+    // side effects themselves (game_over(), coin++, lvl mutation, playSon)
+    // stay here since they're about game state, not tile content.
+    domain_tile_kind_t kind = domain_classify_tile(lvl[test1.y][test1.x], lvl[test2.y][test2.x]);
+    if (kind != DOMAIN_TILE_NONE) {
         rep = 1;
-        if (lvl[test1.y][test1.x] == '9' || lvl[test2.y][test2.x] == '9') {
-            printf("pic\n");
-            game_over();
-        } else if ((lvl[test1.y][test1.x] == '2' || lvl[test2.y][test2.x] == '2') &&
-                   (direction == 'H')) {
-            playSon(2);
-            coin++;
-            if (lvl[test1.y][test1.x] == '2') {
-                lvl[test1.y][test1.x] = '1';
-            } else {
-                lvl[test2.y][test2.x] = '1';
-            }
-        } else if ((lvl[test1.y][test1.x] == 'O' || lvl[test2.y][test2.x] == 'O') && (jean == 0)) {
+        switch (kind) {
+            case DOMAIN_TILE_SPIKE:
+                printf("pic\n");
+                game_over();
+                break;
 
-            printf("viviO\n");
-            jean = 1;
-            vic = 1;
-            vie++;
-            playSon(4);
-            rep = 0;
-        } else if (lvl[test1.y][test1.x] == 'S' || lvl[test2.y][test2.x] == 'S') {
-            if (vic == 0) {
-                vic = 1;
-            } else {
-                vic = 0;
-            }
-            jean = 1;
-            printf("viviS\n");
-            rep = 0;
+            case DOMAIN_TILE_COIN:
+                if (direction == 'H') {
+                    playSon(2);
+                    coin++;
+                    if (lvl[test1.y][test1.x] == '2') {
+                        lvl[test1.y][test1.x] = '1';
+                    } else {
+                        lvl[test2.y][test2.x] = '1';
+                    }
+                }
+                break;
+
+            case DOMAIN_TILE_VICTORY_OBJECT:
+                if (jean == 0) {
+                    printf("viviO\n");
+                    jean = 1;
+                    vic = 1;
+                    vie++;
+                    playSon(4);
+                    rep = 0;
+                }
+                break;
+
+            case DOMAIN_TILE_FLAGPOLE:
+                if (vic == 0) {
+                    vic = 1;
+                } else {
+                    vic = 0;
+                }
+                jean = 1;
+                printf("viviS\n");
+                rep = 0;
+                break;
+
+            case DOMAIN_TILE_SOLID:
+            case DOMAIN_TILE_NONE:
+                break;
         }
     }
 

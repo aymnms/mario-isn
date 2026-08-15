@@ -19,9 +19,9 @@ extern int jump, chute; //saut
 extern int bool_droite, bool_gauche, bool_saut;
 extern int bool_saut_sur_mechant;
 
-extern char statue[10];
-extern int direction_mechant[10];
-extern SDL_Rect tableau_mechant[10][4];
+extern char statue[MAX_MECHANTS];
+extern int direction_mechant[MAX_MECHANTS];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 
 void init_niveau(void) {
     init_skin();

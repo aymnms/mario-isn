@@ -5,11 +5,12 @@
 
 #include "MARIO_mechant.h"
 #include "domain/grid.h"
+#include "globals.h"
 
 //--------------------------Variable-générale--------------------------//
-extern int direction_mechant[20]; //le mechant commence par aller à droite
-extern char statue[20];
-extern SDL_Rect tableau_mechant[20][4];
+extern int direction_mechant[MAX_MECHANTS]; //le mechant commence par aller à droite
+extern char statue[MAX_MECHANTS];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int nb_mechant;
 int boolSB = 0;
 int taille = 150;

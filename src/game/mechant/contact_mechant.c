@@ -15,8 +15,8 @@
 
 extern SDL_Rect pos_perso;
 extern int decalage;
-extern char statue[20];
-extern SDL_Rect tableau_mechant[20][4];
+extern char statue[MAX_MECHANTS];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int nb_mechant;
 extern int jump, chute, bool_saut_sur_mechant;
 extern int init_hauteur_saut, init_hauteur_chute;

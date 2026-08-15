@@ -15,10 +15,10 @@ int vie = 3;
 int coin = 0;
 int vic = 0;
 
-SDL_Rect tableau_mechant[20][4]; //tous les points pour les mechants
+SDL_Rect tableau_mechant[MAX_MECHANTS][4]; //tous les points pour les mechants
 SDL_Texture *imgMechant;
-char statue[20] = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}; //mechant mort ou vivant
-int direction_mechant[20];                                            //tout est dans le nom
+char statue[MAX_MECHANTS] = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0'}; //mechant mort ou vivant
+int direction_mechant[MAX_MECHANTS];                                            //tout est dans le nom
 int nb_mechant; //numéro du méchant à dont c'est le tour (voire game_runer.c)
 
 SDL_Rect origine, pos_perso, pos_mechant; //point pour positionner les elements

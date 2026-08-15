@@ -19,11 +19,10 @@ extern int nb_mechant;
 extern int decalage;
 extern SDL_Rect origine, pos_perso;
 extern int decalage;
-extern char statue[10];
+extern char statue[MAX_MECHANTS];
 extern SDL_Texture *imgMechant; //surface du mechant
-extern SDL_Rect tableau_mechant[10][4];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int nb_mechant;
-extern int repeat, y;
 extern int coin, niveau, vie;
 extern int jean;
 

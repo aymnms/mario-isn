@@ -11,6 +11,7 @@
 #include "MARIO_joueur.h"
 #include "MARIO_musique.h"
 #include "path.h"
+#include "globals.h"
 
 extern SDL_Rect origine, pos_perso;
 extern SDL_Texture *img, *perso;
@@ -18,8 +19,8 @@ extern SDL_Texture *mario_saut_droite;
 extern SDL_Event event;
 extern int decalage;
 extern int coin, niveau, vie;
-extern char statue[20];
-extern SDL_Rect tableau_mechant[20][4];
+extern char statue[MAX_MECHANTS];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int vic;
 
 // game_over()/victory() each load a fixed, finite scene image (there are

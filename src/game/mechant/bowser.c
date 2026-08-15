@@ -10,11 +10,11 @@
 #include "MARIO_musique.h"
 #include "globals.h"
 
-extern char statue[20];
-extern SDL_Rect tableau_mechant[20][4];
+extern char statue[MAX_MECHANTS];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int nb_mechant;
-extern char statue[20];
-extern int direction_mechant[20];
+extern char statue[MAX_MECHANTS];
+extern int direction_mechant[MAX_MECHANTS];
 extern SDL_Rect pos_perso;
 extern int decalage;
 extern int bool_saut_sur_mechant;

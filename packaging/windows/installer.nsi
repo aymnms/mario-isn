@@ -22,6 +22,16 @@
 !ifndef ICON_PATH
   !define ICON_PATH "mario_isn.ico"
 !endif
+; Same reasoning as ICON_PATH above: an OutFile without a directory
+; component is written relative to makensis's compile-time behaviour for
+; unqualified paths, which does not reliably match the repo-root path the
+; workflow's "Upload artifact (Windows)" step expects -- it previously
+; caused the installer to go missing from the artifact/release entirely
+; (silent "no files found" warning from upload-artifact, not a build
+; failure). Passed as an absolute path from CI, like PAYLOAD_DIR/ICON_PATH.
+!ifndef OUTFILE
+  !define OUTFILE "MarioISN-windows-setup.exe"
+!endif
 
 ; MUI_ICON/MUI_UNICON are read by MUI2.nsh's own top-level code when it's
 ; !include'd, so they must be defined before that -- not just before the
@@ -32,7 +42,7 @@
 !include "MUI2.nsh"
 
 Name "MarioISN"
-OutFile "MarioISN-windows-setup.exe"
+OutFile "${OUTFILE}"
 InstallDir "$LOCALAPPDATA\MarioISN"
 RequestExecutionLevel user
 Unicode true

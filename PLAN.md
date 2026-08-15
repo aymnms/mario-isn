@@ -27,13 +27,9 @@ Les jalons suivent directement les 4 issues GitHub ouvertes, dans l'ordre de dé
 
 _(vide)_
 
-## 🔵 En cours
-
-- [ ] `J5-3` intégralement implémenté sur la branche `chore/j5-3-code-cleanup` (J5-3a à J5-3g ci-dessous), CI verte sur les 3 OS + smoke tests, mais **pas encore fusionné dans `main`** — l'utilisateur a explicitement demandé de ne pas toucher `main` avant la fin complète du chantier. En attente de sa confirmation finale avant fusion.
-
 ## ⬜ À faire
 
-### J5 — Phase 3 (dette technique de fond)
+_(vide)_
 
 ## ✅ Terminé
 
@@ -115,3 +111,4 @@ _(vide)_
 - 2026-08-15 — v1.3.4 publiée avec `J11-1`, CI verte sur les 3 OS + smoke tests. **Confirmé par l'utilisateur sur sa vraie machine Windows : le niveau 4 se lance normalement, plus aucun crash.** `J11` clos. Les 3 OS sont désormais validés fonctionnels par l'utilisateur en conditions réelles, sans fuite mémoire ni crash connu.
 - 2026-08-15 — Utilisateur demande explicitement de reprendre `J5-3` (laissée en dette depuis `J5`) : "clean le code... sans régression et avec toutes les bonnes pratiques de code en C", en respectant le skill APE. Audit dédié effectué (`AUDIT.md` §9) : compilation avec `-Wall -Wextra -Wpedantic -Wshadow -Wconversion` (aucun de ces flags actif jusqu'ici) révèle 199 avertissements, dont un vrai bug latent (collision de symboles globaux `double x`/`int x` de même nom, ni l'un ni l'autre `static`) et des tailles de tableaux `extern` incohérentes avec leur vraie définition (même défaut que le crash Bowser de `J11`). Plan détaillé dans `J5-3a` à `J5-3f`, du risque le plus faible (code mort) au plus élevé (extraction de logique métier), chaque étape sur sa propre branche avec vérification CI avant fusion — même discipline que `J6`-`J11`.
 - 2026-08-15 — Utilisateur précise en cours de route : ne pas pousser sur `main` avant la fin complète du chantier `J5-3` (contrairement au reste de la session, où chaque hotfix était mergé et publié individuellement). Toute la série `J5-3a`-`J5-3g` regroupée sur une seule branche longue-durée (`chore/j5-3-code-cleanup`, renommée depuis `chore/j5-3a-dead-code` une fois la portée élargie), chaque étape vérifiée et poussée sur cette branche sans jamais fusionner. `J5-3a`-`J5-3d` complétées sans incident majeur. `J5-3f` (activation `-Werror`) déclenche immédiatement `J5-3g` (non planifiée) : GCC sur `ubuntu-22.04` détecte un `|`/`||` mal utilisé, puis — bien plus important — la CI Linux compile en Release (`-O3`) et pas en Debug, ce qui active `-Wmaybe-uninitialized` et révèle que le fix `J11` pour `goB()` était incomplet, avec le même défaut structurel (switch sans `default`) présent aussi dans `goM()` et `go()`. Docker installé pour reproduire l'environnement CI exact (`ubuntu:22.04`, gcc 11.4.0, `make prod-linux`) plutôt que deviner à l'aveugle — leçon directement issue de l'historique Windows de cette session (3 échecs CI consécutifs faute de logs), appliquée cette fois de façon proactive. `J5-3e` (extraction de logique métier, le chantier le plus risqué) complétée en dernier, une fois `-Werror` déjà en place comme garde-fou : `domain_next_direction`/`domain_scroll_right_action`/`domain_scroll_left_action`/`domain_classify_tile`, TDD strict, 53/53 assertions, vérifiées à chaque étape contre la CI exacte via Docker. **`J5-3` intégralement implémenté et vert sur les 3 OS, mais toujours sur sa branche, pas fusionné — en attente de confirmation finale de l'utilisateur avant `main`.**
+- 2026-08-15 — Utilisateur confirme : `chore/j5-3-code-cleanup` (10 commits, `J5-3a` à `J5-3g`) fusionnée dans `main`, branche supprimée. `J5-3` clos dans son intégralité — dette technique de fond ouverte depuis `J5-2` (2026-08-14), enfin traitée.

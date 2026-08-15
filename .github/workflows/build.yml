@@ -248,6 +248,17 @@ jobs:
       - name: Package artifact (Windows)
         if: runner.os == 'Windows'
         shell: bash
+        # MSYS2_ARG_CONV_EXCL=* is required: Git Bash's MSYS layer auto-
+        # converts any argument that *looks* like a POSIX path (anything
+        # starting with /) into a Windows path before exec'ing the target
+        # program. /DVERSION=1.2.6 matches that heuristic and was silently
+        # getting mangled into "C:/Program Files/Git/DVERSION=1.2.6" --
+        # makensis then tried to open THAT as the script file and failed.
+        # Excluding all args from conversion (there are no real POSIX paths
+        # among makensis's arguments here; PAYLOAD_DIR/ICON_PATH are already
+        # pre-converted via cygpath) sidesteps it entirely.
+        env:
+          MSYS2_ARG_CONV_EXCL: "*"
         run: |
           rm -f build-win/Release/domain_tests.exe
           # NSIS isn't part of the windows-latest runner's default image.

@@ -73,8 +73,16 @@ set(DOMAIN_SOURCES
         src/domain/collision.c
 )
 
+# Sets mario_isn.exe's icon (Explorer/taskbar/Alt+Tab) -- otherwise it uses
+# a generic default icon, one more thing that makes an unsigned executable
+# look untrustworthy.
+if(WIN32)
+  set(WIN32_RESOURCES ${CMAKE_SOURCE_DIR}/packaging/windows/mario_isn.rc)
+endif()
+
 add_executable(mario_isn ${PLATFORM_BUNDLE}
         ${DOMAIN_SOURCES}
+        ${WIN32_RESOURCES}
         src/globals.c
         src/main.c
         src/display.c

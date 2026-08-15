@@ -212,21 +212,63 @@ jobs:
       # ---------------------
       # Linux packaging
       # ---------------------
+      # Packages as a single-file AppImage instead of a tar.gz -- players get
+      # one MarioISN-x86_64.AppImage to chmod +x and run, not an archive to
+      # extract into a folder full of loose files and .so's. build-linux/'s
+      # existing flat layout (mario_isn + img/musique/bin/lib alongside it,
+      # already bundled and rpath'd by bundle_libs_linux.sh) becomes usr/bin/
+      # verbatim -- SDL_GetBasePath() resolves assets relative to whatever
+      # directory the *actual* binary ends up running from (see src/path.c),
+      # so nothing about that resolution needs to change.
       - name: Package artifact (Linux)
         if: runner.os == 'Linux'
         run: |
-          cd build-linux
-          tar -czf MarioISN-linux.tar.gz mario_isn img musique bin lib
+          APPDIR=MarioISN.AppDir
+          mkdir -p "$APPDIR/usr/bin"
+          cp -r build-linux/mario_isn build-linux/img build-linux/musique build-linux/bin build-linux/lib "$APPDIR/usr/bin/"
+          install -m 755 packaging/linux/AppRun "$APPDIR/AppRun"
+          cp packaging/linux/mario_isn.desktop "$APPDIR/mario_isn.desktop"
+          cp packaging/linux/mario_isn.png "$APPDIR/mario_isn.png"
 
+          curl -fsSL -o appimagetool \
+            https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x appimagetool
+          # --appimage-extract-and-run's non-FUSE extraction mode: GitHub's
+          # hosted runners have no FUSE, so running the tool (itself an
+          # AppImage) directly would fail.
+          ./appimagetool --appimage-extract >/dev/null
+          ARCH=x86_64 squashfs-root/AppRun "$APPDIR" MarioISN-x86_64.AppImage
+
+      # Builds a proper installer (Start Menu/Desktop shortcuts, uninstaller)
+      # instead of a raw zip -- players get one MarioISN-windows-setup.exe to
+      # download and run, not a folder full of DLLs to extract and manage.
+      # domain_tests.exe (unit test binary, builds into this same Release
+      # dir as mario_isn.exe) is deleted first so it doesn't leak into the
+      # installer payload.
       - name: Package artifact (Windows)
         if: runner.os == 'Windows'
         shell: bash
+        # MSYS2_ARG_CONV_EXCL=* is required: Git Bash's MSYS layer auto-
+        # converts any argument that *looks* like a POSIX path (anything
+        # starting with /) into a Windows path before exec'ing the target
+        # program. /DVERSION=1.2.6 matches that heuristic and was silently
+        # getting mangled into "C:/Program Files/Git/DVERSION=1.2.6" --
+        # makensis then tried to open THAT as the script file and failed.
+        # Excluding all args from conversion (there are no real POSIX paths
+        # among makensis's arguments here; PAYLOAD_DIR/ICON_PATH are already
+        # pre-converted via cygpath) sidesteps it entirely.
+        env:
+          MSYS2_ARG_CONV_EXCL: "*"
         run: |
-          cd build-win/Release
-          # domain_tests.exe (unit test binary) builds into this same Release
-          # dir as mario_isn.exe -- excluded so it doesn't leak into the
-          # player-facing release artifact.
-          7z a ../MarioISN-windows.zip . -xr!domain_tests.exe
+          rm -f build-win/Release/domain_tests.exe
+          # NSIS isn't part of the windows-latest runner's default image.
+          choco install nsis -y --no-progress
+          VERSION=$(grep -oE '"[0-9]+\.[0-9]+\.[0-9]+"' CMakeLists.txt | head -1 | tr -d '"')
+          PAYLOAD_DIR_WIN=$(cygpath -w "$PWD/build-win/Release")
+          ICON_PATH_WIN=$(cygpath -w "$PWD/packaging/windows/mario_isn.ico")
+          "/c/Program Files (x86)/NSIS/makensis.exe" \
+            "/DVERSION=$VERSION" "/DPAYLOAD_DIR=$PAYLOAD_DIR_WIN" "/DICON_PATH=$ICON_PATH_WIN" \
+            packaging/windows/installer.nsi
 
       # ---------------------
       # Upload artifacts
@@ -250,14 +292,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MarioISN-linux
-          path: build-linux/MarioISN-linux.tar.gz
+          path: MarioISN-x86_64.AppImage
 
       - name: Upload artifact (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
           name: MarioISN-windows
-          path: build-win/MarioISN-windows.zip
+          path: MarioISN-windows-setup.exe
 
   smoke-test-linux:
     name: Linux smoke test (no system SDL2)
@@ -305,15 +347,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends xvfb xauth
 
-      - name: Extract artifact
-        run: |
-          cd dist
-          tar -xzf MarioISN-linux.tar.gz
+      - name: Make the AppImage executable
+        run: chmod +x dist/MarioISN-x86_64.AppImage
 
       - name: Run the game headlessly for a few seconds
         run: |
           cd dist
           set +e
+          # --appimage-extract-and-run: this runner has no FUSE (same as the
+          # build job's appimagetool step), so the AppImage can't mount
+          # itself the normal way -- this flag extracts to a temp dir and
+          # execs the real binary directly instead, transparently to the
+          # timeout/signal handling below.
+          #
           # --kill-after is required: SDL2 intercepts SIGTERM by default and
           # turns it into a queued SDL_QUIT event instead of dying outright.
           # This game's menu loop consumes that one event and clears its own
@@ -324,7 +370,8 @@ jobs:
           # exactly this for 10+ minutes before being killed by this job's
           # timeout-minutes. `--kill-after=5` guarantees a SIGKILL 5s after
           # the initial SIGTERM if the process (group) is still alive.
-          xvfb-run --auto-servernum timeout --kill-after=5 5 ./mario_isn
+          xvfb-run --auto-servernum timeout --kill-after=5 5 \
+            ./MarioISN-x86_64.AppImage --appimage-extract-and-run
           code=$?
           set -e
           # `timeout` exits 124 whenever it had to signal the still-running

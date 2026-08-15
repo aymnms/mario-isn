@@ -1,0 +1,3 @@
+// Sets mario_isn.exe's icon (shown in Explorer, the taskbar, Alt+Tab...).
+// Without this the .exe uses a generic default icon.
+IDI_ICON1 ICON "mario_isn.ico"

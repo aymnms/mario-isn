@@ -122,13 +122,17 @@ first.
 
 ### Installation
 
-1. Go to the [**Releases**][release-url] page and download the archive matching your OS/architecture.
-2. Extract it.
-3. Run it.
+Go to the [**Releases**][release-url] page and download the asset matching your OS:
+
+| OS | Download | Then |
+|---|---|---|
+| macOS (Apple Silicon / Intel) | `MarioISN-macos-{arm,intel}.zip` | Extract, run the `.app` |
+| Windows | `MarioISN-windows-setup.exe` | Run it — installs to your user folder (no admin needed) with a Start Menu shortcut |
+| Linux (x86_64) | `MarioISN-x86_64.AppImage` | `chmod +x MarioISN-x86_64.AppImage`, then run it — no installation needed |
 
 ℹ️ **Note for macOS**: the downloaded `.app` may be marked as coming from an unidentified source (`com.apple.quarantine`). Go to System Settings → Privacy & Security to "Open Anyway".
 
-ℹ️ **Note for Windows**: the executable isn't code-signed (no publisher certificate), so Windows SmartScreen may show a "Windows protected your PC" warning. Click "More info" → "Run anyway" to launch it.
+ℹ️ **Note for Windows**: the installer isn't code-signed (no publisher certificate), so Windows SmartScreen may show a "Windows protected your PC" warning. Click "More info" → "Run anyway" to launch it.
 
 [![Game screenshot][product-screenshot-8]](#)
 

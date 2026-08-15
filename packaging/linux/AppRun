@@ -1,0 +1,9 @@
+#!/bin/sh
+# Entry point AppImage runtimes exec directly. Resolves its own location
+# (works whether run from the FUSE-mounted path or an --appimage-extract'd
+# squashfs-root/ dir) and execs the real binary alongside its bundled libs.
+# mario_isn's own SDL_GetBasePath()-based asset resolution (see src/path.c)
+# then finds img/musique/bin/lib next to it, unchanged from the plain Linux
+# tar.gz layout this AppDir's usr/bin/ is a straight copy of.
+HERE="$(dirname "$(readlink -f "${0}")")"
+exec "${HERE}/usr/bin/mario_isn" "$@"

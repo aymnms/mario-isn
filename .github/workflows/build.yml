@@ -28,8 +28,16 @@ jobs:
     name: Build on ${{ matrix.os }}
     strategy:
       fail-fast: false
+      # ubuntu-latest (24.04, glibc 2.39) is deliberately NOT used here: the
+      # bundled .so files link against whatever glibc symbols are available
+      # on the build machine, and glibc is forward-compatible only (an
+      # older-glibc build runs fine on newer systems, never the reverse). A
+      # user on Ubuntu 22.04/Debian 12-class systems (glibc ~2.35-2.36)
+      # couldn't run a 24.04-built artifact -- pinning to 22.04 targets the
+      # oldest glibc still reasonable to support instead of whatever
+      # "latest" happens to resolve to.
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-22.04, windows-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -215,7 +223,10 @@ jobs:
         shell: bash
         run: |
           cd build-win/Release
-          7z a ../MarioISN-windows.zip .
+          # domain_tests.exe (unit test binary) builds into this same Release
+          # dir as mario_isn.exe -- excluded so it doesn't leak into the
+          # player-facing release artifact.
+          7z a ../MarioISN-windows.zip . -xr!domain_tests.exe
 
       # ---------------------
       # Upload artifacts
@@ -251,7 +262,14 @@ jobs:
   smoke-test-linux:
     name: Linux smoke test (no system SDL2)
     needs: build
-    runs-on: ubuntu-latest
+    # Same version as the build job on purpose: glibc is forward-compatible
+    # only, so the meaningful check is "does it run on the oldest glibc we
+    # target" (22.04), not "does it run on whatever happens to be newest" --
+    # the latter would pass trivially and never catch a version mismatch
+    # like the one that shipped in 1.2.5 (built on 24.04, glibc 2.39;
+    # smoke-tested on 24.04 too, so nothing caught that real users on
+    # 22.04-class systems couldn't run it).
+    runs-on: ubuntu-22.04
     # Safety net: a stray hang here (this job already hit one -- an
     # interactive apt-get prompt with no TTY, see the fix below) should fail
     # fast instead of silently burning CI minutes for hours.

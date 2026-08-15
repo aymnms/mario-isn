@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/aymnms/mario-isn/compare/v1.3.0...v1.3.1) (2026-08-15)
+
+
+### Bug Fixes
+
+* **windows:** resolve NSIS OutFile to an absolute path so the installer is actually produced ([285a297](https://github.com/aymnms/mario-isn/commit/285a2972ef34f5728553bd23b360b98b03a48543))
+
 # [1.3.0](https://github.com/aymnms/mario-isn/compare/v1.2.6...v1.3.0) (2026-08-15)
 
 

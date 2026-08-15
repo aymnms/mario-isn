@@ -1,3 +1,12 @@
+## [1.3.5](https://github.com/aymnms/mario-isn/compare/v1.3.4...v1.3.5) (2026-08-15)
+
+
+### Bug Fixes
+
+* **globals:** resolve global symbol inconsistencies found in J5-3 audit ([5ce7bc8](https://github.com/aymnms/mario-isn/commit/5ce7bc870acf09cc1f3d52aabd0d1c9cb8f605a3))
+* **logic:** use logical || instead of bitwise | in boolean conditions ([b2a17dc](https://github.com/aymnms/mario-isn/commit/b2a17dc70f6b9b8399616739142b7d88948babf1))
+* **logic:** zero-initialize locals GCC proves may be uninitialized at -O3 ([77cef68](https://github.com/aymnms/mario-isn/commit/77cef681bd61fea36ed1bba369acf7bb867d48df))
+
 ## [1.3.4](https://github.com/aymnms/mario-isn/compare/v1.3.3...v1.3.4) (2026-08-15)
 
 

@@ -38,7 +38,7 @@ extern int decalage;
 // a texture each time.
 static int level_skin_loaded = 0;
 
-void init_skin() {
+void init_skin(void) {
     if (level_skin_loaded) {
         return;
     }

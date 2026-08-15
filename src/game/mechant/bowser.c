@@ -137,14 +137,14 @@ int goB(int direction) {
 
     return rep;
 }
-void bowserMort() {
+void bowserMort(void) {
     playSon(3);
     statue[nb_mechant] = 'U';
     tableau_mechant[nb_mechant][1].y = 500 - 120;
     printf(" mechant %d mort\n", nb_mechant);
 }
 
-void contactB() {
+void contactB(void) {
 
     if ((pos_perso.x + decalage >= tableau_mechant[nb_mechant][1].x - 49) &&
         (pos_perso.x + decalage <= tableau_mechant[nb_mechant][1].x + 98)) {

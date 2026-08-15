@@ -46,10 +46,10 @@ int main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 
-void quit_game() { //lorsque le joueur souhaite quitter le niveau du jeu -> redirection Menu
+void quit_game(void) { //lorsque le joueur souhaite quitter le niveau du jeu -> redirection Menu
     run_game = 0;
 }
-void quit() { //QUITTE TOTALEMENT LE PROGRAMME
+void quit(void) { //QUITTE TOTALEMENT LE PROGRAMME
     run = 0;
     run_game = 0;
 }

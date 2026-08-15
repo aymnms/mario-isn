@@ -31,7 +31,7 @@ extern int vic;
 static SDL_Texture *img_dommage, *img_game_over_screen, *img_victory;
 static int scene_skin_loaded = 0;
 
-static void init_scene_skin() {
+static void init_scene_skin(void) {
     if (scene_skin_loaded) {
         return;
     }
@@ -41,7 +41,7 @@ static void init_scene_skin() {
     scene_skin_loaded = 1;
 }
 
-int conditions() {
+int conditions(void) {
     auto int rep = 0;
     if (pos_perso.y >= 450) {
         game_over();
@@ -55,7 +55,7 @@ int conditions() {
     return rep;
 }
 
-void game_over() {
+void game_over(void) {
     vie--;
     for (int i = 0; i <= 19; i++) {
         statue[i] = '0';
@@ -97,7 +97,7 @@ void game_over() {
     }
 }
 
-int victory() {
+int victory(void) {
     origine.x = 0;
     origine.y = 0;
     playMus(5);

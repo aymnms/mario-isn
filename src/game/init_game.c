@@ -23,7 +23,7 @@ extern char statue[10];
 extern int direction_mechant[10];
 extern SDL_Rect tableau_mechant[10][4];
 
-void init_niveau() {
+void init_niveau(void) {
     init_skin();
     origine.x = 0;
     origine.y = 0;
@@ -49,7 +49,7 @@ void init_niveau() {
 // codebase), leaking a texture each time.
 static int timer_skin_loaded = 0;
 
-void init_timer() {
+void init_timer(void) {
     pos_barre.x = 400;
     pos_barre.y = 0;
     pos_noir.x = 600;
@@ -65,7 +65,7 @@ void init_timer() {
     }
 }
 
-void init_game() {
+void init_game(void) {
     niveauSelect(niveau);
     init_niveau();
     init_timer();

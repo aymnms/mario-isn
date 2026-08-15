@@ -85,13 +85,13 @@ int goM(int direction) {
     return rep;
 }
 
-void mechantMort() { //detruit le perso
+void mechantMort(void) { //detruit le perso
     playSon(3);
     statue[nb_mechant] = 'M';
     printf(" mechant %d mort\n", nb_mechant);
 }
 
-void contact_lateral() { //si le mechant et le personnage se touchent verticalement
+void contact_lateral(void) { //si le mechant et le personnage se touchent verticalement
 
     if (statue[nb_mechant] != 'M') {
         if (domain_contact_lateral(pos_perso, decalage, tableau_mechant[nb_mechant][1])) {
@@ -100,7 +100,7 @@ void contact_lateral() { //si le mechant et le personnage se touchent verticalem
     }
 }
 
-void contact_vertical() { //si le personnage est au dessus du méchant
+void contact_vertical(void) { //si le personnage est au dessus du méchant
 
     if (statue[nb_mechant] != 'M' && chute == 1) {
         if (domain_lands_on_top(pos_perso, decalage, tableau_mechant[nb_mechant][1])) {
@@ -115,7 +115,7 @@ void contact_vertical() { //si le personnage est au dessus du méchant
     }
 }
 
-void contact() {
+void contact(void) {
     if (statue[nb_mechant] == 'V') {
         contact_lateral(); //si touche perso latérallement
         contact_vertical();

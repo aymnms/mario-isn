@@ -20,7 +20,7 @@ extern int nb_mechant;
 static SDL_Texture *img_goomba, *img_goomba_mort, *img_bowser, *img_void, *img_bowser_mort;
 static int mechant_skin_loaded = 0;
 
-static void init_mechant_skin() {
+static void init_mechant_skin(void) {
     if (mechant_skin_loaded) {
         return;
     }
@@ -32,7 +32,7 @@ static void init_mechant_skin() {
     mechant_skin_loaded = 1;
 }
 
-void afficher_mechant() {
+void afficher_mechant(void) {
     init_mechant_skin();
 
     if (statue[nb_mechant] == 'V') {           //SI LE MECHANT EST VIVANT

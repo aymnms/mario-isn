@@ -20,7 +20,7 @@ SDL_Rect setRectMechant(SDL_Rect Point) { //on place le point sur la grille
     return domain_to_grid_cell(Point, 0);
 }
 
-void deplacement_mechant() {
+void deplacement_mechant(void) {
 
     srand(time(NULL));
     if (statue[nb_mechant] == 'V') {

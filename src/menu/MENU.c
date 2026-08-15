@@ -10,7 +10,7 @@ extern SDL_Event event;
 
 int repeat = 1, x, y;
 
-int start_game() {
+int start_game(void) {
     playMus(2);
     repeat = 1;
     while (repeat) {
@@ -47,4 +47,4 @@ int start_game() {
     return 0;
 }
 
-void MENU() { start_game(); }
+void MENU(void) { start_game(); }

@@ -8,6 +8,15 @@ project(mario_isn C)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Previously nothing here at all, so 199 real warnings (missing function
+# prototypes, implicit conversions, variable shadowing...) had silently
+# accumulated across the codebase -- see AUDIT.md §9 / PLAN.md J5-3.
+if(CMAKE_C_COMPILER_ID MATCHES "Clang|GNU")
+  add_compile_options(-Wall -Wextra)
+elseif(MSVC)
+  add_compile_options(/W4)
+endif()
+
 # =====================================
 # Platform-specific bundle/target settings
 # =====================================

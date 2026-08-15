@@ -25,7 +25,7 @@ SDL_Rect set_position(SDL_Rect Point) {
     return domain_to_grid_cell(Point, decalage);
 }
 
-void droite() { //si le personnage peut se deplacer vers la droite
+void droite(void) { //si le personnage peut se deplacer vers la droite
     if (go('D') == 0) {
         if (pos_perso.x >= 250 && decalage < 6700) {
             decalage++;
@@ -37,7 +37,7 @@ void droite() { //si le personnage peut se deplacer vers la droite
     }
 }
 
-void gauche() { //si le personnage peut se deplacer vers la gauche
+void gauche(void) { //si le personnage peut se deplacer vers la gauche
     if (go('G') == 0) {
         if ((pos_perso.x <= 50) && (decalage > 0)) {
             decalage--;
@@ -47,7 +47,7 @@ void gauche() { //si le personnage peut se deplacer vers la gauche
     }
 }
 
-void deplacement() {
+void deplacement(void) {
 
     SDL_PollEvent(&event);
 
@@ -106,7 +106,7 @@ void deplacement() {
     }
 }
 
-void deplacement_joueur() {
+void deplacement_joueur(void) {
     deplacement();
     if (bool_droite == 1) {
         droite();

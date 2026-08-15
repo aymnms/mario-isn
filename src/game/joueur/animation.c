@@ -24,7 +24,7 @@ static SDL_Texture *mario_frame1_gauche, *mario_frame2_gauche, *mario_frame3_gau
 static SDL_Texture *mario_frame1_droite, *mario_frame2_droite, *mario_frame3_droite;
 static int perso_skin_loaded = 0;
 
-void init_perso_skin() {
+void init_perso_skin(void) {
     if (perso_skin_loaded) {
         return;
     }
@@ -41,7 +41,7 @@ void init_perso_skin() {
     perso_skin_loaded = 1;
 }
 
-void animation() {
+void animation(void) {
     init_perso_skin();
     test_bas = go('B');
     if (test_bas == 0) //si le perso ne touche pas le sol

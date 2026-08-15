@@ -20,12 +20,12 @@ extern int decalage;
 extern int bool_saut_sur_mechant;
 int pv = 3;
 
-void addBowser(int x, int y) {
+void addBowser(int pos_x, int pos_y) {
     for (int i = 0; i <= 19; i++) {
         if (statue[i] == 'B' || statue[i] == '0') {
             statue[i] = 'B';
-            tableau_mechant[i][1].x = x;
-            tableau_mechant[i][1].y = y;
+            tableau_mechant[i][1].x = pos_x;
+            tableau_mechant[i][1].y = pos_y;
 
             direction_mechant[i] = 1;
 

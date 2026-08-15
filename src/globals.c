@@ -1,7 +1,11 @@
 // globals.c
 #include "globals.h"
 double x = 0;
-int decoule, emp = 0, temps = 0;
+int decoule, emp = 0;
+// SDL_GetTicks()'s own return type: temps is only ever assigned from it,
+// reset to 0, or compared against it -- matching the type avoids a signed/
+// unsigned comparison mismatch instead of just silencing it with casts.
+Uint32 temps = 0;
 char lvl[10][140]; // ou le bon type réel
 SDL_Rect pos_cadre, pos_noir, pos_barre;
 SDL_Texture *cadre, *noir, *barre;      // selon les vrais types

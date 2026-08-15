@@ -12,6 +12,6 @@ void mechantMort(void);
 
 void contact(void);
 
-void addBowser(int x, int y);
+void addBowser(int pos_x, int pos_y);
 int goB(int direction);
 void contactB(void);

@@ -30,6 +30,8 @@ int jump, chute;
 int init_hauteur_saut, init_hauteur_chute;
 
 int main(int argc, char *argv[]) {
+    (void)argc; // required by SDL_main's expected signature, unused otherwise
+    (void)argv;
     printf("Hello World\n");
     // while(run){
     init_menu(); //envoie sur "init_menu.c" par "init_menu.h"

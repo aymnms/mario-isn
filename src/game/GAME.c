@@ -198,7 +198,6 @@ void GAME(void) {
     int frameDelay = 1000 / fps;
     Uint32 frameStart;
     int frameTime;
-    int a = 0;
 
     while (run_game) {
         printf("init_game\n");

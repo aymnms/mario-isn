@@ -11,7 +11,8 @@
 #define MAX_MECHANTS 20
 
 extern double x;
-extern int decoule, emp, temps;
+extern int decoule, emp;
+extern Uint32 temps;
 extern char lvl[10][140];
 extern SDL_Rect pos_cadre, pos_noir, pos_barre;
 extern SDL_Texture *cadre, *noir, *barre;

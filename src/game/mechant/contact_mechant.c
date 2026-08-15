@@ -78,7 +78,7 @@ int goM(int direction) {
     }
 
     if ((lvl[test1.y][test1.x] != '0' || lvl[test2.y][test2.x] != '0') ||
-        lvl[test1.y][test1.x] != '0' && lvl[test2.y][test2.x] != '0') {
+        (lvl[test1.y][test1.x] != '0' && lvl[test2.y][test2.x] != '0')) {
         rep = 1;
     }
 

@@ -44,9 +44,9 @@ void saut(void) {
             pos_perso.y = init_hauteur_saut - domain_jump_arc(x);
         }
     }
-    if (bool_saut_sur_mechant == 0 && jump == 1 && go('H') == 0 && x >= 11 ||
-        jump == 1 && go('H') == 1 ||
-        bool_saut_sur_mechant == 1 && jump == 1 && go('H') == 0 && x >= 7) {
+    if ((bool_saut_sur_mechant == 0 && jump == 1 && go('H') == 0 && x >= 11) ||
+        (jump == 1 && go('H') == 1) ||
+        (bool_saut_sur_mechant == 1 && jump == 1 && go('H') == 0 && x >= 7)) {
         jump = 0;
         chute = 0;
     }

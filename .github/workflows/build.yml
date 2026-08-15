@@ -250,9 +250,12 @@ jobs:
         shell: bash
         run: |
           rm -f build-win/Release/domain_tests.exe
+          # NSIS isn't part of the windows-latest runner's default image.
+          choco install nsis -y --no-progress
           VERSION=$(grep -oE '"[0-9]+\.[0-9]+\.[0-9]+"' CMakeLists.txt | head -1 | tr -d '"')
           PAYLOAD_DIR_WIN=$(cygpath -w "$PWD/build-win/Release")
-          makensis "/DVERSION=$VERSION" "/DPAYLOAD_DIR=$PAYLOAD_DIR_WIN" packaging/windows/installer.nsi
+          "/c/Program Files (x86)/NSIS/makensis.exe" \
+            "/DVERSION=$VERSION" "/DPAYLOAD_DIR=$PAYLOAD_DIR_WIN" packaging/windows/installer.nsi
 
       # ---------------------
       # Upload artifacts

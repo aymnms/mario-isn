@@ -1,3 +1,3 @@
 int conditions(void);
 void game_over(void);
-int victory();
+int victory(void);

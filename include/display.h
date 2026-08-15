@@ -6,12 +6,12 @@
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;
 
-void init_display();
+void init_display(void);
 // void cleanup_display();
 void display_texture(SDL_Texture *texture, SDL_Rect *src, SDL_Rect *dest);
 void update_texture(SDL_Texture *texture, SDL_Rect *src, SDL_Rect *dest);
-void clear_screen();
-void present_screen();
+void clear_screen(void);
+void present_screen(void);
 SDL_Texture *create_texture(char *surface_path);
 
 #endif

@@ -10,22 +10,22 @@
 #include "MARIO_musique.h"
 #include "globals.h"
 
-extern char statue[20];
-extern SDL_Rect tableau_mechant[20][4];
+extern char statue[MAX_MECHANTS];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int nb_mechant;
-extern char statue[20];
-extern int direction_mechant[20];
+extern char statue[MAX_MECHANTS];
+extern int direction_mechant[MAX_MECHANTS];
 extern SDL_Rect pos_perso;
 extern int decalage;
 extern int bool_saut_sur_mechant;
 int pv = 3;
 
-void addBowser(int x, int y) {
+void addBowser(int pos_x, int pos_y) {
     for (int i = 0; i <= 19; i++) {
         if (statue[i] == 'B' || statue[i] == '0') {
             statue[i] = 'B';
-            tableau_mechant[i][1].x = x;
-            tableau_mechant[i][1].y = y;
+            tableau_mechant[i][1].x = pos_x;
+            tableau_mechant[i][1].y = pos_y;
 
             direction_mechant[i] = 1;
 
@@ -37,7 +37,14 @@ void addBowser(int x, int y) {
 int goB(int direction) {
     int rep = 0;
 
-    SDL_Rect test1, test2, test3, test4;
+    // Zero-initialized: the switch below has no default case, so a
+    // `direction` outside {-1, 1, 666, 999} (never happens at today's call
+    // sites, but nothing in the type system guarantees that) would
+    // otherwise leave these read uninitialized just below -- caught by GCC
+    // at -O3 (-Wmaybe-uninitialized), the same class of bug as the J11
+    // Bowser crash fix, just not eliminated by it. lvl[0][0] is always a
+    // valid in-bounds cell.
+    SDL_Rect test1 = {0}, test2 = {0}, test3 = {0}, test4 = {0};
 
     //on définit 4 points pour positionner le mechant sur la grille du niveau
 
@@ -129,7 +136,7 @@ int goB(int direction) {
     printf("test1 = %c\ntest2 = %c\ntest3 = %c\ntest4 = %c\n", lvl[test1.y][test1.x],
            lvl[test2.y][test2.x], lvl[test3.y][test3.x], lvl[test4.y][test4.x]);
 
-    if (lvl[test1.y][test1.x] == '1' | lvl[test2.y][test2.x] == '1' | lvl[test3.y][test3.x] == '1' |
+    if (lvl[test1.y][test1.x] == '1' || lvl[test2.y][test2.x] == '1' || lvl[test3.y][test3.x] == '1' ||
         lvl[test4.y][test4.x] == '1') {
         rep = 1;
     }
@@ -137,14 +144,14 @@ int goB(int direction) {
 
     return rep;
 }
-void bowserMort() {
+void bowserMort(void) {
     playSon(3);
     statue[nb_mechant] = 'U';
     tableau_mechant[nb_mechant][1].y = 500 - 120;
     printf(" mechant %d mort\n", nb_mechant);
 }
 
-void contactB() {
+void contactB(void) {
 
     if ((pos_perso.x + decalage >= tableau_mechant[nb_mechant][1].x - 49) &&
         (pos_perso.x + decalage <= tableau_mechant[nb_mechant][1].x + 98)) {

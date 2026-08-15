@@ -24,9 +24,9 @@ SDL_Rect bobie;
 SDL_Rect niveauOrigine;
 int l, c; //ligne et colonne
 extern int coin, niveau, vie;
-extern char statue[20];
-extern SDL_Rect tableau_mechant[20][4];
-extern int direction_mechant[20];
+extern char statue[MAX_MECHANTS];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
+extern int direction_mechant[MAX_MECHANTS];
 extern SDL_Rect pos_perso;
 extern int decalage;
 
@@ -38,7 +38,7 @@ extern int decalage;
 // a texture each time.
 static int level_skin_loaded = 0;
 
-void init_skin() {
+void init_skin(void) {
     if (level_skin_loaded) {
         return;
     }
@@ -53,13 +53,13 @@ void init_skin() {
     level_skin_loaded = 1;
 }
 
-void addMechant(int x, int y) {
+void addMechant(int pos_x, int pos_y) {
     auto int i;
     for (i = 0; i <= 19; i++) {
         if (statue[i] == 'M' || statue[i] == '0') {
             statue[i] = 'V';
-            tableau_mechant[i][1].x = x;
-            tableau_mechant[i][1].y = 499 - y;
+            tableau_mechant[i][1].x = pos_x;
+            tableau_mechant[i][1].y = 499 - pos_y;
             printf("champ added %d", i);
             direction_mechant[i] = 1;
             break;
@@ -169,8 +169,13 @@ void playerrrr(int ngh) {
 
 void niveauSelect(int nb) {
     FILE *fichier = NULL;
-    auto char num;
-    auto int *nbM, xM, yM;
+    // Zero-initialized: the switch below has no default case, so an
+    // unhandled `nb` would leave this read uninitialized in the do-while
+    // just below it (caught by GCC at -O3, -Wmaybe-uninitialized). '\0'
+    // never appears as a level marker digit in niveau.lvl, so this can
+    // only ever fail the file search cleanly instead of comparing against
+    // garbage.
+    auto char num = '\0';
 
     fichier = fopen(path_bin("niveau.lvl"), "r");
     char caract;
@@ -244,57 +249,57 @@ void niveauAfficher(int strawling) {
     // ALORS
     display_texture(fond, NULL, &niveauOrigine);
 
-    int l, c;
+    int row, col;
 
-    for (l = 0; l < 10; l++) {
+    for (row = 0; row < 10; row++) {
 
-        for (c = 0; c < 140; c++) {
+        for (col = 0; col < 140; col++) {
 
-            switch (lvl[l][c]) {
+            switch (lvl[row][col]) {
                 case '1':
 
-                    bobie.x = (c * largBlock) - strawling;
-                    bobie.y = l * hautBlock;
+                    bobie.x = (col * largBlock) - strawling;
+                    bobie.y = row * hautBlock;
                     // ALORS
                     display_texture(bloc, NULL, &bobie);
                     break;
                 case '2':
-                    bobie.x = (c * largBlock) - strawling;
-                    bobie.y = l * hautBlock;
+                    bobie.x = (col * largBlock) - strawling;
+                    bobie.y = row * hautBlock;
                     // ALORS
                     display_texture(cadeau, NULL, &bobie);
                     break;
                 case '5':
 
-                    bobie.x = (c * largBlock) - strawling;
-                    bobie.y = l * hautBlock;
+                    bobie.x = (col * largBlock) - strawling;
+                    bobie.y = row * hautBlock;
                     // ALORS
                     display_texture(cadeau, NULL, &bobie);
                     break;
                 case '9':
 
-                    bobie.x = (c * largBlock) - strawling;
-                    bobie.y = l * hautBlock;
+                    bobie.x = (col * largBlock) - strawling;
+                    bobie.y = row * hautBlock;
                     // ALORS
                     display_texture(pic, NULL, &bobie);
                     break;
                 case 'D':
-                    bobie.x = (c * largBlock) - strawling;
+                    bobie.x = (col * largBlock) - strawling;
                     bobie.y = 0;
                     // ALORS
                     display_texture(drapeau, NULL, &bobie);
-                    bobie.x = (c * largBlock) - strawling;
-                    bobie.y = l * hautBlock;
+                    bobie.x = (col * largBlock) - strawling;
+                    bobie.y = row * hautBlock;
                     // ALORS
                     display_texture(bloc, NULL, &bobie);
                     break;
                 case 'H':
-                    bobie.x = (c * largBlock) - strawling;
+                    bobie.x = (col * largBlock) - strawling;
                     bobie.y = 350;
                     // ALORS
                     display_texture(hache, NULL, &bobie);
-                    bobie.x = (c * largBlock) - strawling;
-                    bobie.y = l * hautBlock;
+                    bobie.x = (col * largBlock) - strawling;
+                    bobie.y = row * hautBlock;
                     // ALORS
                     display_texture(bloc, NULL, &bobie);
                     break;

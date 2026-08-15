@@ -9,6 +9,8 @@
 #include "MARIO_game.h"
 #include "MARIO_musique.h"
 #include "domain/grid.h"
+#include "domain/movement.h"
+#include "domain/tile.h"
 #include "globals.h"
 
 extern int run_game, run;
@@ -25,29 +27,37 @@ SDL_Rect set_position(SDL_Rect Point) {
     return domain_to_grid_cell(Point, decalage);
 }
 
-void droite() { //si le personnage peut se deplacer vers la droite
+void droite(void) { //si le personnage peut se deplacer vers la droite
     if (go('D') == 0) {
-        if (pos_perso.x >= 250 && decalage < 6700) {
-            decalage++;
-        } else if (pos_perso.x < 500) {
-            {
+        switch (domain_scroll_right_action(pos_perso.x, decalage)) {
+            case DOMAIN_SCROLL_ACTION_SCROLL_WORLD:
+                decalage++;
+                break;
+            case DOMAIN_SCROLL_ACTION_MOVE_SPRITE:
                 pos_perso.x++;
-            }
+                break;
+            case DOMAIN_SCROLL_ACTION_NONE:
+                break;
         }
     }
 }
 
-void gauche() { //si le personnage peut se deplacer vers la gauche
+void gauche(void) { //si le personnage peut se deplacer vers la gauche
     if (go('G') == 0) {
-        if ((pos_perso.x <= 50) && (decalage > 0)) {
-            decalage--;
-        } else if (pos_perso.x > 0) {
-            pos_perso.x--;
+        switch (domain_scroll_left_action(pos_perso.x, decalage)) {
+            case DOMAIN_SCROLL_ACTION_SCROLL_WORLD:
+                decalage--;
+                break;
+            case DOMAIN_SCROLL_ACTION_MOVE_SPRITE:
+                pos_perso.x--;
+                break;
+            case DOMAIN_SCROLL_ACTION_NONE:
+                break;
         }
     }
 }
 
-void deplacement() {
+void deplacement(void) {
 
     SDL_PollEvent(&event);
 
@@ -106,7 +116,7 @@ void deplacement() {
     }
 }
 
-void deplacement_joueur() {
+void deplacement_joueur(void) {
     deplacement();
     if (bool_droite == 1) {
         droite();
@@ -123,7 +133,11 @@ void deplacement_joueur() {
 
 int go(char direction) {
     auto int rep = 0;
-    SDL_Rect test1, test2;
+    // Zero-initialized: same reasoning as goM()/goB() -- the switch below
+    // has no default case, so an unhandled `direction` would leave these
+    // read uninitialized just below (caught by GCC at -O3,
+    // -Wmaybe-uninitialized). lvl[0][0] is always a valid in-bounds cell.
+    SDL_Rect test1 = {0}, test2 = {0};
 
     SDL_Rect position_perso_NO = pos_perso;
     position_perso_NO.x += 8;
@@ -173,37 +187,56 @@ int go(char direction) {
             break;
     }
 
-    if (lvl[test1.y][test1.x] != '0' | lvl[test2.y][test2.x] != '0') {
+    // Pure classification of what test1/test2's tiles represent, then an
+    // impure dispatch on that result -- direction/jean/vic gating and the
+    // side effects themselves (game_over(), coin++, lvl mutation, playSon)
+    // stay here since they're about game state, not tile content.
+    domain_tile_kind_t kind = domain_classify_tile(lvl[test1.y][test1.x], lvl[test2.y][test2.x]);
+    if (kind != DOMAIN_TILE_NONE) {
         rep = 1;
-        if (lvl[test1.y][test1.x] == '9' | lvl[test2.y][test2.x] == '9') {
-            printf("pic\n");
-            game_over();
-        } else if ((lvl[test1.y][test1.x] == '2' | lvl[test2.y][test2.x] == '2') &&
-                   (direction == 'H')) {
-            playSon(2);
-            coin++;
-            if (lvl[test1.y][test1.x] == '2') {
-                lvl[test1.y][test1.x] = '1';
-            } else {
-                lvl[test2.y][test2.x] = '1';
-            }
-        } else if ((lvl[test1.y][test1.x] == 'O' | lvl[test2.y][test2.x] == 'O') && (jean == 0)) {
+        switch (kind) {
+            case DOMAIN_TILE_SPIKE:
+                printf("pic\n");
+                game_over();
+                break;
 
-            printf("viviO\n");
-            jean = 1;
-            vic = 1;
-            vie++;
-            playSon(4);
-            rep = 0;
-        } else if (lvl[test1.y][test1.x] == 'S' | lvl[test2.y][test2.x] == 'S') {
-            if (vic == 0) {
-                vic = 1;
-            } else {
-                vic = 0;
-            }
-            jean = 1;
-            printf("viviS\n");
-            rep = 0;
+            case DOMAIN_TILE_COIN:
+                if (direction == 'H') {
+                    playSon(2);
+                    coin++;
+                    if (lvl[test1.y][test1.x] == '2') {
+                        lvl[test1.y][test1.x] = '1';
+                    } else {
+                        lvl[test2.y][test2.x] = '1';
+                    }
+                }
+                break;
+
+            case DOMAIN_TILE_VICTORY_OBJECT:
+                if (jean == 0) {
+                    printf("viviO\n");
+                    jean = 1;
+                    vic = 1;
+                    vie++;
+                    playSon(4);
+                    rep = 0;
+                }
+                break;
+
+            case DOMAIN_TILE_FLAGPOLE:
+                if (vic == 0) {
+                    vic = 1;
+                } else {
+                    vic = 0;
+                }
+                jean = 1;
+                printf("viviS\n");
+                rep = 0;
+                break;
+
+            case DOMAIN_TILE_SOLID:
+            case DOMAIN_TILE_NONE:
+                break;
         }
     }
 

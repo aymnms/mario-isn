@@ -1,15 +1,16 @@
-﻿#include <stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_image.h>
 
 #include "display.h"
 #include "path.h"
+#include "globals.h"
 
 extern int decalage;
-extern char statue[20];
+extern char statue[MAX_MECHANTS];
 extern SDL_Texture *imgMechant; //surface du mechant
-extern SDL_Rect tableau_mechant[20][4];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int nb_mechant;
 
 // afficher_mechant() runs up to 20x per frame (once per enemy slot). Each
@@ -20,7 +21,7 @@ extern int nb_mechant;
 static SDL_Texture *img_goomba, *img_goomba_mort, *img_bowser, *img_void, *img_bowser_mort;
 static int mechant_skin_loaded = 0;
 
-static void init_mechant_skin() {
+static void init_mechant_skin(void) {
     if (mechant_skin_loaded) {
         return;
     }
@@ -32,7 +33,7 @@ static void init_mechant_skin() {
     mechant_skin_loaded = 1;
 }
 
-void afficher_mechant() {
+void afficher_mechant(void) {
     init_mechant_skin();
 
     if (statue[nb_mechant] == 'V') {           //SI LE MECHANT EST VIVANT

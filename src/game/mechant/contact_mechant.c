@@ -15,8 +15,8 @@
 
 extern SDL_Rect pos_perso;
 extern int decalage;
-extern char statue[20];
-extern SDL_Rect tableau_mechant[20][4];
+extern char statue[MAX_MECHANTS];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int nb_mechant;
 extern int jump, chute, bool_saut_sur_mechant;
 extern int init_hauteur_saut, init_hauteur_chute;
@@ -26,7 +26,11 @@ extern int vie;
 int goM(int direction) {
     int rep = 0;
 
-    auto SDL_Rect test1, test2;
+    // Zero-initialized: same reasoning as goB() in bowser.c -- the switch
+    // below has no default case, so an unhandled `direction` would leave
+    // these read uninitialized just below (caught by GCC at -O3,
+    // -Wmaybe-uninitialized). lvl[0][0] is always a valid in-bounds cell.
+    auto SDL_Rect test1 = {0}, test2 = {0};
 
     //on définit 4 points pour positionner le mechant sur la grille du niveau
 
@@ -78,20 +82,20 @@ int goM(int direction) {
     }
 
     if ((lvl[test1.y][test1.x] != '0' || lvl[test2.y][test2.x] != '0') ||
-        lvl[test1.y][test1.x] != '0' && lvl[test2.y][test2.x] != '0') {
+        (lvl[test1.y][test1.x] != '0' && lvl[test2.y][test2.x] != '0')) {
         rep = 1;
     }
 
     return rep;
 }
 
-void mechantMort() { //detruit le perso
+void mechantMort(void) { //detruit le perso
     playSon(3);
     statue[nb_mechant] = 'M';
     printf(" mechant %d mort\n", nb_mechant);
 }
 
-void contact_lateral() { //si le mechant et le personnage se touchent verticalement
+void contact_lateral(void) { //si le mechant et le personnage se touchent verticalement
 
     if (statue[nb_mechant] != 'M') {
         if (domain_contact_lateral(pos_perso, decalage, tableau_mechant[nb_mechant][1])) {
@@ -100,7 +104,7 @@ void contact_lateral() { //si le mechant et le personnage se touchent verticalem
     }
 }
 
-void contact_vertical() { //si le personnage est au dessus du méchant
+void contact_vertical(void) { //si le personnage est au dessus du méchant
 
     if (statue[nb_mechant] != 'M' && chute == 1) {
         if (domain_lands_on_top(pos_perso, decalage, tableau_mechant[nb_mechant][1])) {
@@ -115,7 +119,7 @@ void contact_vertical() { //si le personnage est au dessus du méchant
     }
 }
 
-void contact() {
+void contact(void) {
     if (statue[nb_mechant] == 'V') {
         contact_lateral(); //si touche perso latérallement
         contact_vertical();

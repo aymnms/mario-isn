@@ -12,7 +12,7 @@ extern int jump, chute;
 extern int init_hauteur_saut, init_hauteur_chute;
 extern int bool_saut, bool_saut_sur_mechant;
 
-void statue_saut() {
+void statue_saut(void) {
     if (go('B') == 1 && go('H') == 0 &&
         jump == 0) { //si perso sur sol, qu'il n'a pas d'obstacle et ne saut pas | saut classique
         init_hauteur_saut = pos_perso.y;
@@ -34,7 +34,7 @@ void statue_saut() {
     }
 }
 
-void saut() {
+void saut(void) {
 
     if (jump == 1 && go('H') == 0) {
         x += 0.1;
@@ -44,9 +44,9 @@ void saut() {
             pos_perso.y = init_hauteur_saut - domain_jump_arc(x);
         }
     }
-    if (bool_saut_sur_mechant == 0 && jump == 1 && go('H') == 0 && x >= 11 ||
-        jump == 1 && go('H') == 1 ||
-        bool_saut_sur_mechant == 1 && jump == 1 && go('H') == 0 && x >= 7) {
+    if ((bool_saut_sur_mechant == 0 && jump == 1 && go('H') == 0 && x >= 11) ||
+        (jump == 1 && go('H') == 1) ||
+        (bool_saut_sur_mechant == 1 && jump == 1 && go('H') == 0 && x >= 7)) {
         jump = 0;
         chute = 0;
     }
@@ -54,7 +54,7 @@ void saut() {
 
 //-----------------------------------------------GRAVITE----------------------------------------------------//
 
-void gravite() { //gere la position en y du personnage
+void gravite(void) { //gere la position en y du personnage
 
     //INITIALISATION DE LA CHUTE
     if (jump == 0 && chute == 0 && go('B') == 0) {

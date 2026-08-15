@@ -8,9 +8,15 @@
 extern int run, run_game;
 extern SDL_Event event;
 
-int repeat = 1, x, y;
+// Not extern anywhere: kept internal linkage on purpose. click_x/click_y
+// used to be named `x`/`y` at external linkage, colliding with the
+// unrelated global `double x` in globals.h (the jump-physics progress
+// variable, used in saut_joueur.c) -- two different globals sharing one
+// name, neither `static`. It happened to link and run without a visible
+// crash so far (see AUDIT.md §9 for why), but was a real latent bug.
+static int repeat = 1, click_x, click_y;
 
-int start_game() {
+int start_game(void) {
     playMus(2);
     repeat = 1;
     while (repeat) {
@@ -23,18 +29,18 @@ int start_game() {
 
                 case SDL_MOUSEBUTTONDOWN:
                     if (event.button.button == SDL_BUTTON_LEFT) { //si clique gauche
-                        x = event.button.x;
-                        y = event.button.y;
-                        if (151 < x && x < 453 && 226 < y &&
-                            y < 312) { //si clique dans "play" alors lance le jeu
+                        click_x = event.button.x;
+                        click_y = event.button.y;
+                        if (151 < click_x && click_x < 453 && 226 < click_y &&
+                            click_y < 312) { //si clique dans "play" alors lance le jeu
                             repeat = 0;
                             playMus(1);
 
                             if (run_game != 1) {
                                 run_game = 1;
                             }
-                        } else if (151 < x && x < 453 && 332 < y &&
-                                   y < 416) { //si clicque dans "quit" alors quit le jeu
+                        } else if (151 < click_x && click_x < 453 && 332 < click_y &&
+                                   click_y < 416) { //si clicque dans "quit" alors quit le jeu
                             quit();           //pour quitter le jeu
                             repeat = 0;       //arrete la boucle
                             return EXIT_SUCCESS;
@@ -47,4 +53,4 @@ int start_game() {
     return 0;
 }
 
-void MENU() { start_game(); }
+void MENU(void) { start_game(); }

@@ -8,7 +8,9 @@
 
 #include "domain/collision.h"
 #include "domain/grid.h"
+#include "domain/movement.h"
 #include "domain/physics.h"
+#include "domain/tile.h"
 #include "test_harness.h"
 
 static void test_physics(void) {
@@ -98,10 +100,75 @@ static void test_collision(void) {
     ASSERT_TRUE(!domain_lands_on_top(player, 0, enemy));
 }
 
+static void test_movement(void) {
+    /* domain_next_direction: unchanged when clear, flipped when blocked,
+     * for both directions. */
+    ASSERT_EQ_INT(domain_next_direction(1, 0), 1);
+    ASSERT_EQ_INT(domain_next_direction(1, 1), -1);
+    ASSERT_EQ_INT(domain_next_direction(-1, 0), -1);
+    ASSERT_EQ_INT(domain_next_direction(-1, 1), 1);
+
+    /* domain_scroll_right_action: scroll whenever the player is past the
+     * right-side deadzone (x>=250) AND the world hasn't hit its right edge
+     * (decalage<6700) -- decalage keeps scrolling all the way up to x=500,
+     * it doesn't stop just because x got big. */
+    ASSERT_TRUE(domain_scroll_right_action(250, 0) == DOMAIN_SCROLL_ACTION_SCROLL_WORLD);
+    ASSERT_TRUE(domain_scroll_right_action(499, 0) == DOMAIN_SCROLL_ACTION_SCROLL_WORLD);
+    ASSERT_TRUE(domain_scroll_right_action(6699, 6699) == DOMAIN_SCROLL_ACTION_SCROLL_WORLD);
+    /* below the deadzone, move the sprite instead regardless of decalage... */
+    ASSERT_TRUE(domain_scroll_right_action(0, 0) == DOMAIN_SCROLL_ACTION_MOVE_SPRITE);
+    ASSERT_TRUE(domain_scroll_right_action(249, 0) == DOMAIN_SCROLL_ACTION_MOVE_SPRITE);
+    /* ...or once the world has hit its right edge, move the sprite instead
+     * (until it hits its own 500px cap)... */
+    ASSERT_TRUE(domain_scroll_right_action(250, 6700) == DOMAIN_SCROLL_ACTION_MOVE_SPRITE);
+    ASSERT_TRUE(domain_scroll_right_action(499, 6700) == DOMAIN_SCROLL_ACTION_MOVE_SPRITE);
+    /* ...and once both the world AND the sprite are capped, nothing moves. */
+    ASSERT_TRUE(domain_scroll_right_action(500, 6700) == DOMAIN_SCROLL_ACTION_NONE);
+
+    /* domain_scroll_left_action: mirror image around x<=50 / decalage>0 and
+     * a 0px sprite floor instead of a 500px cap. */
+    ASSERT_TRUE(domain_scroll_left_action(50, 1) == DOMAIN_SCROLL_ACTION_SCROLL_WORLD);
+    ASSERT_TRUE(domain_scroll_left_action(1, 1) == DOMAIN_SCROLL_ACTION_SCROLL_WORLD);
+    ASSERT_TRUE(domain_scroll_left_action(100, 0) == DOMAIN_SCROLL_ACTION_MOVE_SPRITE);
+    ASSERT_TRUE(domain_scroll_left_action(51, 0) == DOMAIN_SCROLL_ACTION_MOVE_SPRITE);
+    ASSERT_TRUE(domain_scroll_left_action(50, 0) == DOMAIN_SCROLL_ACTION_MOVE_SPRITE);
+    ASSERT_TRUE(domain_scroll_left_action(1, 0) == DOMAIN_SCROLL_ACTION_MOVE_SPRITE);
+    ASSERT_TRUE(domain_scroll_left_action(0, 0) == DOMAIN_SCROLL_ACTION_NONE);
+}
+
+static void test_tile(void) {
+    /* both empty: no collision */
+    ASSERT_TRUE(domain_classify_tile('0', '0') == DOMAIN_TILE_NONE);
+
+    /* each kind, matching via either corner */
+    ASSERT_TRUE(domain_classify_tile('9', '0') == DOMAIN_TILE_SPIKE);
+    ASSERT_TRUE(domain_classify_tile('0', '9') == DOMAIN_TILE_SPIKE);
+    ASSERT_TRUE(domain_classify_tile('2', '0') == DOMAIN_TILE_COIN);
+    ASSERT_TRUE(domain_classify_tile('0', '2') == DOMAIN_TILE_COIN);
+    ASSERT_TRUE(domain_classify_tile('O', '0') == DOMAIN_TILE_VICTORY_OBJECT);
+    ASSERT_TRUE(domain_classify_tile('0', 'O') == DOMAIN_TILE_VICTORY_OBJECT);
+    ASSERT_TRUE(domain_classify_tile('S', '0') == DOMAIN_TILE_FLAGPOLE);
+    ASSERT_TRUE(domain_classify_tile('0', 'S') == DOMAIN_TILE_FLAGPOLE);
+
+    /* any other non-'0' character: plain solid block */
+    ASSERT_TRUE(domain_classify_tile('1', '0') == DOMAIN_TILE_SOLID);
+    ASSERT_TRUE(domain_classify_tile('0', '1') == DOMAIN_TILE_SOLID);
+
+    /* priority order matches the original if/else-if chain: spike beats
+     * everything, coin beats victory-object and flagpole, etc. -- can't
+     * actually happen with this level format (one character per cell) but
+     * the original code's precedence must still be preserved exactly. */
+    ASSERT_TRUE(domain_classify_tile('9', '2') == DOMAIN_TILE_SPIKE);
+    ASSERT_TRUE(domain_classify_tile('2', 'O') == DOMAIN_TILE_COIN);
+    ASSERT_TRUE(domain_classify_tile('O', 'S') == DOMAIN_TILE_VICTORY_OBJECT);
+}
+
 int main(void) {
     test_physics();
     test_grid();
     test_collision();
+    test_movement();
+    test_tile();
 
     printf("%d/%d assertions passed\n", g_test_count - g_test_failures, g_test_count);
     return g_test_failures > 0 ? 1 : 0;

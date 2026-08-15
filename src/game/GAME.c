@@ -19,11 +19,10 @@ extern int nb_mechant;
 extern int decalage;
 extern SDL_Rect origine, pos_perso;
 extern int decalage;
-extern char statue[10];
+extern char statue[MAX_MECHANTS];
 extern SDL_Texture *imgMechant; //surface du mechant
-extern SDL_Rect tableau_mechant[10][4];
+extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int nb_mechant;
-extern int repeat, y;
 extern int coin, niveau, vie;
 extern int jean;
 
@@ -43,7 +42,7 @@ static int champi_skin_loaded = 0;
 static SDL_Texture *coin_digits[10];
 static int coin_skin_loaded = 0;
 
-void timer() {
+void timer(void) {
     alfred++;
     if (alfred == 100) {
         decoule--;
@@ -55,7 +54,7 @@ void timer() {
     }
 }
 
-void systeme_vie() { // affiche les vies à l'écran
+void systeme_vie(void) { // affiche les vies à l'écran
     if (!champi_skin_loaded) {
         img_champi = create_texture(path_img("champi.png"));
         champi_skin_loaded = 1;
@@ -68,7 +67,7 @@ void systeme_vie() { // affiche les vies à l'écran
     }
 }
 
-void coinAff() {
+void coinAff(void) {
     switch (coin) {
 
         case 0:
@@ -117,7 +116,7 @@ void coinAff() {
     display_texture(coinnb, NULL, &pos_coinnb);
 }
 
-void refresh() {
+void refresh(void) {
     if (run_game == 1) {
         origine.x = -decalage;
 
@@ -156,7 +155,7 @@ void refresh() {
     }
 }
 
-void init_coin() {
+void init_coin(void) {
     printf("init_coin\n");
     pos_coinmeter.x = 0;
     pos_coinmeter.y = 65;
@@ -182,24 +181,23 @@ void init_coin() {
     }
 }
 
-void mechant() {
+void mechant(void) {
     for (nb_mechant = 0; nb_mechant <= 19; nb_mechant++) {
         deplacement_mechant();
         contact(); //test contact si tue ou meurt
     }
 }
 
-void joueur() {
+void joueur(void) {
     deplacement_joueur();
     gravite();
 }
 
-void GAME() {
+void GAME(void) {
     int fps = 60;
     int frameDelay = 1000 / fps;
     Uint32 frameStart;
     int frameTime;
-    int a = 0;
 
     while (run_game) {
         printf("init_game\n");

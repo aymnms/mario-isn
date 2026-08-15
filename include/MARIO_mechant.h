@@ -1,22 +1,17 @@
 void init_mechant(int ngh);
 
-void afficher_mechant();
+void afficher_mechant(void);
 
 SDL_Rect setRectMechant(SDL_Rect Point);
 
-void deplacement_mechant();
+void deplacement_mechant(void);
 
 int goM(int direction);
 
-void regulation_vitesse(int i);
+void mechantMort(void);
 
-void mechantMort();
+void contact(void);
 
-void contact();
-
-void addChamp(int x, int y);
-void grow();
-
-void addBowser(int x, int y);
+void addBowser(int pos_x, int pos_y);
 int goB(int direction);
-void contactB();
+void contactB(void);

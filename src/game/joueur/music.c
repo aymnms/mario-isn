@@ -14,7 +14,7 @@ Mix_Music *musiqueGameOver;
 Mix_Music *musiqueMiss;
 Mix_Music *musiquevictory;
 
-void init_mus() {
+void init_mus(void) {
     Mix_AllocateChannels(32);
     // window = SDL_CreateWindow("Mario ISN 2.0",
     //                            SDL_WINDOWPOS_CENTERED,
@@ -86,7 +86,7 @@ void playMus(int son) {
     }
 }
 
-void freeMusic() {
+void freeMusic(void) {
     Mix_FreeMusic(musiqueFond); //Libération de la musique
     Mix_CloseAudio();           //Fermeture de l'API
 }

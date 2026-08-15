@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/aymnms/mario-isn/compare/v1.3.1...v1.3.2) (2026-08-15)
+
+
+### Bug Fixes
+
+* **rendering:** cache textures instead of recreating them every frame ([b8a8474](https://github.com/aymnms/mario-isn/commit/b8a8474c6bd613a7458fe9a69c551bb2d42910a3))
+
 ## [1.3.1](https://github.com/aymnms/mario-isn/compare/v1.3.0...v1.3.1) (2026-08-15)
 
 

@@ -169,7 +169,13 @@ void playerrrr(int ngh) {
 
 void niveauSelect(int nb) {
     FILE *fichier = NULL;
-    auto char num;
+    // Zero-initialized: the switch below has no default case, so an
+    // unhandled `nb` would leave this read uninitialized in the do-while
+    // just below it (caught by GCC at -O3, -Wmaybe-uninitialized). '\0'
+    // never appears as a level marker digit in niveau.lvl, so this can
+    // only ever fail the file search cleanly instead of comparing against
+    // garbage.
+    auto char num = '\0';
 
     fichier = fopen(path_bin("niveau.lvl"), "r");
     char caract;

@@ -123,7 +123,11 @@ void deplacement_joueur(void) {
 
 int go(char direction) {
     auto int rep = 0;
-    SDL_Rect test1, test2;
+    // Zero-initialized: same reasoning as goM()/goB() -- the switch below
+    // has no default case, so an unhandled `direction` would leave these
+    // read uninitialized just below (caught by GCC at -O3,
+    // -Wmaybe-uninitialized). lvl[0][0] is always a valid in-bounds cell.
+    SDL_Rect test1 = {0}, test2 = {0};
 
     SDL_Rect position_perso_NO = pos_perso;
     position_perso_NO.x += 8;

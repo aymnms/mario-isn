@@ -26,7 +26,11 @@ extern int vie;
 int goM(int direction) {
     int rep = 0;
 
-    auto SDL_Rect test1, test2;
+    // Zero-initialized: same reasoning as goB() in bowser.c -- the switch
+    // below has no default case, so an unhandled `direction` would leave
+    // these read uninitialized just below (caught by GCC at -O3,
+    // -Wmaybe-uninitialized). lvl[0][0] is always a valid in-bounds cell.
+    auto SDL_Rect test1 = {0}, test2 = {0};
 
     //on définit 4 points pour positionner le mechant sur la grille du niveau
 

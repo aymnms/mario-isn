@@ -37,7 +37,14 @@ void addBowser(int pos_x, int pos_y) {
 int goB(int direction) {
     int rep = 0;
 
-    SDL_Rect test1, test2, test3, test4;
+    // Zero-initialized: the switch below has no default case, so a
+    // `direction` outside {-1, 1, 666, 999} (never happens at today's call
+    // sites, but nothing in the type system guarantees that) would
+    // otherwise leave these read uninitialized just below -- caught by GCC
+    // at -O3 (-Wmaybe-uninitialized), the same class of bug as the J11
+    // Bowser crash fix, just not eliminated by it. lvl[0][0] is always a
+    // valid in-bounds cell.
+    SDL_Rect test1 = {0}, test2 = {0}, test3 = {0}, test4 = {0};
 
     //on définit 4 points pour positionner le mechant sur la grille du niveau
 

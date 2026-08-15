@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/aymnms/mario-isn/compare/v1.3.2...v1.3.3) (2026-08-15)
+
+
+### Bug Fixes
+
+* **ci:** target the real mario_isn process, not the AppImage supervisor ([00ab401](https://github.com/aymnms/mario-isn/commit/00ab4015d50daca4d983c1ed29d7687a12821fe8))
+
 ## [1.3.2](https://github.com/aymnms/mario-isn/compare/v1.3.1...v1.3.2) (2026-08-15)
 
 

@@ -10,9 +10,17 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Previously nothing here at all, so 199 real warnings (missing function
 # prototypes, implicit conversions, variable shadowing...) had silently
-# accumulated across the codebase -- see AUDIT.md §9 / PLAN.md J5-3.
+# accumulated across the codebase -- see AUDIT.md §9 / PLAN.md J5-3. All of
+# them are now fixed, and -Werror turns any future regression of this kind
+# into a build failure instead of something that silently piles back up.
+#
+# MSVC's /W4 is intentionally NOT paired with /WX here: its warning set is
+# different from Clang/GCC's and has never been audited/fixed the same way
+# (no local Windows toolchain available to verify against, only CI) -- /W4
+# alone still surfaces them for a human to read, without risking turning an
+# unverified, possibly-noisy warning into a hard Windows CI failure.
 if(CMAKE_C_COMPILER_ID MATCHES "Clang|GNU")
-  add_compile_options(-Wall -Wextra)
+  add_compile_options(-Wall -Wextra -Werror)
 elseif(MSVC)
   add_compile_options(/W4)
 endif()

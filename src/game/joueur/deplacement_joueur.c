@@ -9,6 +9,7 @@
 #include "MARIO_game.h"
 #include "MARIO_musique.h"
 #include "domain/grid.h"
+#include "domain/movement.h"
 #include "globals.h"
 
 extern int run_game, run;
@@ -27,22 +28,30 @@ SDL_Rect set_position(SDL_Rect Point) {
 
 void droite(void) { //si le personnage peut se deplacer vers la droite
     if (go('D') == 0) {
-        if (pos_perso.x >= 250 && decalage < 6700) {
-            decalage++;
-        } else if (pos_perso.x < 500) {
-            {
+        switch (domain_scroll_right_action(pos_perso.x, decalage)) {
+            case DOMAIN_SCROLL_ACTION_SCROLL_WORLD:
+                decalage++;
+                break;
+            case DOMAIN_SCROLL_ACTION_MOVE_SPRITE:
                 pos_perso.x++;
-            }
+                break;
+            case DOMAIN_SCROLL_ACTION_NONE:
+                break;
         }
     }
 }
 
 void gauche(void) { //si le personnage peut se deplacer vers la gauche
     if (go('G') == 0) {
-        if ((pos_perso.x <= 50) && (decalage > 0)) {
-            decalage--;
-        } else if (pos_perso.x > 0) {
-            pos_perso.x--;
+        switch (domain_scroll_left_action(pos_perso.x, decalage)) {
+            case DOMAIN_SCROLL_ACTION_SCROLL_WORLD:
+                decalage--;
+                break;
+            case DOMAIN_SCROLL_ACTION_MOVE_SPRITE:
+                pos_perso.x--;
+                break;
+            case DOMAIN_SCROLL_ACTION_NONE:
+                break;
         }
     }
 }

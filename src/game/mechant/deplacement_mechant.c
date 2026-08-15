@@ -5,6 +5,7 @@
 
 #include "MARIO_mechant.h"
 #include "domain/grid.h"
+#include "domain/movement.h"
 #include "globals.h"
 
 //--------------------------Variable-générale--------------------------//
@@ -25,37 +26,26 @@ void deplacement_mechant(void) {
 
     srand(time(NULL));
     if (statue[nb_mechant] == 'V') {
-        if (goM(direction_mechant[nb_mechant]) != 1 &&
-            tableau_mechant[nb_mechant][1].x != 0) { //si le mechant ne rencontre pas d'obstacle
-                                                     //c'est normal qu'il n'y ai rien pour le moment
-        } else {
-            direction_mechant[nb_mechant] =
-                -direction_mechant[nb_mechant]; //on change la direction du mechant
-        }
+        // Reverse direction if blocked ahead -- or, for goombas specifically,
+        // also if x==0 (an inactive/never-placed slot; see addMechant()).
+        // Preserved as-is from the original `goM(...) != 1 && x != 0` guard.
+        int obstacle_ahead =
+            (goM(direction_mechant[nb_mechant]) == 1) || (tableau_mechant[nb_mechant][1].x == 0);
+        direction_mechant[nb_mechant] =
+            domain_next_direction(direction_mechant[nb_mechant], obstacle_ahead);
         tableau_mechant[nb_mechant][1].x += direction_mechant[nb_mechant]; //on déplace le méchant
         if (goM(666) != 1) {                    // si il y a un trou sous le mechant
             tableau_mechant[nb_mechant][1].y++; //le mechant tombe
         }
 
     } else if (statue[nb_mechant] == 'B') {
-        if (goB(direction_mechant[nb_mechant]) == 1) { //si le mechant ne rencontre pas d'obstacle
-            direction_mechant[nb_mechant] =
-                -direction_mechant[nb_mechant]; //on change la direction du mechant
-        }
+        int obstacle_ahead = goB(direction_mechant[nb_mechant]) == 1;
+        direction_mechant[nb_mechant] =
+            domain_next_direction(direction_mechant[nb_mechant], obstacle_ahead);
 
-        //int po = rand()%2;
         tableau_mechant[nb_mechant][1].x += direction_mechant[nb_mechant]; //on déplace le méchant
         if (goB(666) != 1) {                    // si il y a un trou sous le mechant
             tableau_mechant[nb_mechant][1].y++; //le mechant tombe
         }
-
-        /*else if(po == 1){boolSB = 1;}
-		if (boolSB == 1)
-		{
-			
-			//boolSB = 1;printf("%d,%d : c'est commeee l'oiseau...\n", tableau_mechant[nb_mechant][1].x, tableau_mechant[nb_mechant][1].y);
-			//if(taille > 0){tableau_mechant[nb_mechant][1].y --; taille--;}
-			else{taille = 150; boolSB = 0;}
-		} */
     }
 }

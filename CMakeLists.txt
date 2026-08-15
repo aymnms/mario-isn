@@ -88,6 +88,7 @@ set(DOMAIN_SOURCES
         src/domain/physics.c
         src/domain/grid.c
         src/domain/collision.c
+        src/domain/movement.c
 )
 
 # Sets mario_isn.exe's icon (Explorer/taskbar/Alt+Tab) -- otherwise it uses

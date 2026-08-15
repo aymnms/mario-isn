@@ -1,3 +1,17 @@
+# [1.3.0](https://github.com/aymnms/mario-isn/compare/v1.2.6...v1.3.0) (2026-08-15)
+
+
+### Bug Fixes
+
+* exclude makensis args from Git Bash's MSYS path conversion ([bfed518](https://github.com/aymnms/mario-isn/commit/bfed5180f5a15ec17babb8b0b449564d2744b0d6))
+* install NSIS explicitly on the Windows runner ([fe41d60](https://github.com/aymnms/mario-isn/commit/fe41d60af7e30db736575755712ac4ea98b10598))
+* pass an absolute icon path to the NSIS installer script ([1561bc8](https://github.com/aymnms/mario-isn/commit/1561bc823b393e9704abdecf36286e216368b0be))
+
+
+### Features
+
+* single-file distribution for Windows and Linux ([a140142](https://github.com/aymnms/mario-isn/commit/a1401420c678b72d0e0a212783ef2e05c3e57c60))
+
 ## [1.2.6](https://github.com/aymnms/mario-isn/compare/v1.2.5...v1.2.6) (2026-08-15)
 
 

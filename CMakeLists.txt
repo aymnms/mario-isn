@@ -35,6 +35,16 @@ find_package(SDL2       QUIET CONFIG)
 find_package(SDL2_image QUIET CONFIG)
 find_package(SDL2_mixer QUIET CONFIG)
 
+if(APPLE)
+  # Homebrew's "sdl2" is now sdl2-compat: an SDL2-ABI shim that dlopen()s the
+  # real libSDL3.dylib at runtime instead of linking it -- invisible to
+  # fixup_bundle's otool-based dependency walk. Located here (rather than
+  # inline in FixupBundleMacOS.cmake) so SDL3_DIR can be hinted the same way
+  # as SDL2_DIR/etc. for the cross-compiled Intel build. See the
+  # fixup_bundle POST_BUILD step below for where this gets bundled.
+  find_package(SDL3 QUIET CONFIG)
+endif()
+
 if(NOT SDL2_FOUND OR NOT SDL2_image_FOUND OR NOT SDL2_mixer_FOUND)
   find_package(PkgConfig REQUIRED)
   pkg_check_modules(SDL2        REQUIRED sdl2)
@@ -152,10 +162,16 @@ if(APPLE)
   # .app so it runs without Homebrew SDL2 installed on the target machine.
   # Release-only: re-fixing ~100 dylibs on every relink is too slow for the
   # Debug dev loop (make run), and local dev already has Homebrew SDL2.
+  set(FIXUP_BUNDLE_EXTRA_ARGS "")
+  if(TARGET SDL3::SDL3)
+    list(APPEND FIXUP_BUNDLE_EXTRA_ARGS -DSDL3_LIBRARY=$<TARGET_FILE:SDL3::SDL3>)
+  endif()
+
   if(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_custom_command(TARGET mario_isn POST_BUILD
         COMMAND ${CMAKE_COMMAND}
                 -DBUNDLE_PATH=$<TARGET_BUNDLE_DIR:mario_isn>
+                ${FIXUP_BUNDLE_EXTRA_ARGS}
                 -P ${CMAKE_SOURCE_DIR}/cmake/FixupBundleMacOS.cmake
     )
   endif()

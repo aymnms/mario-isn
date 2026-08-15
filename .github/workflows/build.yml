@@ -169,13 +169,36 @@ jobs:
       # dereferenced-symlinks regression (zip missing -y) that shipped in
       # 1.2.0: the app built and signed fine, only the packaged artifact
       # was broken, so nothing before this step would have noticed.
-      - name: Verify code signature survives the zip round-trip (macOS)
+      # Round-trips the exact zip that gets uploaded, verifies the signature
+      # survives it, then actually launches the app briefly. The launch
+      # check is what would have caught the sdl2-compat/libSDL3 regression:
+      # sdl2-compat dlopen()s libSDL3.dylib at runtime instead of linking it,
+      # so it's invisible to fixup_bundle and to a plain codesign check --
+      # the signature was perfectly valid, the app just aborted on launch.
+      - name: Verify code signature and smoke-test the zip round-trip (macOS)
         if: runner.os == 'macOS'
         run: |
           for arch in arm intel; do
             rm -rf /tmp/verify-$arch && mkdir -p /tmp/verify-$arch
             unzip -q build-$arch/MarioISN-macos-$arch.zip -d /tmp/verify-$arch
             codesign --verify --deep --strict --verbose=2 /tmp/verify-$arch/mario_isn.app
+
+            if [ "$arch" = "intel" ]; then
+              RUNNER="arch -x86_64"
+            else
+              RUNNER=""
+            fi
+            $RUNNER /tmp/verify-$arch/mario_isn.app/Contents/MacOS/mario_isn &
+            pid=$!
+            sleep 4
+            if ! kill -0 "$pid" 2>/dev/null; then
+              wait "$pid"
+              echo "mario_isn ($arch) exited early with code $? instead of staying up -- see output above"
+              exit 1
+            fi
+            echo "mario_isn ($arch) stayed up for 4s -- bundled libs (including libSDL3) resolved correctly"
+            kill -9 "$pid"
+            wait "$pid" 2>/dev/null || true
           done
 
       # ---------------------

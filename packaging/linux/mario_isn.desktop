@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=MarioISN
+Comment=A Mario Bros game in C, ISN scientific project
+Exec=mario_isn
+Icon=mario_isn
+Categories=Game;
+Terminal=false

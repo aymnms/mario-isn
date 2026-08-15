@@ -25,6 +25,17 @@ elseif(WIN32)
   # GUI subsystem: without this, Windows opens a console window alongside
   # the game (SDL2::SDL2main still provides the real entry point either way).
   set(PLATFORM_BUNDLE WIN32)
+
+  # Both mario_isn.exe and vcpkg's prebuilt SDL2.dll are linked against the
+  # MSVC runtime (VCRUNTIME140.dll, msvcp140.dll, the api-ms-win-crt-*.dll
+  # Universal CRT forwarders) -- none of which ship with a bare Windows
+  # install and none of which were being bundled, so the game failed to
+  # launch on any machine without the Visual C++ Redistributable already
+  # installed. InstallRequiredSystemLibraries is CMake's standard mechanism
+  # for locating the exact redistributable files matching the detected
+  # compiler; copied next to the .exe in the WIN32 packaging block below.
+  set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
+  include(InstallRequiredSystemLibraries)
 endif()
 
 # =====================================
@@ -189,6 +200,17 @@ elseif(WIN32)
               ${CMAKE_SOURCE_DIR}/ressources/bin
               $<TARGET_FILE_DIR:mario_isn>/bin
   )
+
+  # Bundle the Visual C++ Redistributable DLLs -- see the InstallRequiredSystemLibraries
+  # call above for why. VCPKG_APPLOCAL_DEPS already copies SDL2/SDL2_image/SDL2_mixer's
+  # own DLLs; this covers the MSVC runtime none of them ship with.
+  if(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
+    add_custom_command(TARGET mario_isn POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+                $<TARGET_FILE_DIR:mario_isn>
+    )
+  endif()
 
 elseif(UNIX)
   # On Linux, copy assets next to the executable

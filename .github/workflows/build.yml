@@ -392,3 +392,49 @@ jobs:
             exit 1
           fi
           echo "Game stayed up for 5s -- bundled libs resolved correctly"
+
+      # Regression test for the leak fixed in J10 (see PLAN.md): several
+      # hot render-path functions reloaded a fixed sprite from disk via
+      # create_texture() on every call instead of caching it, and
+      # SDL_DestroyTexture was never called anywhere in the codebase.
+      # Reproduced locally, it leaked ~2.15GB of RSS in 17s of gameplay.
+      # This reuses the same SIGTERM-becomes-SDL_QUIT quirk documented in
+      # the step above to get the real gameplay loop running headlessly
+      # (no input automation needed -- afficher_mechant()/animation()/
+      # systeme_vie()/coinAff() all run every frame regardless of input),
+      # then samples RSS before/after via `ps` and fails if it grew by more
+      # than a threshold that's a wide margin above what legitimate
+      # one-time sprite caching should ever need, and far below what the
+      # real regression produced.
+      - name: Leak regression test (RSS should stay flat during gameplay)
+        run: |
+          cd dist
+          xvfb-run --auto-servernum bash -c '
+            set -e
+            ./MarioISN-x86_64.AppImage --appimage-extract-and-run &
+            PID=$!
+            sleep 3
+            RSS_BEFORE=$(ps -o rss= -p "$PID" 2>/dev/null | tr -d " ")
+            if [ -z "$RSS_BEFORE" ]; then
+              echo "Process $PID not found before gameplay -- crashed at menu?"
+              exit 1
+            fi
+            echo "RSS before gameplay: ${RSS_BEFORE} KB"
+
+            kill -TERM "$PID"
+            sleep 10
+            RSS_AFTER=$(ps -o rss= -p "$PID" 2>/dev/null | tr -d " ")
+            kill -KILL "$PID" 2>/dev/null || true
+            if [ -z "$RSS_AFTER" ]; then
+              echo "Process $PID not found after gameplay -- crashed during play?"
+              exit 1
+            fi
+            echo "RSS after ~10s of gameplay: ${RSS_AFTER} KB"
+
+            GROWTH=$((RSS_AFTER - RSS_BEFORE))
+            echo "RSS growth during gameplay: ${GROWTH} KB"
+            if [ "$GROWTH" -gt 153600 ]; then
+              echo "Memory grew by ${GROWTH} KB in ~10s of gameplay -- likely a texture/resource leak (see PLAN.md J10)"
+              exit 1
+            fi
+          '

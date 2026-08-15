@@ -1,13 +1,12 @@
 ; MarioISN Windows installer.
 ;
 ; Built in CI (see .github/workflows/build.yml) via:
-;   makensis /DVERSION=<x.y.z> /DPAYLOAD_DIR=<absolute path to build-win/Release> installer.nsi
+;   makensis /DVERSION=<x.y.z> /DPAYLOAD_DIR=<absolute path to build-win/Release> \
+;            /DICON_PATH=<absolute path to mario_isn.ico> installer.nsi
 ;
 ; Installs per-user (no admin elevation, no UAC prompt -- appropriate for
 ; unsigned freeware) into %LOCALAPPDATA%\MarioISN, with Start Menu/Desktop
 ; shortcuts and a proper uninstaller.
-
-!include "MUI2.nsh"
 
 !ifndef VERSION
   !define VERSION "0.0.0"
@@ -15,14 +14,28 @@
 !ifndef PAYLOAD_DIR
   !define PAYLOAD_DIR "..\..\build-win\Release"
 !endif
+; Passed as an absolute path from CI (see build.yml) rather than a bare
+; relative filename resolved against this script's own directory --
+; makensis resolves relative File/Icon paths against the *invoking* working
+; directory (repo root in CI), not the .nsi's location, which is an easy
+; way to point at a file that doesn't exist from there.
+!ifndef ICON_PATH
+  !define ICON_PATH "mario_isn.ico"
+!endif
+
+; MUI_ICON/MUI_UNICON are read by MUI2.nsh's own top-level code when it's
+; !include'd, so they must be defined before that -- not just before the
+; page macros that come later.
+!define MUI_ICON "${ICON_PATH}"
+!define MUI_UNICON "${ICON_PATH}"
+
+!include "MUI2.nsh"
 
 Name "MarioISN"
 OutFile "MarioISN-windows-setup.exe"
 InstallDir "$LOCALAPPDATA\MarioISN"
 RequestExecutionLevel user
 Unicode true
-!define MUI_ICON "mario_isn.ico"
-!define MUI_UNICON "mario_isn.ico"
 
 !define MUI_ABORTWARNING
 

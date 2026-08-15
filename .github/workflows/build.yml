@@ -411,9 +411,29 @@ jobs:
           cd dist
           xvfb-run --auto-servernum bash -c '
             set -e
+            # Kill any mario_isn orphaned by the previous step: its
+            # --kill-after=5 targets the AppImage --appimage-extract-and-run
+            # supervisor, which forks (not exec-replaces) the real binary,
+            # so the supervisor dying does not guarantee the actual game
+            # process went with it. Without this, pgrep -n below could still
+            # pick the fresh process correctly, but a leftover instance
+            # would pollute this steps output/process list for no reason.
+            pkill -9 -x mario_isn 2>/dev/null || true
+            sleep 1
+
             ./MarioISN-x86_64.AppImage --appimage-extract-and-run &
-            PID=$!
             sleep 3
+            # $! here is that same small fork supervisor, not the actual
+            # SDL process -- confirmed empirically in CI (its RSS was ~1MB,
+            # and it disappeared on its own while a separate mario_isn
+            # process kept logging independently). Find the real process by
+            # name instead; -n picks the most-recently-started match so a
+            # stray leftover cannot be mistaken for the fresh one.
+            PID=$(pgrep -n -x mario_isn || true)
+            if [ -z "$PID" ]; then
+              echo "mario_isn process not found after startup -- crashed at menu?"
+              exit 1
+            fi
             RSS_BEFORE=$(ps -o rss= -p "$PID" 2>/dev/null | tr -d " ")
             if [ -z "$RSS_BEFORE" ]; then
               echo "Process $PID not found before gameplay -- crashed at menu?"

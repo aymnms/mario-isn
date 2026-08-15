@@ -129,7 +129,7 @@ int goB(int direction) {
     printf("test1 = %c\ntest2 = %c\ntest3 = %c\ntest4 = %c\n", lvl[test1.y][test1.x],
            lvl[test2.y][test2.x], lvl[test3.y][test3.x], lvl[test4.y][test4.x]);
 
-    if (lvl[test1.y][test1.x] == '1' | lvl[test2.y][test2.x] == '1' | lvl[test3.y][test3.x] == '1' |
+    if (lvl[test1.y][test1.x] == '1' || lvl[test2.y][test2.x] == '1' || lvl[test3.y][test3.x] == '1' ||
         lvl[test4.y][test4.x] == '1') {
         rep = 1;
     }

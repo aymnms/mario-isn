@@ -173,12 +173,12 @@ int go(char direction) {
             break;
     }
 
-    if (lvl[test1.y][test1.x] != '0' | lvl[test2.y][test2.x] != '0') {
+    if (lvl[test1.y][test1.x] != '0' || lvl[test2.y][test2.x] != '0') {
         rep = 1;
-        if (lvl[test1.y][test1.x] == '9' | lvl[test2.y][test2.x] == '9') {
+        if (lvl[test1.y][test1.x] == '9' || lvl[test2.y][test2.x] == '9') {
             printf("pic\n");
             game_over();
-        } else if ((lvl[test1.y][test1.x] == '2' | lvl[test2.y][test2.x] == '2') &&
+        } else if ((lvl[test1.y][test1.x] == '2' || lvl[test2.y][test2.x] == '2') &&
                    (direction == 'H')) {
             playSon(2);
             coin++;
@@ -187,7 +187,7 @@ int go(char direction) {
             } else {
                 lvl[test2.y][test2.x] = '1';
             }
-        } else if ((lvl[test1.y][test1.x] == 'O' | lvl[test2.y][test2.x] == 'O') && (jean == 0)) {
+        } else if ((lvl[test1.y][test1.x] == 'O' || lvl[test2.y][test2.x] == 'O') && (jean == 0)) {
 
             printf("viviO\n");
             jean = 1;
@@ -195,7 +195,7 @@ int go(char direction) {
             vie++;
             playSon(4);
             rep = 0;
-        } else if (lvl[test1.y][test1.x] == 'S' | lvl[test2.y][test2.x] == 'S') {
+        } else if (lvl[test1.y][test1.x] == 'S' || lvl[test2.y][test2.x] == 'S') {
             if (vic == 0) {
                 vic = 1;
             } else {

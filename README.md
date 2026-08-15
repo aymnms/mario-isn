@@ -14,7 +14,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/aymnms/mario-isn">
-    <img src="ressources/img/sdl_icone.png" alt="Logo" width="80" height="80">
+    <img src=".github/images/sdl_icone.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Mario-ISN</h3>
@@ -25,7 +25,7 @@
     <a href="https://github.com/aymnms/mario-isn/releases"><strong>Download the latest release »</strong></a>
     <br />
     <br />
-    <img src="ressources/img/screenshot-7.gif" alt="Gameplay demo" width="600" height="500">
+    <img src=".github/images/screenshot-7.gif" alt="Gameplay demo" width="600" height="500">
     <br />
     <a href="https://github.com/aymnms/mario-isn/issues/new?labels=bug&template=bug-report---.md">Report a bug</a>
     &middot;
@@ -127,6 +127,8 @@ first.
 3. Run it.
 
 ℹ️ **Note for macOS**: the downloaded `.app` may be marked as coming from an unidentified source (`com.apple.quarantine`). Go to System Settings → Privacy & Security to "Open Anyway".
+
+ℹ️ **Note for Windows**: the executable isn't code-signed (no publisher certificate), so Windows SmartScreen may show a "Windows protected your PC" warning. Click "More info" → "Run anyway" to launch it.
 
 [![Game screenshot][product-screenshot-8]](#)
 
@@ -324,11 +326,11 @@ Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information
 [CMake-url]: https://cmake.org/
 [SDL2-badge]: https://img.shields.io/badge/SDL2-000000?style=for-the-badge
 [SDL2-url]: https://www.libsdl.org/
-[product-screenshot-1]: ressources/img/screenshot-1.png
-[product-screenshot-2]: ressources/img/screenshot-2.png
-[product-screenshot-3]: ressources/img/screenshot-3.png
-[product-screenshot-4]: ressources/img/screenshot-4.png
-[product-screenshot-5]: ressources/img/screenshot-5.png
-[product-screenshot-6]: ressources/img/screenshot-6.png
-[product-screenshot-7]: ressources/img/screenshot-7.gif
-[product-screenshot-8]: ressources/img/screenshot-8.png
+[product-screenshot-1]: .github/images/screenshot-1.png
+[product-screenshot-2]: .github/images/screenshot-2.png
+[product-screenshot-3]: .github/images/screenshot-3.png
+[product-screenshot-4]: .github/images/screenshot-4.png
+[product-screenshot-5]: .github/images/screenshot-5.png
+[product-screenshot-6]: .github/images/screenshot-6.png
+[product-screenshot-7]: .github/images/screenshot-7.gif
+[product-screenshot-8]: .github/images/screenshot-8.png

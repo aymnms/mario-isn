@@ -24,8 +24,6 @@ _(vide)_
 
 ## ⬜ À faire
 
-- [ ] Fermer manuellement les issues #16, #15, #8, #9 sur GitHub — corrigées et vérifiées (release v1.2.0), mais aucun token disponible dans cette session pour les clore via l'API
-
 ### J5 — Phase 3 (dette technique de fond)
 
 - [ ] `J5-3` Suite de `J5-2` (2e passe, différée) : extraire la transition d'état de déplacement des ennemis (`deplacement_mechant()` — inversion de direction/chute), les seuils de scroll joueur (`droite()`/`gauche()`), et surtout séparer `go()` (le plus tangled — mélange détection de collision pure et réactions impures : pièces, mort, victoire, mutation du niveau) en une résolution de tuile pure + un dispatcher de réactions impur. Cartographie complète dans le journal ci-dessous.
@@ -33,6 +31,7 @@ _(vide)_
 ## ✅ Terminé
 
 - [x] `J0-1` Audit du dépôt (`AUDIT.md`)
+- [x] Fermer les issues #16, #15, #8, #9 sur GitHub — confirmé par l'utilisateur (déjà fermées manuellement de son côté)
 - [x] `J1-1` Ajouter `github-token` au step `download-artifact@v4` de `release.yml`
 - [x] `J2-1` Bundling macOS : `cmake/FixupBundleMacOS.cmake` (CMake `BundleUtilities`/`fixup_bundle`), Release-only, vérifié localement et en CI (`otool -L` confirme `@executable_path/../Frameworks/...`, 114 dylibs copiées/réécrites, binaire lancé avec succès)
 - [x] `J2-2` Bundling Linux : `scripts/bundle_libs_linux.sh` (copie récursive via `ldd` + rpath `patchelf`), Release-only, no-op si `patchelf` absent ; vérifié en CI après correction d'un piège `pipefail`/`grep`
@@ -78,3 +77,4 @@ _(vide)_
 - 2026-08-15 — v1.2.4 publiée avec `J6-1`. Vérification finale sur l'artefact réel téléchargé depuis la release (pas juste en local) : signature valide, lancement réussi en quarantaine simulée.
 - 2026-08-15 — Utilisateur signale une nouvelle erreur après la 1.2.4 : "Failed loading SDL3 library." `J6-2` diagnostiqué : `brew info sdl2` révèle que le paquet a été remplacé par `sdl2-compat` (couche de compat qui `dlopen()` `libSDL3.dylib` au runtime), invisible pour `fixup_bundle`. Corrigé (`find_package(SDL3)`, hint `SDL3_DIR` pour le build Intel, copie explicite dans `FixupBundleMacOS.cmake`) et vérifié en local avec un test de contrôle qui reproduit fidèlement le `SIGABRT` du bug avant fix, confirme le lancement stable après. Étape CI de vérification macOS renforcée pour lancer réellement l'app, pas seulement vérifier sa signature.
 - 2026-08-15 — v1.2.5 publiée avec `J6-2`. Vérification sur les artefacts réels de la release : ARM confirmé (signature valide, `libSDL3.dylib` présent, lancement stable via `open`) ; Intel présentait un `SIGKILL` incohérent uniquement avec la quarantaine simulée manuellement (`xattr`) + Rosetta — sans quarantaine, lancement stable. Diagnostiqué comme un artefact de la méthode de simulation (ne reproduit pas exactement les métadonnées d'un vrai téléchargement navigateur), pas un vrai bug — **confirmé par l'utilisateur en conditions réelles sur son MacBook Pro M1 Max : les deux architectures (ARM et Intel via Rosetta) fonctionnent correctement en v1.2.5**. `J6` clos.
+- 2026-08-15 — Utilisateur confirme avoir déjà fermé manuellement les issues #16, #15, #8, #9 sur GitHub. Retiré du backlog.

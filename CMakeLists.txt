@@ -92,7 +92,6 @@ add_executable(mario_isn ${PLATFORM_BUNDLE}
         src/game/init_game.c
         src/game/GAME.c
         src/game/conditions.c
-        src/game/mechant/addElem.c
         src/game/mechant/bowser.c
         src/game/mechant/contact_mechant.c
         src/game/mechant/deplacement_mechant.c

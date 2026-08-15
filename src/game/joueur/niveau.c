@@ -30,7 +30,18 @@ extern int direction_mechant[20];
 extern SDL_Rect pos_perso;
 extern int decalage;
 
+// init_skin() runs on every respawn and every level change (via
+// init_niveau()), not just once at program start. These are fixed tile
+// sprites, so the load is guarded to run only once -- previously every
+// respawn/level change re-created them via create_texture() without ever
+// freeing the previous one (never done anywhere in the codebase), leaking
+// a texture each time.
+static int level_skin_loaded = 0;
+
 void init_skin() {
+    if (level_skin_loaded) {
+        return;
+    }
     printf("initialisation skin\n");
     bloc = create_texture(path_img("block.png"));
     fond = create_texture(path_img("fondNuage.png"));
@@ -39,6 +50,7 @@ void init_skin() {
     pic = create_texture(path_img("pic.png"));
     drapeau = create_texture(path_img("drapeau.png"));
     hache = create_texture(path_img("axe.png"));
+    level_skin_loaded = 1;
 }
 
 void addMechant(int x, int y) {

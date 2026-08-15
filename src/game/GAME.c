@@ -14,7 +14,7 @@
 #include "globals.h"
 
 extern int run_game;
-extern SDL_Texture *img, *champi;
+extern SDL_Texture *img;
 extern int nb_mechant;
 extern int decalage;
 extern SDL_Rect origine, pos_perso;
@@ -32,6 +32,17 @@ int alfred = 0;
 SDL_Texture *coinmeter, *coinnb;
 SDL_Rect pos_coinmeter, pos_coinnb, pos_champi;
 
+// systeme_vie()/coinAff() run every rendered frame. Life icon and coin
+// digits are a fixed, finite set of sprites, so they're loaded once and
+// reused -- previously every frame did a fresh create_texture() (in
+// systeme_vie() into a local variable that even shadowed the never-really-
+// used `extern champi`, so the loaded texture wasn't reachable outside the
+// call it leaked in), never freed anywhere in the codebase.
+static SDL_Texture *img_champi;
+static int champi_skin_loaded = 0;
+static SDL_Texture *coin_digits[10];
+static int coin_skin_loaded = 0;
+
 void timer() {
     alfred++;
     if (alfred == 100) {
@@ -45,12 +56,15 @@ void timer() {
 }
 
 void systeme_vie() { // affiche les vies à l'écran
-    SDL_Texture *champi = create_texture(path_img("champi.png"));
+    if (!champi_skin_loaded) {
+        img_champi = create_texture(path_img("champi.png"));
+        champi_skin_loaded = 1;
+    }
     pos_champi.y = 0;
     for (int i = 0; i <= vie - 1; i++) {
         pos_champi.x = i * 55;
         // ALORS
-        display_texture(champi, NULL, &pos_champi);
+        display_texture(img_champi, NULL, &pos_champi);
     }
 }
 
@@ -58,43 +72,43 @@ void coinAff() {
     switch (coin) {
 
         case 0:
-            coinnb = create_texture(path_img("zero.png"));
+            coinnb = coin_digits[0];
             break;
 
         case 1:
-            coinnb = create_texture(path_img("un.png"));
+            coinnb = coin_digits[1];
             break;
 
         case 2:
-            coinnb = create_texture(path_img("deux.png"));
+            coinnb = coin_digits[2];
             break;
 
         case 3:
-            coinnb = create_texture(path_img("trois.png"));
+            coinnb = coin_digits[3];
             break;
 
         case 4:
-            coinnb = create_texture(path_img("quatre.png"));
+            coinnb = coin_digits[4];
             break;
 
         case 5:
-            coinnb = create_texture(path_img("cinq.png"));
+            coinnb = coin_digits[5];
             break;
 
         case 6:
-            coinnb = create_texture(path_img("six.png"));
+            coinnb = coin_digits[6];
             break;
 
         case 7:
-            coinnb = create_texture(path_img("sept.png"));
+            coinnb = coin_digits[7];
             break;
 
         case 8:
-            coinnb = create_texture(path_img("huit.png"));
+            coinnb = coin_digits[8];
             break;
 
         case 9:
-            coinnb = create_texture(path_img("neuf.png"));
+            coinnb = coin_digits[9];
             break;
     }
 
@@ -146,13 +160,26 @@ void init_coin() {
     printf("init_coin\n");
     pos_coinmeter.x = 0;
     pos_coinmeter.y = 65;
-    coinmeter = create_texture(path_img("coinx.png"));
-    if (coinmeter == NULL) {
-        printf("coinx not found\n");
-    }
-
     pos_coinnb.x = 70;
     pos_coinnb.y = 65;
+
+    if (!coin_skin_loaded) {
+        coinmeter = create_texture(path_img("coinx.png"));
+        if (coinmeter == NULL) {
+            printf("coinx not found\n");
+        }
+        coin_digits[0] = create_texture(path_img("zero.png"));
+        coin_digits[1] = create_texture(path_img("un.png"));
+        coin_digits[2] = create_texture(path_img("deux.png"));
+        coin_digits[3] = create_texture(path_img("trois.png"));
+        coin_digits[4] = create_texture(path_img("quatre.png"));
+        coin_digits[5] = create_texture(path_img("cinq.png"));
+        coin_digits[6] = create_texture(path_img("six.png"));
+        coin_digits[7] = create_texture(path_img("sept.png"));
+        coin_digits[8] = create_texture(path_img("huit.png"));
+        coin_digits[9] = create_texture(path_img("neuf.png"));
+        coin_skin_loaded = 1;
+    }
 }
 
 void mechant() {

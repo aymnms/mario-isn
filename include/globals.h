@@ -7,3 +7,4 @@ extern char lvl[10][140];
 extern SDL_Rect pos_cadre, pos_noir, pos_barre;
 extern SDL_Texture *cadre, *noir, *barre;
 extern SDL_Texture *perso, *img;
+extern SDL_Texture *mario_idle_droite, *mario_saut_droite;

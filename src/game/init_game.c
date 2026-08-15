@@ -5,6 +5,7 @@
 
 #include "display.h"
 #include "MARIO_niveau.h"
+#include "MARIO_joueur.h"
 #include "path.h"
 #include "globals.h"
 
@@ -35,21 +36,33 @@ void init_niveau() {
     pos_perso.x = 50;  // coordonn�s en x
     pos_perso.y = 100; // coordonn�s en y
 
-    perso = create_texture(path_img("mario_idle.png"));
+    init_perso_skin();
+    perso = mario_idle_droite;
     display_texture(perso, NULL, &pos_perso);
 }
+
+// init_niveau()/init_timer() run on every respawn and every level change
+// (via init_game()), not just once at program start. barre/noir/cadre are
+// fixed HUD sprites, so their texture load is guarded to run only once --
+// previously every respawn/level change re-created them via create_texture()
+// without ever freeing the previous one (never done anywhere in the
+// codebase), leaking a texture each time.
+static int timer_skin_loaded = 0;
 
 void init_timer() {
     pos_barre.x = 400;
     pos_barre.y = 0;
-    barre = create_texture(path_img("barre.png"));
     pos_noir.x = 600;
     pos_noir.y = 0;
-    noir = create_texture(path_img("noir.png"));
     pos_cadre.x = 400;
     pos_cadre.y = 0;
-    cadre = create_texture(path_img("cadre.png"));
     decoule = 600;
+    if (!timer_skin_loaded) {
+        barre = create_texture(path_img("barre.png"));
+        noir = create_texture(path_img("noir.png"));
+        cadre = create_texture(path_img("cadre.png"));
+        timer_skin_loaded = 1;
+    }
 }
 
 void init_game() {

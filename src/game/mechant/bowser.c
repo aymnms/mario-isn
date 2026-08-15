@@ -103,6 +103,7 @@ int goB(int direction) {
             test1 = setRectMechant(BSSO);
             test2 = setRectMechant(BSSE);
             test3 = setRectMechant(BS);
+            test4 = test3; // ce cas ne teste que 3 points ; dupliqué pour éviter de lire test4 non initialisé plus bas
             break;
 
         case 1: //droite
@@ -122,6 +123,7 @@ int goB(int direction) {
             test1 = setRectMechant(BNNO);
             test2 = setRectMechant(BNNE);
             test3 = setRectMechant(BN);
+            test4 = test3; // ce cas ne teste que 3 points ; dupliqué pour éviter de lire test4 non initialisé plus bas
             break;
     }
     printf("test1 = %c\ntest2 = %c\ntest3 = %c\ntest4 = %c\n", lvl[test1.y][test1.x],

@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/aymnms/mario-isn/compare/v1.3.3...v1.3.4) (2026-08-15)
+
+
+### Bug Fixes
+
+* **mechant:** initialize test4 in goB() before it's read ([6716ad2](https://github.com/aymnms/mario-isn/commit/6716ad269ff561fac6d3914f1b0fdd286e0e5fe2))
+
 ## [1.3.3](https://github.com/aymnms/mario-isn/compare/v1.3.2...v1.3.3) (2026-08-15)
 
 

@@ -23,6 +23,45 @@ static void test_physics(void) {
     ASSERT_NEAR(domain_on_enemy_jump_arc(0), 0.0, 1e-9);
     ASSERT_NEAR(domain_on_enemy_jump_arc(7.5), 56.25, 1e-9);
     ASSERT_NEAR(domain_on_enemy_jump_arc(15), 0.0, 1e-9);
+
+    /* domain_jump_threshold: 11 for a normal jump, 7 for an enemy-bounce jump */
+    ASSERT_NEAR(domain_jump_threshold(0), 11.0, 1e-9);
+    ASSERT_NEAR(domain_jump_threshold(1), 7.0, 1e-9);
+
+    /* domain_jump_should_end: not ending while jump isn't active */
+    ASSERT_TRUE(!domain_jump_should_end(0, 0, 0, 20));
+    /* normal jump: ends once x reaches 11, not before */
+    ASSERT_TRUE(!domain_jump_should_end(1, 0, 0, 10.9));
+    ASSERT_TRUE(domain_jump_should_end(1, 0, 0, 11));
+    /* enemy-bounce jump: ends once x reaches 7, not before */
+    ASSERT_TRUE(!domain_jump_should_end(1, 1, 0, 6.9));
+    ASSERT_TRUE(domain_jump_should_end(1, 1, 0, 7));
+    /* hitting a ceiling ends the jump immediately regardless of x or kind */
+    ASSERT_TRUE(domain_jump_should_end(1, 0, 1, 0));
+    ASSERT_TRUE(domain_jump_should_end(1, 1, 1, 0));
+
+    /* domain_chute_should_start: only when idle (no jump, no chute) and
+     * nothing underfoot */
+    ASSERT_TRUE(domain_chute_should_start(0, 0, 0));
+    ASSERT_TRUE(!domain_chute_should_start(1, 0, 0)); /* jumping */
+    ASSERT_TRUE(!domain_chute_should_start(0, 1, 0)); /* already falling */
+    ASSERT_TRUE(!domain_chute_should_start(0, 0, 1)); /* standing on something */
+
+    /* domain_chute_is_active: not falling, or grounded -> not active */
+    ASSERT_TRUE(!domain_chute_is_active(0, 0, 0, 20));
+    ASSERT_TRUE(!domain_chute_is_active(1, 1, 0, 20));
+    /* normal fall: active once x has reached 11 */
+    ASSERT_TRUE(!domain_chute_is_active(1, 0, 0, 10.9));
+    ASSERT_TRUE(domain_chute_is_active(1, 0, 0, 11));
+    /* enemy-bounce fall: active once x has reached 7 */
+    ASSERT_TRUE(!domain_chute_is_active(1, 0, 1, 6.9));
+    ASSERT_TRUE(domain_chute_is_active(1, 0, 1, 7));
+
+    /* domain_chute_should_end: only while falling and something is now
+     * underfoot */
+    ASSERT_TRUE(domain_chute_should_end(1, 1));
+    ASSERT_TRUE(!domain_chute_should_end(0, 1));
+    ASSERT_TRUE(!domain_chute_should_end(1, 0));
 }
 
 static void test_grid(void) {

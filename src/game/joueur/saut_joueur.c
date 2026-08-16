@@ -38,15 +38,13 @@ void saut(void) {
 
     if (jump == 1 && go('H') == 0) {
         x += 0.1;
-        if (bool_saut_sur_mechant == 1 && x <= 7) {
+        if (bool_saut_sur_mechant == 1 && x <= domain_jump_threshold(1)) {
             pos_perso.y = init_hauteur_saut - domain_on_enemy_jump_arc(x);
-        } else if (bool_saut_sur_mechant == 0 && x <= 11) {
+        } else if (bool_saut_sur_mechant == 0 && x <= domain_jump_threshold(0)) {
             pos_perso.y = init_hauteur_saut - domain_jump_arc(x);
         }
     }
-    if ((bool_saut_sur_mechant == 0 && jump == 1 && go('H') == 0 && x >= 11) ||
-        (jump == 1 && go('H') == 1) ||
-        (bool_saut_sur_mechant == 1 && jump == 1 && go('H') == 0 && x >= 7)) {
+    if (domain_jump_should_end(jump, bool_saut_sur_mechant, go('H'), x)) {
         jump = 0;
         chute = 0;
     }
@@ -57,7 +55,7 @@ void saut(void) {
 void gravite(void) { //gere la position en y du personnage
 
     //INITIALISATION DE LA CHUTE
-    if (jump == 0 && chute == 0 && go('B') == 0) {
+    if (domain_chute_should_start(jump, chute, go('B'))) {
         chute = 1;
         if (bool_saut_sur_mechant == 1) {
             init_hauteur_chute = pos_perso.y + domain_on_enemy_jump_arc(x);
@@ -69,7 +67,7 @@ void gravite(void) { //gere la position en y du personnage
     }
 
     if (bool_saut_sur_mechant == 1) {
-        if (chute == 1 && go('B') == 0 && x >= 7) {
+        if (domain_chute_is_active(chute, go('B'), 1, x)) {
             x += 0.1;
             pos_perso.y = init_hauteur_chute - domain_on_enemy_jump_arc(x);
             if (go('B') == 1) {
@@ -82,7 +80,7 @@ void gravite(void) { //gere la position en y du personnage
             }
         }
     } else {
-        if (chute == 1 && go('B') == 0 && x >= 11) {
+        if (domain_chute_is_active(chute, go('B'), 0, x)) {
             x += 0.1;
             pos_perso.y = init_hauteur_chute - domain_jump_arc(x);
             if (go('B') == 1) {
@@ -94,7 +92,7 @@ void gravite(void) { //gere la position en y du personnage
             }
         }
     }
-    if (chute == 1 && go('B') == 1) {
+    if (domain_chute_should_end(chute, go('B'))) {
         chute = 0;
         if (bool_saut_sur_mechant == 1) {
             bool_saut_sur_mechant = 0;

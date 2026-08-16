@@ -77,8 +77,8 @@ int goB(int direction) {
     BSSE.y += 150;
 
     SDL_Rect BSSO = tableau_mechant[nb_mechant][1];
-    BSO.x += 0;
-    BSO.y += 150;
+    BSSO.x += 0;
+    BSSO.y += 150;
 
     SDL_Rect BN = tableau_mechant[nb_mechant][1];
     BN.x += 50;

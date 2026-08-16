@@ -33,14 +33,24 @@ int main(int argc, char *argv[]) {
     (void)argc; // required by SDL_main's expected signature, unused otherwise
     (void)argv;
     printf("Hello World\n");
-    // while(run){
-    init_menu(); //envoie sur "init_menu.c" par "init_menu.h"
-    MENU();      //envoie sur "MENU.c" par "MENU.h"
-    if (run_game) {
-        // init_game();
+    init_menu(); //envoie sur "init_menu.c" par "init_menu.h" -- une seule fois : crée
+                 //la fenêtre/le renderer/l'audio, jamais à refaire à chaque retour au menu
+
+    // CI's headless smoke/leak-regression tests need to reach real gameplay
+    // without a mouse click to get past the menu. This env var is never set
+    // during normal play; it skips straight to one GAME() session instead
+    // of looping through the menu. See .github/workflows/build.yml.
+    if (getenv("MARIO_ISN_AUTOPLAY")) {
+        run_game = 1;
         GAME();
+    } else {
+        while (run) {
+            MENU(); //envoie sur "MENU.c" par "MENU.h"
+            if (run_game) {
+                GAME();
+            }
+        }
     }
-    // }
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

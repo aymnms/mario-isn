@@ -4,7 +4,6 @@
 #include <SDL_image.h>
 #include "MARIO_musique.h"
 #include "display.h"
-#include "path.h"
 
 extern SDL_Rect origine;
 
@@ -24,10 +23,6 @@ void init_fenetre(void) {
 
     // Montre le curseur (activé par défaut)
     SDL_ShowCursor(SDL_ENABLE);
-
-    // Charge une image
-    SDL_Texture *texture = create_texture(path_img("menu.png"));
-    update_texture(texture, NULL, NULL);
 }
 
 void init_menu(void) { //gère l'organisation de l'execution des fonctions

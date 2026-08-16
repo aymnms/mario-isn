@@ -1,3 +1,5 @@
+#pragma once
+
 void niveauAfficher(int strawling);
 void init_skin(void);
 void niveauSelect(int nb);

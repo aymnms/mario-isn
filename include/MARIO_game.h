@@ -1,3 +1,5 @@
+#pragma once
+
 void GAME(void);
 void init_game(void);
 void init_niveau(void);

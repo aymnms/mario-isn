@@ -15,14 +15,9 @@
 
 extern int run_game;
 extern SDL_Texture *img;
-extern int nb_mechant;
 extern int decalage;
 extern SDL_Rect origine, pos_perso;
-extern int decalage;
-extern char statue[MAX_MECHANTS];
 extern SDL_Texture *imgMechant; //surface du mechant
-extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
-extern int nb_mechant;
 extern int coin, niveau, vie;
 extern int jean;
 
@@ -134,7 +129,7 @@ void refresh(void) {
 
         //-----------------------Mechant-----------------------//
         printf("afficher mechant\n");
-        for (nb_mechant = 0; nb_mechant <= 19; nb_mechant++) {
+        for (nb_mechant = 0; nb_mechant < MAX_MECHANTS; nb_mechant++) {
             afficher_mechant();
         }
         //-----------------------Perso-----------------------//
@@ -182,7 +177,7 @@ void init_coin(void) {
 }
 
 void mechant(void) {
-    for (nb_mechant = 0; nb_mechant <= 19; nb_mechant++) {
+    for (nb_mechant = 0; nb_mechant < MAX_MECHANTS; nb_mechant++) {
         deplacement_mechant();
         contact(); //test contact si tue ou meurt
     }

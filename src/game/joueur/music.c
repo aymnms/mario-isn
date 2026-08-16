@@ -37,6 +37,16 @@ void init_mus(void) {
     musiqueMiss = Mix_LoadMUS(path_music("miss.wav"));
     musiquevictory = Mix_LoadMUS(path_music("victory.wav"));
     sonUp = Mix_LoadWAV(path_music("up.wav"));
+
+    // None of these were ever checked -- a missing/corrupt asset silently
+    // left the pointer NULL, and every later Mix_PlayMusic()/
+    // Mix_PlayChannel() call on it is a silent no-op (SDL_mixer checks for
+    // NULL internally), so the failure would only ever surface as "why is
+    // there no sound" with nothing in the logs to explain why.
+    if (!musiqueFond || !musiqueMenu || !sonSaut || !sonBloc || !sonEnemy || !musiqueGameOver ||
+        !musiqueMiss || !musiquevictory || !sonUp) {
+        fprintf(stderr, "init_mus: echec de chargement d'un asset audio: %s\n", Mix_GetError());
+    }
 }
 
 void playSon(const int son) {
@@ -87,6 +97,18 @@ void playMus(int son) {
 }
 
 void freeMusic(void) {
-    Mix_FreeMusic(musiqueFond); //Libération de la musique
-    Mix_CloseAudio();           //Fermeture de l'API
+    // Previously only musiqueFond was freed here -- the other 4 Mix_Music
+    // and 4 Mix_Chunk loaded in init_mus() were never released, leaking
+    // them for the life of the process (harmless in practice since this
+    // only runs once at exit and the OS reclaims it, but still incomplete).
+    Mix_FreeMusic(musiqueFond);
+    Mix_FreeMusic(musiqueMenu);
+    Mix_FreeMusic(musiqueGameOver);
+    Mix_FreeMusic(musiqueMiss);
+    Mix_FreeMusic(musiquevictory);
+    Mix_FreeChunk(sonSaut);
+    Mix_FreeChunk(sonBloc);
+    Mix_FreeChunk(sonEnemy);
+    Mix_FreeChunk(sonUp);
+    Mix_CloseAudio(); //Fermeture de l'API
 }

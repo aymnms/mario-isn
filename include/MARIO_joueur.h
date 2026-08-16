@@ -1,3 +1,5 @@
+#pragma once
+
 void saut(void);
 void statue_saut(void);
 void deplacement_joueur(void);

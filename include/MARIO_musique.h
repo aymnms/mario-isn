@@ -1,3 +1,5 @@
+#pragma once
+
 void init_mus(void);
 void playSon(int son);
 void playMus(int son);

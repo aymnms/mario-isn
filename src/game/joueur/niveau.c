@@ -24,9 +24,6 @@ SDL_Texture *hache;
 SDL_Rect bobie;
 SDL_Rect niveauOrigine;
 extern int coin, niveau, vie;
-extern char statue[MAX_MECHANTS];
-extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
-extern int direction_mechant[MAX_MECHANTS];
 extern SDL_Rect pos_perso;
 extern int decalage;
 
@@ -55,7 +52,7 @@ void init_skin(void) {
 
 void addMechant(int pos_x, int pos_y) {
     auto int i;
-    for (i = 0; i <= 19; i++) {
+    for (i = 0; i < MAX_MECHANTS; i++) {
         if (statue[i] == 'M' || statue[i] == '0') {
             statue[i] = 'V';
             tableau_mechant[i][1].x = pos_x;
@@ -64,7 +61,7 @@ void addMechant(int pos_x, int pos_y) {
             direction_mechant[i] = 1;
             break;
         }
-        if (i == 19) {
+        if (i == MAX_MECHANTS - 1) {
             printf("pas assez de place !!!");
         }
     }

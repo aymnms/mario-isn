@@ -11,18 +11,13 @@
 #include "domain/tile.h"
 #include "globals.h"
 
-extern char statue[MAX_MECHANTS];
-extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
-extern int nb_mechant;
-extern char statue[MAX_MECHANTS];
-extern int direction_mechant[MAX_MECHANTS];
 extern SDL_Rect pos_perso;
 extern int decalage;
 extern int bool_saut_sur_mechant;
 int pv = 3;
 
 void addBowser(int pos_x, int pos_y) {
-    for (int i = 0; i <= 19; i++) {
+    for (int i = 0; i < MAX_MECHANTS; i++) {
         if (statue[i] == 'B' || statue[i] == '0') {
             statue[i] = 'B';
             tableau_mechant[i][1].x = pos_x;

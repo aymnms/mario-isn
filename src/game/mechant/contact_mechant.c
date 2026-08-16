@@ -9,6 +9,7 @@
 #include "MARIO_niveau.h"
 #include "MARIO_musique.h"
 #include "domain/collision.h"
+#include "domain/tile.h"
 #include "globals.h"
 
 //--------------------------Variable-générale--------------------------//
@@ -24,8 +25,6 @@ extern int vie;
 //---------------------------------------------------------------------//
 
 int goM(int direction) {
-    int rep = 0;
-
     // Zero-initialized: same reasoning as goB() in bowser.c -- the switch
     // below has no default case, so an unhandled `direction` would leave
     // these read uninitialized just below (caught by GCC at -O3,
@@ -81,12 +80,14 @@ int goM(int direction) {
             break;
     }
 
-    if ((lvl[test1.y][test1.x] != '0' || lvl[test2.y][test2.x] != '0') ||
-        (lvl[test1.y][test1.x] != '0' && lvl[test2.y][test2.x] != '0')) {
-        rep = 1;
-    }
-
-    return rep;
+    // Reuses the pure classification already extracted from go() (J5-3e) --
+    // goM() only ever needs "is this tile blocking at all", never which
+    // kind, so this is a strict subset of what domain_classify_tile()
+    // already computes. Also fixes a redundant disjunct the previous
+    // inline check had here (`(A||B) || (A&&B)` is just `(A||B)`, the
+    // second half could never add a case the first didn't already cover;
+    // see AUDIT.md §10).
+    return domain_classify_tile(lvl[test1.y][test1.x], lvl[test2.y][test2.x]) != DOMAIN_TILE_NONE;
 }
 
 void mechantMort(void) { //detruit le perso

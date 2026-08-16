@@ -18,3 +18,7 @@ domain_tile_kind_t domain_classify_tile(char tile1, char tile2) {
     }
     return DOMAIN_TILE_NONE;
 }
+
+int domain_any_solid_tile(char t1, char t2, char t3, char t4) {
+    return t1 == '1' || t2 == '1' || t3 == '1' || t4 == '1';
+}

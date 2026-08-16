@@ -18,4 +18,12 @@ typedef enum {
 
 domain_tile_kind_t domain_classify_tile(char tile1, char tile2);
 
+/* True if any of the four sampled tile characters is a plain solid block
+ * ('1'). Used by goB() (bowser.c), which samples 4 corners instead of go()/
+ * goM()'s 2 -- unlike domain_classify_tile(), which pairs two corners and
+ * lets a higher-priority kind (spike, coin...) at one corner mask a solid
+ * block at the other, this checks each corner independently so a '1' at any
+ * of the 4 points is never hidden by a different tile kind at another. */
+int domain_any_solid_tile(char t1, char t2, char t3, char t4);
+
 #endif

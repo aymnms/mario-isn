@@ -197,6 +197,23 @@ static void test_tile(void) {
     ASSERT_TRUE(domain_classify_tile('9', '2') == DOMAIN_TILE_SPIKE);
     ASSERT_TRUE(domain_classify_tile('2', 'O') == DOMAIN_TILE_COIN);
     ASSERT_TRUE(domain_classify_tile('O', 'S') == DOMAIN_TILE_VICTORY_OBJECT);
+
+    /* domain_any_solid_tile: none solid */
+    ASSERT_TRUE(!domain_any_solid_tile('0', '0', '0', '0'));
+
+    /* solid at each of the 4 positions individually */
+    ASSERT_TRUE(domain_any_solid_tile('1', '0', '0', '0'));
+    ASSERT_TRUE(domain_any_solid_tile('0', '1', '0', '0'));
+    ASSERT_TRUE(domain_any_solid_tile('0', '0', '1', '0'));
+    ASSERT_TRUE(domain_any_solid_tile('0', '0', '0', '1'));
+
+    /* a non-'1' non-'0' tile (e.g. a spike) at another corner must not mask
+     * a solid '1' elsewhere -- this is exactly the case where reusing
+     * domain_classify_tile() per-pair would have been wrong for goB(). */
+    ASSERT_TRUE(domain_any_solid_tile('1', '9', '0', '0'));
+
+    /* other non-'0'/non-'1' tiles alone (spike, coin) are not "solid" */
+    ASSERT_TRUE(!domain_any_solid_tile('9', '2', 'O', 'S'));
 }
 
 int main(void) {

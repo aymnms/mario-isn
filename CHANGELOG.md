@@ -1,3 +1,10 @@
+## [1.3.7](https://github.com/aymnms/mario-isn/compare/v1.3.6...v1.3.7) (2026-08-16)
+
+
+### Bug Fixes
+
+* **menu:** actually return to the menu instead of quitting the app ([3bac6d7](https://github.com/aymnms/mario-isn/commit/3bac6d74d5453e9b5b47393d88fb84438e1f1d9f))
+
 ## [1.3.6](https://github.com/aymnms/mario-isn/compare/v1.3.5...v1.3.6) (2026-08-16)
 
 

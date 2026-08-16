@@ -8,6 +8,7 @@
 #include "MARIO_game.h"
 #include "MARIO_niveau.h"
 #include "MARIO_musique.h"
+#include "domain/tile.h"
 #include "globals.h"
 
 extern char statue[MAX_MECHANTS];
@@ -35,8 +36,6 @@ void addBowser(int pos_x, int pos_y) {
 }
 
 int goB(int direction) {
-    int rep = 0;
-
     // Zero-initialized: the switch below has no default case, so a
     // `direction` outside {-1, 1, 666, 999} (never happens at today's call
     // sites, but nothing in the type system guarantees that) would
@@ -136,10 +135,13 @@ int goB(int direction) {
     printf("test1 = %c\ntest2 = %c\ntest3 = %c\ntest4 = %c\n", lvl[test1.y][test1.x],
            lvl[test2.y][test2.x], lvl[test3.y][test3.x], lvl[test4.y][test4.x]);
 
-    if (lvl[test1.y][test1.x] == '1' || lvl[test2.y][test2.x] == '1' || lvl[test3.y][test3.x] == '1' ||
-        lvl[test4.y][test4.x] == '1') {
-        rep = 1;
-    }
+    // Reuses the pure classification extracted for goM() -- but per-corner,
+    // not per-pair: unlike domain_classify_tile(), which would let a
+    // higher-priority tile kind (spike, coin...) at one corner mask a solid
+    // block at another, goB() must catch a '1' at ANY of its 4 corners
+    // independently. See domain_any_solid_tile()'s doc comment.
+    int rep = domain_any_solid_tile(lvl[test1.y][test1.x], lvl[test2.y][test2.x], lvl[test3.y][test3.x],
+                                     lvl[test4.y][test4.x]);
     printf("%d\n", rep);
 
     return rep;

@@ -92,9 +92,7 @@ void game_over(void) {
 
         SDL_Delay(5000);
         SDL_WaitEvent(&event);
-        quit_game();
-        vie = 3;
-        niveau = 1;
+        quit_game(); // réinitialise déjà vie/niveau/statue/tableau_mechant pour le prochain Play
     }
 }
 

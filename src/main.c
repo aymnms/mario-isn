@@ -60,6 +60,23 @@ int main(int argc, char *argv[]) {
 
 void quit_game(void) { //lorsque le joueur souhaite quitter le niveau du jeu -> redirection Menu
     run_game = 0;
+    // A fresh return to the menu should mean a fresh game next time Play is
+    // clicked. niveauSelect()/addMechant()/addBowser() only ever ADD
+    // enemies into statue[]/tableau_mechant[], they never clear stale ones
+    // from an interrupted session first, and init_game() never resets
+    // `niveau` either. Without this, quitting mid-level and pressing Play
+    // again resumed that same level (never level 1) with its enemies
+    // duplicated -- the old ones were still marked alive in their slots
+    // alongside the newly (re)loaded ones. This path was unreachable before
+    // the menu-return-loop fix (see PLAN.md J13), so the gap was latent
+    // until then.
+    for (int i = 0; i < MAX_MECHANTS; i++) {
+        statue[i] = '0';
+        tableau_mechant[i][1].x = 0;
+        tableau_mechant[i][1].y = 0;
+    }
+    vie = 3;
+    niveau = 1;
 }
 void quit(void) { //QUITTE TOTALEMENT LE PROGRAMME
     run = 0;

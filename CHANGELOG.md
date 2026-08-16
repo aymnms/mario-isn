@@ -1,3 +1,10 @@
+## [1.3.6](https://github.com/aymnms/mario-isn/compare/v1.3.5...v1.3.6) (2026-08-16)
+
+
+### Bug Fixes
+
+* **mechant:** correct BSSO/BSO copy-paste offset bug in goB() ([fbd0ab4](https://github.com/aymnms/mario-isn/commit/fbd0ab49c5701dceb380eaa6d262afdacb0341d2))
+
 ## [1.3.5](https://github.com/aymnms/mario-isn/compare/v1.3.4...v1.3.5) (2026-08-15)
 
 

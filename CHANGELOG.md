@@ -1,3 +1,10 @@
+## [1.3.8](https://github.com/aymnms/mario-isn/compare/v1.3.7...v1.3.8) (2026-08-16)
+
+
+### Bug Fixes
+
+* **state:** reset level/enemy state on quit_game(), not just run_game ([80f2e8a](https://github.com/aymnms/mario-isn/commit/80f2e8ae2447d655d9aaba2845e454fe6f397aee))
+
 ## [1.3.7](https://github.com/aymnms/mario-isn/compare/v1.3.6...v1.3.7) (2026-08-16)
 
 

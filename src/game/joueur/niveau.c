@@ -7,6 +7,7 @@
 #include "MARIO_niveau.h"
 #include "MARIO_conditions.h"
 #include "MARIO_mechant.h"
+#include "domain/level.h"
 #include "path.h"
 #include "globals.h"
 
@@ -22,7 +23,6 @@ SDL_Texture *hache;
 
 SDL_Rect bobie;
 SDL_Rect niveauOrigine;
-int l, c; //ligne et colonne
 extern int coin, niveau, vie;
 extern char statue[MAX_MECHANTS];
 extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
@@ -168,7 +168,6 @@ void playerrrr(int ngh) {
 //9 -> pic
 
 void niveauSelect(int nb) {
-    FILE *fichier = NULL;
     // Zero-initialized: the switch below has no default case, so an
     // unhandled `nb` would leave this read uninitialized in the do-while
     // just below it (caught by GCC at -O3, -Wmaybe-uninitialized). '\0'
@@ -177,13 +176,6 @@ void niveauSelect(int nb) {
     // garbage.
     auto char num = '\0';
 
-    fichier = fopen(path_bin("niveau.lvl"), "r");
-    // int, not char: fgetc() returns EOF as int -1, but plain `char` is
-    // unsigned on some platforms this project targets (notably arm64
-    // macOS) -- on those, `caract == EOF` could never be true no matter
-    // what fgetc() actually returned, silently defeating the EOF checks
-    // below.
-    int caract;
     switch (nb) {
         case 1:
             num = '1';
@@ -205,60 +197,61 @@ void niveauSelect(int nb) {
             break;
     }
 
-    if (fichier != NULL) {
-        do //recherche du bon tableau
-        {
-            do //recherche des limittes d'un tableau
-            {
-                caract = fgetc(fichier); //caractère en cour
-                printf("%c", caract);
-                if (caract == EOF) {
-                    fprintf(stderr, "niveau.lvl: marqueur du niveau %d introuvable (fin de fichier)\n", nb);
-                    fclose(fichier);
-                    return;
-                }
-            } while (caract != '#'); //on test la nature du caractère (début du tableau)
-            caract = fgetc(fichier); //caractère en cour
-            printf("%c", caract);
-            if (caract == EOF) {
-                fprintf(stderr, "niveau.lvl: marqueur du niveau %d introuvable (fin de fichier)\n", nb);
-                fclose(fichier);
-                return;
-            }
-        } while (caract != num); //on test la nature du caractère (bon niveau)
-
-        for (l = 0; l < LVL_ROWS; l++) //pour chaque ligne
-        {
-            for (c = 0; c < LVL_COLS; c++) //pour chaque colonnes
-            {
-                caract = fgetc(fichier); //caractère en cour
-                printf("%c", caract);
-                if (caract == '\n') {
-                    caract = fgetc(fichier);
-                } //on test la nature du caractère
-                if (caract == EOF) {
-                    fprintf(stderr, "niveau.lvl: fin de fichier inattendue en lisant le niveau %d\n", nb);
-                    fclose(fichier);
-                    return;
-                }
-                lvl[l][c] = (char)caract;
-            }
-        }
-        caract = fgetc(fichier); //caractère en cour
-        printf("%c", caract);
-        caract = fgetc(fichier); //caractère en cour
-        printf("%c", caract);
-        if (caract != '@') {
-            printf("erreur  : dépacement \n");
-        } //on test la nature du caractère (fin du tableau)
-        printf("init mechant\n");
-        init_mechant(nb);
-        playerrrr(nb);
-
-        fclose(fichier); // On ferme le fichier qui a été ouvert
-    } else {
+    FILE *fichier = fopen(path_bin("niveau.lvl"), "r");
+    if (fichier == NULL) {
         printf("echec ouverture niveau.txt");
-    } //dbg si échec du chargement
+        return;
+    }
+
+    if (fseek(fichier, 0, SEEK_END) != 0) {
+        fprintf(stderr, "niveau.lvl: erreur de lecture\n");
+        fclose(fichier);
+        return;
+    }
+    long file_size = ftell(fichier);
+    if (file_size < 0 || fseek(fichier, 0, SEEK_SET) != 0) {
+        fprintf(stderr, "niveau.lvl: erreur de lecture\n");
+        fclose(fichier);
+        return;
+    }
+
+    char *data = malloc((size_t)file_size);
+    if (data == NULL) {
+        fprintf(stderr, "niveau.lvl: erreur d'allocation memoire\n");
+        fclose(fichier);
+        return;
+    }
+
+    size_t read_count = fread(data, 1, (size_t)file_size, fichier);
+    fclose(fichier);
+
+    // Parses the level block from the in-memory buffer -- see
+    // domain/level.h. `lvl` is a genuinely contiguous 2D array in C, so
+    // &lvl[0][0] is safe to fill row-major from a flat char*.
+    domain_level_parse_result_t result =
+        domain_parse_level(data, (int)read_count, num, LVL_ROWS, LVL_COLS, &lvl[0][0]);
+
+    // Echoes exactly the prefix of the file the original fgetc()-driven
+    // reader printed character by character as it went, since nothing else
+    // wrote to stdout in between those printf("%c", ...) calls.
+    fwrite(data, 1, (size_t)result.end_offset, stdout);
+    free(data);
+
+    if (result.status == DOMAIN_LEVEL_MARKER_NOT_FOUND) {
+        fprintf(stderr, "niveau.lvl: marqueur du niveau %d introuvable (fin de fichier)\n", nb);
+        return;
+    }
+    if (result.status == DOMAIN_LEVEL_UNEXPECTED_END) {
+        fprintf(stderr, "niveau.lvl: fin de fichier inattendue en lisant le niveau %d\n", nb);
+        return;
+    }
+    if (!result.trailer_valid) {
+        printf("erreur  : dépacement \n");
+    } //on test la nature du caractère (fin du tableau)
+
+    printf("init mechant\n");
+    init_mechant(nb);
+    playerrrr(nb);
 }
 
 void niveauAfficher(int strawling) {

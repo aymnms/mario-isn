@@ -6,8 +6,11 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 
+#include <string.h>
+
 #include "domain/collision.h"
 #include "domain/grid.h"
+#include "domain/level.h"
 #include "domain/movement.h"
 #include "domain/physics.h"
 #include "domain/tile.h"
@@ -199,12 +202,85 @@ static void test_tile(void) {
     ASSERT_TRUE(domain_classify_tile('O', 'S') == DOMAIN_TILE_VICTORY_OBJECT);
 }
 
+static void test_level(void) {
+    /* basic 2x2 grid, no newline in the data -- straight character-by-
+     * character fill, then a valid '@' trailer */
+    {
+        const char data[] = "#1AB CD@";
+        char grid[4];
+        domain_level_parse_result_t r = domain_parse_level(data, (int)strlen(data), '1', 2, 2, grid);
+        ASSERT_TRUE(r.status == DOMAIN_LEVEL_OK);
+        ASSERT_TRUE(r.trailer_valid);
+        ASSERT_TRUE(grid[0] == 'A' && grid[1] == 'B' && grid[2] == ' ' && grid[3] == 'C');
+        ASSERT_EQ_INT(r.end_offset, (int)strlen(data));
+    }
+
+    /* a '\n' where a grid character is expected is skipped: the byte right
+     * after it is used instead, matching niveau.lvl's line-wrapped rows */
+    {
+        const char data[] = "#1AB\nCD@@";
+        char grid[4];
+        domain_level_parse_result_t r = domain_parse_level(data, (int)strlen(data), '1', 2, 2, grid);
+        ASSERT_TRUE(r.status == DOMAIN_LEVEL_OK);
+        ASSERT_TRUE(r.trailer_valid);
+        ASSERT_TRUE(grid[0] == 'A' && grid[1] == 'B' && grid[2] == 'C' && grid[3] == 'D');
+    }
+
+    /* marker search skips a non-matching level block first (`#9xx`) before
+     * finding the real one -- exercises the original's "loop back to the
+     * outer do-while" path */
+    {
+        const char data[] = "#9xx#1AB@@";
+        char grid[4];
+        domain_level_parse_result_t r = domain_parse_level(data, (int)strlen(data), '1', 1, 2, grid);
+        ASSERT_TRUE(r.status == DOMAIN_LEVEL_OK);
+        ASSERT_TRUE(grid[0] == 'A' && grid[1] == 'B');
+    }
+
+    /* no matching marker anywhere in the data */
+    {
+        const char data[] = "#9xxAB@@";
+        char grid[4];
+        domain_level_parse_result_t r = domain_parse_level(data, (int)strlen(data), '1', 1, 2, grid);
+        ASSERT_TRUE(r.status == DOMAIN_LEVEL_MARKER_NOT_FOUND);
+    }
+
+    /* data runs out before any '#' at all */
+    {
+        const char data[] = "no marker here";
+        char grid[4];
+        domain_level_parse_result_t r = domain_parse_level(data, (int)strlen(data), '1', 1, 2, grid);
+        ASSERT_TRUE(r.status == DOMAIN_LEVEL_MARKER_NOT_FOUND);
+    }
+
+    /* marker found but data ends mid-grid */
+    {
+        const char data[] = "#1A";
+        char grid[4];
+        domain_level_parse_result_t r = domain_parse_level(data, (int)strlen(data), '1', 1, 2, grid);
+        ASSERT_TRUE(r.status == DOMAIN_LEVEL_UNEXPECTED_END);
+    }
+
+    /* grid parses fine even with a malformed trailer -- not a hard error,
+     * just trailer_valid == false (mirrors the original's warning-only
+     * print) */
+    {
+        const char data[] = "#1ABXY";
+        char grid[4];
+        domain_level_parse_result_t r = domain_parse_level(data, (int)strlen(data), '1', 1, 2, grid);
+        ASSERT_TRUE(r.status == DOMAIN_LEVEL_OK);
+        ASSERT_TRUE(!r.trailer_valid);
+        ASSERT_TRUE(grid[0] == 'A' && grid[1] == 'B');
+    }
+}
+
 int main(void) {
     test_physics();
     test_grid();
     test_collision();
     test_movement();
     test_tile();
+    test_level();
 
     printf("%d/%d assertions passed\n", g_test_count - g_test_failures, g_test_count);
     return g_test_failures > 0 ? 1 : 0;

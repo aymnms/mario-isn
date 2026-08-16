@@ -255,15 +255,15 @@ Commit messages must follow [Conventional Commits](https://www.conventionalcommi
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Isolated CI smoke test (container without SDL2 installed) for the Linux bundling
-- [ ] Cache the vcpkg dependency tree in CI instead of rebuilding SDL2 from source on every Windows run
-- [ ] Suppress the console window that opens alongside the game on Windows
-- [ ] `clang-format`/`.editorconfig` for consistent C style
-- [ ] Extract a testable game-logic core, decoupled from SDL, so gameplay code can have unit tests
+- [x] Isolated CI smoke test (container without SDL2 installed) for the Linux bundling
+- [x] Cache the vcpkg dependency tree in CI instead of rebuilding SDL2 from source on every Windows run
+- [x] Suppress the console window that opens alongside the game on Windows
+- [x] `clang-format`/`.editorconfig` for consistent C style
+- [x] Extract a testable game-logic core, decoupled from SDL, so gameplay code can have unit tests
 
-See the [open issues](https://github.com/aymnms/mario-isn/issues) for the full list of proposed features and known
-issues, and [`PLAN.md`](./PLAN.md) / [`AUDIT.md`](./AUDIT.md) for the detailed engineering history behind the
-multi-platform build and release pipeline.
+Everything originally on this roadmap is done. See the [open issues](https://github.com/aymnms/mario-isn/issues) for
+the full list of proposed features and known issues, and [`PLAN.md`](./PLAN.md) / [`AUDIT.md`](./AUDIT.md) for the
+detailed engineering history behind the multi-platform build and release pipeline.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

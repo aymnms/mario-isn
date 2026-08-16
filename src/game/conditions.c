@@ -7,6 +7,7 @@
 #include "MARIO_conditions.h"
 #include "MARIO_quit.h"
 #include "MARIO_game.h"
+#include "MARIO_mechant.h"
 #include "MARIO_niveau.h"
 #include "MARIO_joueur.h"
 #include "MARIO_musique.h"
@@ -19,8 +20,6 @@ extern SDL_Texture *mario_saut_droite;
 extern SDL_Event event;
 extern int decalage;
 extern int coin, niveau, vie;
-extern char statue[MAX_MECHANTS];
-extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
 extern int vic;
 
 // game_over()/victory() each load a fixed, finite scene image (there are
@@ -58,10 +57,10 @@ int conditions(void) {
 
 void game_over(void) {
     vie--;
-    for (int i = 0; i <= 19; i++) {
+    for (int i = 0; i < MAX_MECHANTS; i++) {
         statue[i] = '0';
     }
-    for (int i = 0; i <= 19; i++) {
+    for (int i = 0; i < MAX_MECHANTS; i++) {
         tableau_mechant[i][1].x = 0;
         tableau_mechant[i][1].y = 0;
     }
@@ -102,10 +101,10 @@ int victory(void) {
     playMus(5);
     init_scene_skin();
     img = img_victory;
-    for (int i = 0; i <= 19; i++) {
+    for (int i = 0; i < MAX_MECHANTS; i++) {
         statue[i] = '0';
     }
-    for (int i = 0; i <= 19; i++) {
+    for (int i = 0; i < MAX_MECHANTS; i++) {
         tableau_mechant[i][1].x = 0;
         tableau_mechant[i][1].y = 0;
     }

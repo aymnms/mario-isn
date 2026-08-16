@@ -4,6 +4,7 @@
 
 #include "MARIO_quit.h"
 #include "MARIO_joueur.h"
+#include "MARIO_mechant.h"
 #include "MARIO_niveau.h"
 #include "MARIO_conditions.h"
 #include "MARIO_game.h"
@@ -16,7 +17,6 @@
 extern int run_game, run;
 extern SDL_Rect pos_perso, origine;
 extern SDL_Event event;
-extern int nb_mechant;
 extern int decalage; //strawling
 extern int bool_droite, bool_gauche, bool_saut;
 extern int coin, niveau, vie;

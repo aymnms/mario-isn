@@ -4,14 +4,12 @@
 #include <SDL_image.h>
 
 #include "display.h"
+#include "MARIO_mechant.h"
 #include "path.h"
 #include "globals.h"
 
 extern int decalage;
-extern char statue[MAX_MECHANTS];
 extern SDL_Texture *imgMechant; //surface du mechant
-extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
-extern int nb_mechant;
 
 // afficher_mechant() runs up to 20x per frame (once per enemy slot). Each
 // enemy state has a fixed, finite set of sprites, so they're loaded once

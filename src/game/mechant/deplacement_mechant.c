@@ -1,20 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL.h>
-#include <time.h> //Ne pas oublier d'inclure le fichier time.h
 
 #include "MARIO_mechant.h"
 #include "domain/grid.h"
 #include "domain/movement.h"
 #include "globals.h"
-
-//--------------------------Variable-générale--------------------------//
-extern int direction_mechant[MAX_MECHANTS]; //le mechant commence par aller à droite
-extern char statue[MAX_MECHANTS];
-extern SDL_Rect tableau_mechant[MAX_MECHANTS][4];
-extern int nb_mechant;
-int boolSB = 0;
-int taille = 150;
 
 //---------------------------------------------------------------------//
 
@@ -26,7 +17,6 @@ SDL_Rect setRectMechant(SDL_Rect Point) { //on place le point sur la grille
 
 void deplacement_mechant(void) {
 
-    srand(time(NULL));
     if (statue[nb_mechant] == 'V') {
         // Reverse direction if blocked ahead -- or, for goombas specifically,
         // also if x==0 (an inactive/never-placed slot; see addMechant()).

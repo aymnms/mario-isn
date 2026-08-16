@@ -354,6 +354,16 @@ jobs:
         run: chmod +x dist/MarioISN-x86_64.AppImage
 
       - name: Run the game headlessly for a few seconds
+        env:
+          # Skip straight into gameplay (see src/main.c) instead of sitting
+          # at the menu waiting for a click that headless CI can never send.
+          # Previously this step relied on a real bug for the same effect
+          # (SIGTERM-as-SDL_QUIT fell through into gameplay because the
+          # menu's own quit handling was broken) -- now that main.c's menu
+          # loop and quit handling are both fixed (see PLAN.md J13), SIGTERM
+          # at the menu correctly exits the app instead, so that trick no
+          # longer works and this explicit, intentional hook replaces it.
+          MARIO_ISN_AUTOPLAY: "1"
         run: |
           cd dist
           set +e
@@ -363,30 +373,23 @@ jobs:
           # execs the real binary directly instead, transparently to the
           # timeout/signal handling below.
           #
-          # --kill-after is required: SDL2 intercepts SIGTERM by default and
-          # turns it into a queued SDL_QUIT event instead of dying outright.
-          # This game's menu loop consumes that one event and clears its own
-          # `repeat` flag, but leaves `run_game` at its default (1), so
-          # main() falls straight through into the gameplay loop next --
-          # which then never sees a SIGTERM-driven SDL_QUIT again and runs
-          # forever. Plain `timeout 5` (one SIGTERM, no follow-up) hung on
-          # exactly this for 10+ minutes before being killed by this job's
-          # timeout-minutes. `--kill-after=5` guarantees a SIGKILL 5s after
-          # the initial SIGTERM if the process (group) is still alive.
+          # --kill-after is a safety net, not strictly required anymore: the
+          # game's own gameplay-loop SDL_QUIT handling (deplacement_joueur.c)
+          # already exits cleanly on a plain SIGTERM. Kept in case that ever
+          # regresses, so this step fails fast instead of hanging again.
           xvfb-run --auto-servernum timeout --kill-after=5 5 \
             ./MarioISN-x86_64.AppImage --appimage-extract-and-run
           code=$?
           set -e
           # `timeout` exits 124 whenever it had to signal the still-running
-          # process itself (whether that took just the SIGTERM or needed the
-          # --kill-after SIGKILL escalation) -- i.e. the game made it to its
-          # main loop and stayed up. Confirmed empirically in CI: this game
-          # needs the SIGKILL escalation (see comment above), and when it
-          # does, xvfb-run propagates the killed process's own termination
-          # status (128+9=137) instead of timeout's usual 124 -- so both are
-          # accepted as "the harness had to kill it" (i.e. success). Any
-          # other exit code means it died on its own within the window
-          # (most likely a missing bundled shared library).
+          # process itself, whether the process then exits gracefully on
+          # that first SIGTERM or needs the --kill-after SIGKILL escalation
+          # -- i.e. the game made it into gameplay and stayed up until the
+          # timeout, either way. 137 (xvfb-run propagating a raw SIGKILL
+          # termination status) is also accepted in case the escalation path
+          # is ever needed again. Any other exit code means it died on its
+          # own within the window (most likely a missing bundled shared
+          # library).
           if [ "$code" -ne 124 ] && [ "$code" -ne 137 ]; then
             echo "Game exited early with code $code instead of staying up -- see output above"
             exit 1
@@ -398,15 +401,16 @@ jobs:
       # create_texture() on every call instead of caching it, and
       # SDL_DestroyTexture was never called anywhere in the codebase.
       # Reproduced locally, it leaked ~2.15GB of RSS in 17s of gameplay.
-      # This reuses the same SIGTERM-becomes-SDL_QUIT quirk documented in
-      # the step above to get the real gameplay loop running headlessly
-      # (no input automation needed -- afficher_mechant()/animation()/
-      # systeme_vie()/coinAff() all run every frame regardless of input),
-      # then samples RSS before/after via `ps` and fails if it grew by more
-      # than a threshold that's a wide margin above what legitimate
-      # one-time sprite caching should ever need, and far below what the
-      # real regression produced.
+      # Launches straight into gameplay via MARIO_ISN_AUTOPLAY (see main.c
+      # and the step above -- no input automation needed beyond that,
+      # afficher_mechant()/animation()/systeme_vie()/coinAff() all run every
+      # frame regardless of input), then samples RSS before/after via `ps`
+      # and fails if it grew by more than a threshold that's a wide margin
+      # above what legitimate one-time sprite caching should ever need, and
+      # far below what the real regression produced.
       - name: Leak regression test (RSS should stay flat during gameplay)
+        env:
+          MARIO_ISN_AUTOPLAY: "1"
         run: |
           cd dist
           xvfb-run --auto-servernum bash -c '
@@ -431,17 +435,16 @@ jobs:
             # stray leftover cannot be mistaken for the fresh one.
             PID=$(pgrep -n -x mario_isn || true)
             if [ -z "$PID" ]; then
-              echo "mario_isn process not found after startup -- crashed at menu?"
+              echo "mario_isn process not found after startup -- crashed on launch?"
               exit 1
             fi
             RSS_BEFORE=$(ps -o rss= -p "$PID" 2>/dev/null | tr -d " ")
             if [ -z "$RSS_BEFORE" ]; then
-              echo "Process $PID not found before gameplay -- crashed at menu?"
+              echo "Process $PID not found before gameplay -- crashed on launch?"
               exit 1
             fi
             echo "RSS before gameplay: ${RSS_BEFORE} KB"
 
-            kill -TERM "$PID"
             sleep 10
             RSS_AFTER=$(ps -o rss= -p "$PID" 2>/dev/null | tr -d " ")
             kill -KILL "$PID" 2>/dev/null || true

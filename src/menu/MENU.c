@@ -4,6 +4,8 @@
 
 #include "MARIO_quit.h"
 #include "MARIO_musique.h"
+#include "display.h"
+#include "path.h"
 
 extern int run, run_game;
 extern SDL_Event event;
@@ -16,7 +18,20 @@ extern SDL_Event event;
 // crash so far (see AUDIT.md §9 for why), but was a real latent bug.
 static int repeat = 1, click_x, click_y;
 
+// MENU() now runs once per visit to the menu screen (main.c's loop returns
+// here after every GAME() session), not just once at process startup, so
+// the menu image is loaded once and redrawn on each entry instead of
+// living in init_menu()'s one-time setup (see init_menu.c).
+static SDL_Texture *menu_texture;
+static int menu_skin_loaded = 0;
+
 int start_game(void) {
+    if (!menu_skin_loaded) {
+        menu_texture = create_texture(path_img("menu.png"));
+        menu_skin_loaded = 1;
+    }
+    update_texture(menu_texture, NULL, NULL);
+
     playMus(2);
     repeat = 1;
     while (repeat) {
@@ -24,6 +39,9 @@ int start_game(void) {
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT:
+                    quit(); // ferme vraiment l'appli (avant : ne faisait que
+                            // sortir de cette boucle, laissant le process
+                            // tourner -- voir PLAN.md J13)
                     repeat = 0;
                     break;
 

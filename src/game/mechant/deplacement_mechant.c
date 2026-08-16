@@ -19,7 +19,9 @@ int taille = 150;
 //---------------------------------------------------------------------//
 
 SDL_Rect setRectMechant(SDL_Rect Point) { //on place le point sur la grille
-    return domain_to_grid_cell(Point, 0);
+    // Clamped: goM()/goB() index lvl[][] straight from this cell -- see the
+    // matching comment on set_position() (deplacement_joueur.c) for why.
+    return domain_clamp_to_grid(domain_to_grid_cell(Point, 0), LVL_ROWS, LVL_COLS);
 }
 
 void deplacement_mechant(void) {

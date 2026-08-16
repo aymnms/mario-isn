@@ -24,7 +24,12 @@ extern int vic;
 int jean = 0;
 
 SDL_Rect set_position(SDL_Rect Point) {
-    return domain_to_grid_cell(Point, decalage);
+    // Clamped: go()'s collision checks index lvl[][] straight from this
+    // cell, and the player's scroll/position limits are looser than the
+    // level grid's own size -- at max scroll this can otherwise compute a
+    // column past lvl[][]'s valid range (proven: (541+6700)/50 = 144 on a
+    // 140-wide grid). See AUDIT.md §10.
+    return domain_clamp_to_grid(domain_to_grid_cell(Point, decalage), LVL_ROWS, LVL_COLS);
 }
 
 void droite(void) { //si le personnage peut se deplacer vers la droite

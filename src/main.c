@@ -77,6 +77,7 @@ void quit_game(void) { //lorsque le joueur souhaite quitter le niveau du jeu -> 
     }
     vie = 3;
     niveau = 1;
+    coin = 0;
 }
 void quit(void) { //QUITTE TOTALEMENT LE PROGRAMME
     run = 0;

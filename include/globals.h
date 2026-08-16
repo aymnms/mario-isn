@@ -10,10 +10,19 @@
 // regardless of what a given file's extern claimed).
 #define MAX_MECHANTS 20
 
+// Real dimensions of lvl[][] (defined in globals.c). Player/enemy scroll and
+// position limits (domain/movement.c) are looser than these -- at max
+// scroll, collision checks can compute a grid column just past LVL_COLS-1 --
+// so any code indexing lvl[][] from a computed cell must clamp against
+// these first (see domain_clamp_to_grid()), not just trust the caller's
+// scroll/position bounds to have kept it in range.
+#define LVL_ROWS 10
+#define LVL_COLS 140
+
 extern double x;
 extern int decoule, emp;
 extern Uint32 temps;
-extern char lvl[10][140];
+extern char lvl[LVL_ROWS][LVL_COLS];
 extern SDL_Rect pos_cadre, pos_noir, pos_barre;
 extern SDL_Texture *cadre, *noir, *barre;
 extern SDL_Texture *perso, *img;

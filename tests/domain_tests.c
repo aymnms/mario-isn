@@ -49,6 +49,42 @@ static void test_grid(void) {
     cell = domain_to_grid_cell(point, 0);
     ASSERT_EQ_INT(cell.x, 0);
     ASSERT_EQ_INT(cell.y, -1);
+
+    /* domain_clamp_to_grid: already-in-bounds cells pass through unchanged... */
+    SDL_Rect in_bounds;
+    in_bounds.x = 5;
+    in_bounds.y = 3;
+    SDL_Rect clamped = domain_clamp_to_grid(in_bounds, 10, 140);
+    ASSERT_EQ_INT(clamped.x, 5);
+    ASSERT_EQ_INT(clamped.y, 3);
+
+    /* ...negative x/y clamp up to 0 (the case go()/goM()/goB() hit with
+     * SDL_GetTicks()-independent negative decalage/pos_perso edge cases)... */
+    SDL_Rect negative;
+    negative.x = -1;
+    negative.y = -1;
+    clamped = domain_clamp_to_grid(negative, 10, 140);
+    ASSERT_EQ_INT(clamped.x, 0);
+    ASSERT_EQ_INT(clamped.y, 0);
+
+    /* ...and a cell at or past the edge clamps down to the last valid
+     * row/column -- this is the exact scenario proven reachable at max
+     * scroll: (541+6700)/50 = 144, 4 columns past the grid's 0-139 range. */
+    SDL_Rect past_edge;
+    past_edge.x = 144;
+    past_edge.y = 10;
+    clamped = domain_clamp_to_grid(past_edge, 10, 140);
+    ASSERT_EQ_INT(clamped.x, 139);
+    ASSERT_EQ_INT(clamped.y, 9);
+
+    /* exactly-at-the-edge (cols/rows themselves, one past the last valid
+     * index) clamps the same way as further past it */
+    SDL_Rect at_edge;
+    at_edge.x = 140;
+    at_edge.y = 10;
+    clamped = domain_clamp_to_grid(at_edge, 10, 140);
+    ASSERT_EQ_INT(clamped.x, 139);
+    ASSERT_EQ_INT(clamped.y, 9);
 }
 
 static void test_collision(void) {

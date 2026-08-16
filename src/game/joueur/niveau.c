@@ -178,7 +178,12 @@ void niveauSelect(int nb) {
     auto char num = '\0';
 
     fichier = fopen(path_bin("niveau.lvl"), "r");
-    char caract;
+    // int, not char: fgetc() returns EOF as int -1, but plain `char` is
+    // unsigned on some platforms this project targets (notably arm64
+    // macOS) -- on those, `caract == EOF` could never be true no matter
+    // what fgetc() actually returned, silently defeating the EOF checks
+    // below.
+    int caract;
     switch (nb) {
         case 1:
             num = '1';
@@ -207,21 +212,36 @@ void niveauSelect(int nb) {
             {
                 caract = fgetc(fichier); //caractère en cour
                 printf("%c", caract);
+                if (caract == EOF) {
+                    fprintf(stderr, "niveau.lvl: marqueur du niveau %d introuvable (fin de fichier)\n", nb);
+                    fclose(fichier);
+                    return;
+                }
             } while (caract != '#'); //on test la nature du caractère (début du tableau)
             caract = fgetc(fichier); //caractère en cour
             printf("%c", caract);
+            if (caract == EOF) {
+                fprintf(stderr, "niveau.lvl: marqueur du niveau %d introuvable (fin de fichier)\n", nb);
+                fclose(fichier);
+                return;
+            }
         } while (caract != num); //on test la nature du caractère (bon niveau)
 
-        for (l = 0; l < 10; l++) //pour chaque ligne
+        for (l = 0; l < LVL_ROWS; l++) //pour chaque ligne
         {
-            for (c = 0; c < 140; c++) //pour chaque colonnes
+            for (c = 0; c < LVL_COLS; c++) //pour chaque colonnes
             {
                 caract = fgetc(fichier); //caractère en cour
                 printf("%c", caract);
                 if (caract == '\n') {
                     caract = fgetc(fichier);
                 } //on test la nature du caractère
-                lvl[l][c] = caract;
+                if (caract == EOF) {
+                    fprintf(stderr, "niveau.lvl: fin de fichier inattendue en lisant le niveau %d\n", nb);
+                    fclose(fichier);
+                    return;
+                }
+                lvl[l][c] = (char)caract;
             }
         }
         caract = fgetc(fichier); //caractère en cour
@@ -251,9 +271,9 @@ void niveauAfficher(int strawling) {
 
     int row, col;
 
-    for (row = 0; row < 10; row++) {
+    for (row = 0; row < LVL_ROWS; row++) {
 
-        for (col = 0; col < 140; col++) {
+        for (col = 0; col < LVL_COLS; col++) {
 
             switch (lvl[row][col]) {
                 case '1':

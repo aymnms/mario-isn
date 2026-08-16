@@ -1,3 +1,10 @@
+## [1.3.9](https://github.com/aymnms/mario-isn/compare/v1.3.8...v1.3.9) (2026-08-16)
+
+
+### Bug Fixes
+
+* three follow-ups from AUDIT.md §10 ([a841107](https://github.com/aymnms/mario-isn/commit/a8411074a3f69bd02d5fe49a0e758212210075a0))
+
 ## [1.3.8](https://github.com/aymnms/mario-isn/compare/v1.3.7...v1.3.8) (2026-08-16)
 
 
